@@ -19,11 +19,11 @@ export default function Header(){
 						<Image src='/logo.png' alt='LogoImage' width={35} height={35} />
 					</Link>
 					<div>
-						<p className='font-black text-2xl'>NEXT PIZZA</p>
+						<p className='font-black text-2xl '>NEXT PIZZA</p>
 						<p className='font-normal text-muted-foreground'>вкусней уже некуда</p>
 					</div>
 				</div>
-				<div className='relative w-250 h-11'>
+				<div className='relative w-250 h-11 lg:w-150'>
 					<Search
 						className='absolute w-5 h-5 left-3 top-3 text-muted-foreground'
 					/>
