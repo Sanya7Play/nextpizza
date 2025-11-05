@@ -2,6 +2,7 @@ import {Sheet, SheetContent, SheetFooter, SheetHeader, SheetTitle, SheetTrigger}
 import {Button} from "@/components/ui/button";
 import { ArrowRight,RussianRuble } from "lucide-react";
 import CartItem from "@/components/shared/CartItem";
+import Link from "next/link";
 
 export default function CardDrawer({children}: { children: React.ReactNode}) {
 	return (
@@ -32,7 +33,15 @@ export default function CardDrawer({children}: { children: React.ReactNode}) {
 							<RussianRuble size={14} strokeWidth={3}/>
 						</p>
 					</div>
-					<Button type="submit" variant='default' className='text-base font-bold py-6 w-11/12 mx-auto rounded-xl gap-1 cursor-pointer'>Оформить заказ<ArrowRight size={20}/></Button>
+					<Link href='/drawer'>
+						<Button
+							type="submit"
+							variant='default'
+							className='text-base font-bold py-6 w-11/12 mx-auto rounded-xl gap-1 cursor-pointer'>
+							Оформить заказ
+							<ArrowRight size={20}/>
+						</Button>
+					</Link>
 				</SheetFooter>
 			</SheetContent>
 		</Sheet>

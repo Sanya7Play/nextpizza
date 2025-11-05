@@ -20,11 +20,11 @@ export default function CartItem() {
 				<div className='flex flex-row items-center justify-between'>
 					<div className='flex flex-row items-center gap-3'>
 						<Button variant='outline' size='sm' className='py-0.5 px-2 cursor-pointer'>
-							<Minus size={16}/>
+							<Minus size={17}/>
 						</Button>
-						<p>2</p>
+						<p className='font-bold'>2</p>
 						<Button variant='outline' size='sm' className='py-0.5 px-2 cursor-pointer'>
-							<Plus size={16}/>
+							<Plus size={17}/>
 						</Button>
 					</div>
 					<div className='flex flex-row items-center gap-2'>

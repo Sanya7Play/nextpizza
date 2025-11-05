@@ -8,7 +8,12 @@ import {useState} from "react";
 import PopoverMenu from "@/components/shared/PopoverMenu";
 import Link from "next/link";
 
-export default function Header(){
+interface HeaderProps {
+	buttonHide: boolean,
+	searchHide: boolean
+}
+
+export default function Header({buttonHide, searchHide}: HeaderProps) {
 	const [isAuthenticated, setIsAuthenticated] = useState<boolean>(true);
 	const items: string[] = ['12','23'];
 	return(
@@ -23,15 +28,19 @@ export default function Header(){
 						<p className='font-normal text-muted-foreground'>вкусней уже некуда</p>
 					</div>
 				</div>
-				<div className='relative w-250 h-11 lg:w-150'>
-					<Search
-						className='absolute w-5 h-5 left-3 top-3 text-muted-foreground'
-					/>
-					<Input
-						type='text'
-						placeholder='Поиск Пиццы...'
-						className='w-full h-full bg-neutral-200 outline-none pl-10 pr-3 rounded-lg focus-visible:border-ring'
-					/>
+				<div className='relative w-250 h-11 2xl:w-250 xl:w-110 lg:w-60 md:w-50'>
+					{searchHide &&
+						<>
+                            <Search
+                                className='absolute w-5 h-5 left-3 top-3 text-muted-foreground'
+                            />
+                            <Input
+                                type='text'
+                                placeholder='Поиск Пиццы...'
+                                className='w-full h-full bg-neutral-200 outline-none pl-10 pr-3 rounded-lg focus-visible:border-ring'
+                            />
+						</>
+					}
 				</div>
 				<div className='flex flex-row items-center justify-between gap-3'>
 					{isAuthenticated ?
@@ -44,18 +53,24 @@ export default function Header(){
 							<Button variant='outline' className='p-5.5 cursor-pointer gap-1 rounded-2xl'><User size={16}/>Войти</Button>
 						)
 					}
-					{items.length > 0 ?
-						(
-							<CardDrawer>
-								<Button variant='default' className='p-6 cursor-pointer rounded-2xl text-base font-extrabold gap-3'>
-									<p className='flex flex-row items-center gap-1'>520<RussianRuble size={14} strokeWidth={3}/></p>
-									<p className='border-r border-gray-100/50 h-5'></p>
-									<p className='flex flex-row items-center gap-1'><ShoppingCart size={16} strokeWidth={3}/>3</p>
-								</Button>
-							</CardDrawer>
-						) : (
-							<Button variant='outline' className='p-6 cursor-pointer rounded-2xl'><ShoppingCart size={16}/></Button>
-						)
+					{buttonHide &&
+						<>
+							{items.length > 0 ?
+								(
+									<CardDrawer>
+										<Button
+											variant='default'
+											className='group p-6 cursor-pointer rounded-2xl text-base font-extrabold gap-3'>
+											<p className='flex flex-row items-center gap-1 group-hover:-translate-x-1 duration-300'>520<RussianRuble size={14} strokeWidth={3}/></p>
+											<p className='border-r border-gray-100/50 h-5'></p>
+											<p className='flex flex-row items-center gap-1 group-hover:translate-x-1 duration-300'><ShoppingCart size={16} strokeWidth={3}/>3</p>
+										</Button>
+									</CardDrawer>
+								) : (
+									<Button variant='outline' className='p-6 cursor-pointer rounded-2xl'><ShoppingCart size={16}/></Button>
+								)
+							}
+						</>
 					}
 				</div>
 			</div>
