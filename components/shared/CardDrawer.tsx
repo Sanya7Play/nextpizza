@@ -1,17 +1,26 @@
-import {Sheet, SheetContent, SheetFooter, SheetHeader, SheetTitle, SheetTrigger} from "@/components/ui/sheet";
+"use client"
+import {
+	Sheet, SheetClose,
+	SheetContent,
+	SheetFooter,
+	SheetHeader,
+	SheetTitle,
+	SheetTrigger
+} from "@/components/ui/sheet";
 import {Button} from "@/components/ui/button";
-import { ArrowRight,RussianRuble } from "lucide-react";
+import {ArrowLeft, ArrowRight, RussianRuble} from "lucide-react";
 import CartItem from "@/components/shared/CartItem";
 import Link from "next/link";
+import Image from "next/image";
 
 export default function CardDrawer({children}: { children: React.ReactNode}) {
-	const items = ['Пицца'];
+	const items = [];
 	return (
-		<Sheet>
-			<SheetTrigger asChild>{children}</SheetTrigger>
-			<SheetContent>
-				{items.length < 0 ? (
-					<>
+		<>
+			{items.length > 0 ? (
+				<Sheet>
+					<SheetTrigger asChild>{children}</SheetTrigger>
+					<SheetContent showClose={true}>
 						<SheetHeader className="text-card-foreground flex flex-row items-center justify-between">
 							<SheetTitle className='flex flex-row gap-1'>
 								<p className='text-xl'>В корзине</p>
@@ -46,14 +55,37 @@ export default function CardDrawer({children}: { children: React.ReactNode}) {
 								</Button>
 							</Link>
 						</SheetFooter>
-					</>
-				) : (
-					<div className='flex items-center justify-center my-auto'>
+					</SheetContent>
+				</Sheet>
+			) : (
+				<Sheet>
+					<SheetTrigger asChild>{children}</SheetTrigger>
+					<SheetContent>
+						<SheetHeader>
+							<SheetTitle></SheetTitle>
+						</SheetHeader>
+						<div className='flex flex-col items-center justify-center w-full h-full gap-3'>
+							<Image src='/cart.png' alt='Image' width={120} height={120} />
+							<div className='flex flex-col items-center justify-center gap-2'>
+								<h1 className='text-[22px] font-bold'>Корзина пустая</h1>
+								<p className='text-center w-3/4 text-base text-muted-foreground'>Добавьте хотя бы одну пиццу, чтобы совершить заказ</p>
+							</div>
+							<SheetClose asChild>
+								<Button variant="default"
+										className='gap-2 cursor-pointer font-bold py-6 px-6 rounded-2xl'
+								>
+									<ArrowLeft size={20}/>
+									Вернуться назад
+								</Button>
+							</SheetClose>
+						</div>
+						<SheetFooter>
+						</SheetFooter>
+					</SheetContent>
+				</Sheet>
+			)
+			}
+		</>
 
-					</div>
-				)}
-
-			</SheetContent>
-		</Sheet>
 	)
 }

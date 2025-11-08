@@ -9,9 +9,9 @@ export default function PopoverSort({children}: { children: React.ReactNode}) {
 			</PopoverTrigger>
 			<PopoverContent className="w-35">
 				<div className="flex flex-col justify-between gap-4">
-					<Link href=''>популярности</Link>
-					<Link href=''>по цене</Link>
-					<Link href=''>по алфавиту</Link>
+					<Link href='' className='hover:text-primary'>популярное</Link>
+					<Link href='' className='hover:text-primary'>по цене</Link>
+					<Link href='' className='hover:text-primary'>по алфавиту</Link>
 				</div>
 			</PopoverContent>
 		</Popover>

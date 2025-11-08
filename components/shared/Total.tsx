@@ -3,7 +3,7 @@ import {Button} from "@/components/ui/button";
 
 export default function Total() {
 	return (
-		<div className='flex flex-col w-150 h-150 bg-neutral-100 rounded-xl gap-3 p-10'>
+		<div className='flex flex-col w-150 h-121 bg-neutral-100 rounded-xl gap-3 p-10'>
 			<div className='flex flex-col w-auto h-auto pb-5 p-10 gap-2'>
 				<h1 className='text-xl'>Итого:</h1>
 				<span className='flex flex-row items-center gap-2 text-4xl font-extrabold'>820.4<RussianRuble size={32} strokeWidth={3}/></span>

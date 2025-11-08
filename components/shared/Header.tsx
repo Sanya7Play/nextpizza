@@ -37,7 +37,7 @@ export default function Header({buttonHide, searchHide}: HeaderProps) {
                             <Input
                                 type='text'
                                 placeholder='Поиск Пиццы...'
-                                className='w-full h-full bg-neutral-200 outline-none pl-10 pr-3 rounded-lg focus-visible:border-ring'
+                                className='w-full h-full bg-neutral-100 outline-none pl-10 pr-3 rounded-lg focus-visible:border-ring'
                             />
 						</>
 					}
