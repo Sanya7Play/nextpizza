@@ -1,9 +1,13 @@
 import ProductItem from "./ProductItem";
+import Title from "@/components/shared/Title";
 export default function ProductsGroupList() {
 	return(
 		<div className='flex flex-col gap-3 w-full mr-18'>
-			<h1 className='text-4xl font-extrabold'>Пиццы</h1>
-			<div className='grid grid-cols-3 gap-10 w-auto h-auto'>
+			<Title text='Пиццы'/>
+			<div className='grid grid-cols-3 gap-20 w-auto h-auto pb-5'>
+				<ProductItem/>
+				<ProductItem/>
+				<ProductItem/>
 				<ProductItem/>
 			</div>
 		</div>

@@ -28,9 +28,9 @@ export default function CartItem() {
 						</Button>
 					</div>
 					<div className='flex flex-row items-center gap-2'>
-									<span className='flex flex-row items-center text-base font-bold gap-0.5'>965
-										<RussianRuble size={14} strokeWidth={3}/>
-									</span>
+						<span className='flex flex-row items-center text-base font-bold gap-0.5'>965
+							<RussianRuble size={14} strokeWidth={3}/>
+						</span>
 						<Trash2 color='grey' strokeWidth={2} size={16} className='cursor-pointer'/>
 					</div>
 				</div>

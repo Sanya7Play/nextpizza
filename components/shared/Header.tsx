@@ -28,7 +28,7 @@ export default function Header({buttonHide, searchHide}: HeaderProps) {
 						<p className='font-normal text-muted-foreground'>вкусней уже некуда</p>
 					</div>
 				</div>
-				<div className='relative w-250 h-11 2xl:w-250 xl:w-110 lg:w-60 md:w-50'>
+				<div className='relative w-250 h-11 2xl:w-180 xl:w-110 lg:w-60 md:w-50'>
 					{searchHide &&
 						<>
                             <Search

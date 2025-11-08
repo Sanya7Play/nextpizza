@@ -12,7 +12,7 @@ export default function PurchaseCard() {
 					<p className='text-sm text-muted-foreground'>Традиционное тесто, 20 см.</p>
 				</div>
 			</div>
-			<div className='flex flex-row items-center gap-5'>
+			<div className='flex flex-row items-center ml-20 gap-2'>
 				<div className='flex flex-row items-center'>
 					<p className='flex flex-row items-center gap-0.5 font-bold'>495<RussianRuble size={14} strokeWidth={3}/></p>
 				</div>
