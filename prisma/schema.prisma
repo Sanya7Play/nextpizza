@@ -1,48 +1,59 @@
 generator client {
-    provider    =  "prisma-client-js"
+    provider = "prisma-client-js"
 }
 
-datasource db{
-    provider    = "postgresql"
-    url         =  env("POSTGRES_URL")
+datasource db {
+    provider = "postgresql"
+    url      = env("POSTGRES_URL")
 }
 
-model User{
+model User {
     id Int @id @default(autoincrement())
 
     fullName String
-    email String
+    email    String
     password String
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
-
 }
+
 model Category {
     id Int @id @default(autoincrement())
 
-    name String
+    name     String
     products Product[]
-
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-
-}
-model Product{
-    id  Int @id @default(autoincrement())
-
-    name String
-    imageUrl String
-    price Int
-
-    category   Category @relation(fields: [categoryId], references: [id])
-    categoryId Int
 }
 
-model Ingredients{
+model ProductCategory {
     id Int @id @default(autoincrement())
 
-    name String
-    price Int
+    name     String
+    products Product[]
+}
+
+model Product {
+    id Int @id @default(autoincrement())
+
+    name     String
     imageUrl String
+    price    Int
+
+    productCategory ProductCategory @relation(fields: [productCategoryId], references: [id])
+    ingridients     Ingredients[]
+
+    category          Category @relation(fields: [categoryId], references: [id])
+    categoryId        Int
+    productCategoryId Int
+}
+
+model Ingredients {
+    id Int @id @default(autoincrement())
+
+    name     String
+    price    Int
+    imageUrl String
+
+    ingridient   Product @relation(fields: [ingridientId], references: [id])
+    ingridientId Int
 }

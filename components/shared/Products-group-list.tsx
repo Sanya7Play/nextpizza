@@ -19,9 +19,7 @@ export default function ProductsGroupList() {
 
 	useEffect(() => {
 		async function getProducts() {
-
 			setLoading(true);
-
 			const response = await axios.get('/api/products');
 			console.log(response.data);
 			setProducts(response.data);
@@ -29,13 +27,13 @@ export default function ProductsGroupList() {
 				setTimeout(() => setLoading(false), 3000);
 			}
 		}
-		getProducts();
+		getProducts().then(r => console.log('Загрузка данных'));
 	}, []);
 
 	return(
 		<div className='flex flex-col gap-3 w-full mr-18'>
 			<Title text='Пиццы'/>
-			<div className='grid grid-cols-3 gap-20 w-auto h-auto pb-1'>
+			<div className='grid grid-cols-3 gap-5 w-auto h-auto pb-1	'>
 				{products.map((product) => (
 					<ProductItem
 						key={product.id}

@@ -28,11 +28,16 @@ export default function ProductItem({name, price, image, imageAlt, id, loading}:
 						<p className='text-muted-foreground text-sm'>Маринованные огурчики, свежие томаты, красный лук, сочные ананасы, итальянские травы, сладкий перец, кубики брынзы, митболы</p>
 					</div>
 					<div className='flex flex-row items-center justify-between mt-5'>
-				<span className='flex flex-row gap-1 items-center text-xl'> от
-					<p className='font-bold text-xl'>{price}</p>
-					<RussianRuble color='black' strokeWidth={2.5} size={18}/>
-				</span>
-						<Button variant='default' size={"sm"} className='cursor-pointer text-base'>+ Выбрать</Button>
+						<span className='flex flex-row gap-1 items-center text-xl'> от
+							<p className='font-bold text-xl'>{price}</p>
+							<RussianRuble color='black' strokeWidth={2.5} size={18}/>
+						</span>
+						<Button
+							variant='default'
+							size={"sm"}
+							className='cursor-pointer text-base'>
+							+ Выбрать
+						</Button>
 					</div>
 				</div>
 			)}
