@@ -1,12 +1,13 @@
 'use client'
 import Image from "next/image";
-import {RussianRuble, Search, ShoppingCart, User} from "lucide-react";
+import { RussianRuble, Search, ShoppingCart, User} from "lucide-react";
 import {Input} from "@/components/ui/input";
 import {Button} from "@/components/ui/button";
 import CardDrawer from "@/components/shared/CardDrawer";
 import {useState} from "react";
 import PopoverMenu from "@/components/shared/PopoverMenu";
 import Link from "next/link";
+import PopoverInput from "@/components/shared/PopoverInput";
 
 interface HeaderProps {
 	buttonHide: boolean,
@@ -34,11 +35,14 @@ export default function Header({buttonHide, searchHide}: HeaderProps) {
                             <Search
                                 className='absolute w-5 h-5 left-3 top-3 text-muted-foreground'
                             />
-                            <Input
-                                type='text'
-                                placeholder='Поиск Пиццы...'
-                                className='w-full h-full bg-neutral-100 outline-none pl-10 pr-3 rounded-lg focus-visible:border-ring'
-                            />
+
+							<PopoverInput>
+                                <Input
+                                    type='text'
+                                    placeholder='Поиск Пиццы...'
+                                    className='w-full h-full bg-neutral-200/60 outline-none pl-10 pr-3 rounded-2xl focus-visible:border-ring'
+                                />
+							</PopoverInput>
 						</>
 					}
 				</div>

@@ -1,3 +1,4 @@
+'use client'
 import {
 	Breadcrumb,
 	BreadcrumbItem,
@@ -6,8 +7,30 @@ import {
 	BreadcrumbSeparator
 } from "@/components/ui/breadcrumb";
 import Link from "next/link";
+import {Product} from ".prisma/client";
+import {useEffect, useState} from "react";
+import {Skeleton} from "@/components/ui/skeleton";
 
-export default function WindowCardBreadCrumb() {
+type Props = {
+	product: Product | null;
+}
+export default function WindowCardBreadCrumb({product}: Props) {
+
+	const [breadcrumb, setBreadcrumb] = useState<boolean>(false);
+	useEffect(() => {
+		async function getBreadCrumb(){
+			if(product){
+				setBreadcrumb(true);
+				setTimeout(() => {
+					setBreadcrumb(false);
+				}, 1000);
+			}
+			else{
+				setBreadcrumb(false);
+			}
+		}
+		getBreadCrumb()
+	},[product])
 	return (
 		<Breadcrumb>
 			<BreadcrumbList>
@@ -24,7 +47,11 @@ export default function WindowCardBreadCrumb() {
 				</BreadcrumbItem>
 				<BreadcrumbSeparator />
 				<BreadcrumbItem>
-					<BreadcrumbPage>Чизбургер-пицца</BreadcrumbPage>
+					<BreadcrumbPage>
+						{breadcrumb ? (
+							<Skeleton className="mx-auto h-[25px] w-[115px] rounded-2xl" />
+						) : (product?.name)}
+					</BreadcrumbPage>
 				</BreadcrumbItem>
 			</BreadcrumbList>
 		</Breadcrumb>
