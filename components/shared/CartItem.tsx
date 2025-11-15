@@ -1,12 +1,13 @@
 import Image from "next/image";
 import {Button} from "@/components/ui/button";
 import {Minus, Plus, RussianRuble, Trash2} from "lucide-react";
+import {ICartItem} from "@/components/constants/pizza";
 
 export default function CartItem() {
 	return(
 		<div className='flex flex-row gap-3 py-5'>
 			<div className='flex flex-col items-center justify-center'>
-				<Image src='/img2.png' alt='Image' width={85} height={85}/>
+				<Image src='/assets/images/products/burger-pizza.avif' alt='Image' width={85} height={85}/>
 			</div>
 			<div className='flex flex-col'>
 				<div className='flex flex-col mb-3 border-b pb-3'>

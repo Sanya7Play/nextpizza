@@ -3,6 +3,7 @@ import ProductItem from "./ProductItem";
 import Title from "@/components/shared/Title";
 import axios from "axios";
 import {useEffect, useState} from "react";
+import {Ingredients} from ".prisma/client";
 
 interface Product {
 	name: string;
@@ -15,21 +16,25 @@ interface Product {
 export default function ProductsGroupList() {
 
 	const [products, setProducts] = useState<Product[]>([]);
-	const [loading, setLoading] = useState(false);
+	const [ingredients, setIngredients] = useState<Ingredients[]>([]);
+	const [loading, setLoading] = useState<boolean>(false);
+	const [order, setOrder] = useState<Product[]>([]);
 
 	useEffect(() => {
 		async function getProducts() {
 			setLoading(true);
-			const response = await axios.get('/api/products');
-			console.log(response.data);
-			setProducts(response.data);
-			if (response.data.length > 0){
-				setTimeout(() => setLoading(false), 3000);
+			const responseProducts = await axios.get('/api/products');
+			const responseIngredients = await axios.get('/api/ingredients');
+			console.log(responseIngredients.data);
+			console.log(responseProducts.data);
+			setIngredients(responseIngredients.data);
+			setProducts(responseProducts.data);
+			if (responseProducts.data.length > 0){
+				setTimeout(() => setLoading(false), 2000);
 			}
 		}
 		getProducts().then(r => console.log('Загрузка данных'));
 	}, []);
-
 	return(
 		<div className='flex flex-col gap-3 w-full mr-18'>
 			<Title text='Пиццы'/>
@@ -43,6 +48,7 @@ export default function ProductsGroupList() {
 						image={product.imageUrl}
 						imageAlt={product.name}
 						loading={loading}
+						ingredients={ingredients}
 					/>
 				))}
 			</div>

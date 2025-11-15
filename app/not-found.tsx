@@ -4,8 +4,8 @@ export default function NotFound() {
 	return(
 		<>
 			<div className="mx-50 bg-white rounded-4xl min-h-screen lg:mx-20">
-				<Header buttonHide={true} searchHide={true}/>
-				<div className='flex flex-row gap-10'>
+				<Header buttonHide={false} searchHide={false}/>
+				<div className='flex flex-row gap-10 items-center justify-center'>
 					<InfoBlock
 						textTitle='Cтраница не найдена'
 						textDescription='Проверьте корректность введённого адреса или повторите попытку позже'

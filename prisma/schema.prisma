@@ -7,9 +7,10 @@ datasource db {
     url      = env("POSTGRES_URL")
 }
 
-model User {
-    id Int @id @default(autoincrement())
+// --- Пользователь ---
 
+model User {
+    id       Int    @id @default(autoincrement())
     fullName String
     email    String
     password String
@@ -18,42 +19,101 @@ model User {
     updatedAt DateTime @updatedAt
 }
 
-model Category {
-    id Int @id @default(autoincrement())
+// --- Категории (верхний уровень: Пиццы, Комбо, Закуски и т.д.) ---
 
+model Category {
+    id       Int       @id @default(autoincrement())
     name     String
     products Product[]
 }
+
+// --- Подкатегории продуктов (например: Мясные, Овощные, Острые и т.п.) ---
 
 model ProductCategory {
-    id Int @id @default(autoincrement())
-
+    id       Int       @id @default(autoincrement())
     name     String
     products Product[]
 }
 
-model Product {
-    id Int @id @default(autoincrement())
+// --- Товар (пицца, напиток и т.д.) ---
 
+model Product {
+    id       Int    @id @default(autoincrement())
     name     String
     imageUrl String
     price    Int
 
-    productCategory ProductCategory @relation(fields: [productCategoryId], references: [id])
-    ingridients     Ingredients[]
+    // Верхний уровень категории (Пиццы / Кофе / Закуски ...)
+    categoryId Int
+    category   Category @relation(fields: [categoryId], references: [id])
 
-    category          Category @relation(fields: [categoryId], references: [id])
-    categoryId        Int
+    // Подкатегория (Мясные / Овощные ...)
     productCategoryId Int
+    productCategory   ProductCategory @relation(fields: [productCategoryId], references: [id])
+
+    // Размеры / вариации товара
+    ProductItem ProductItem[]
+
+    // Доступные ингредиенты для этого продукта (many-to-many)
+    ingredients Ingredient[] @relation("ProductIngredients")
 }
 
-model Ingredients {
-    id Int @id @default(autoincrement())
+// --- Конкретная вариация товара (размер, тип теста и т.п.) ---
 
+model ProductItem {
+    id        Int  @id @default(autoincrement())
+    price     Int
+    size      Int? // можно потом заменить на enum
+    pizzaType Int? // тоже можно сделать enum, например "thin"/"traditional"
+
+    productId Int
+    product   Product @relation(fields: [productId], references: [id])
+
+    cartItems CartItem[]
+}
+
+// --- Ингредиент (допы: сырный бортик, бекон, соус и т.п.) ---
+
+model Ingredient {
+    id       Int    @id @default(autoincrement())
     name     String
     price    Int
     imageUrl String
 
-    ingridient   Product @relation(fields: [ingridientId], references: [id])
-    ingridientId Int
+    // Какие продукты могут использовать этот ингредиент
+    products Product[] @relation("ProductIngredients")
+
+    // В каких элементах корзины этот ингредиент выбран как «доп»
+    cartItems CartItem[] @relation("CartItemSupplements")
+}
+
+// --- Корзина ---
+
+model Cart {
+    id          Int        @id @default(autoincrement())
+    item        CartItem[]
+    totalAmount Int        @default(0)
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+// --- Элемент корзины (конкретная пицца/напиток + допы) ---
+
+model CartItem {
+    id       Int @id @default(autoincrement())
+    quantity Int @default(1)
+
+    // Конкретная вариация товара (размер/тесто)
+    productItemId Int?
+    ProductItem   ProductItem? @relation(fields: [productItemId], references: [id])
+
+    // Выбранные доп. ингредиенты (many-to-many)
+    supplements Ingredient[] @relation("CartItemSupplements")
+
+    cartId Int
+    Cart   Cart @relation(fields: [cartId], references: [id])
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
 }

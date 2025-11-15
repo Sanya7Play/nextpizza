@@ -5,7 +5,7 @@ export default function OrderCard() {
 	return (
 		<div className='flex flex-row justify-between mx-5 my-4 border-b border-neutral-200 pb-5 last:border-none'>
 			<div className='flex flex-row w-auto h-auto '>
-				<Image src='/img2.png' alt='name' width={60} height={60} className='m-auto'/>
+				<Image src='/assets/images/products/burger-pizza.avif' alt='name' width={60} height={60} className='m-auto'/>
 				<div className='flex flex-col ml-5'>
 					<p className='text-lg font-bold'>Чизбургер-Пицца</p>
 					<p className='text-sm text-muted-foreground'>Традиционное тесто, 20 см.</p>

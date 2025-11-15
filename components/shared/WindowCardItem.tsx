@@ -1,32 +1,66 @@
 'use client'
-import Image from "next/image";
 import {Button} from "@/components/ui/button";
-import Ingredients from "@/components/shared/Ingredients";
-import {Product} from ".prisma/client";
+import {Ingredients} from ".prisma/client";
+import {ICartItem, IProduct, IItem} from "@/components/constants/pizza";
 import {useEffect, useState} from "react";
 import SkeletonId from "@/components/shared/SkeletonId";
+import IngredientsCard from "@/components/shared/IngredientsCard";
+import {buttonDaugh, buttonSize} from "@/components/constants/pizza";
 
 type Props = {
-	product: Product | null;
+	product: IProduct | null;
+	ingredients: Ingredients[];
 }
 
-export default function WindowCardItem({product}:Props){
+export default function WindowCardItem({product, ingredients}:Props){
 
-	const buttonSize = ['Маленькая', 'Cредняя', 'Большая'];
-	const buttonDaugh = ['Традиционное','Тонкое'];
 
 	const [loading, setLoading] = useState<boolean>(false);
-	const [size, setSize] = useState<string | undefined >(buttonSize[0]);
-	const [daugh, setDaugh] = useState<string | undefined >(buttonDaugh[0]);
+	const [size, setSize] = useState<string | undefined>(buttonSize[0].size);
+	const [key, setKey] = useState<number | undefined>(buttonSize[0].key);
+	const [weight, setWeight] = useState<number | undefined>(buttonSize[0].weight);
+	const [daugh, setDaugh] = useState<string | undefined>(buttonDaugh[0]);
+	const [supplements, setSupplements] = useState<Ingredients[]>([]);
+	const [cart, setCart] = useState<ICartItem[]>([]);
 
-	const changeSize = (item: string | undefined) => {
-		const size: string | undefined = buttonSize.find(sizeItem => item === sizeItem);
-		setSize(size)
+	const changeSize = (item: IItem) => {
+		const size: string | undefined = buttonSize.find(obj => item.size === obj.size)?.size;
+		const key: number | undefined = buttonSize.find(obj => item.key === obj.key)?.key;
+		const weight: number | undefined = buttonSize.find(obj => item.weight === obj.weight)?.weight;
+		setKey(key);
+		setSize(size);
+		setWeight(weight);
 	}
 
 	const changeType = (item: string | undefined) => {
 		const type: string | undefined = buttonDaugh.find(daugh => item === daugh);
-		setDaugh(type)
+		setDaugh(type);
+	}
+
+	const addIngredient = (id: number) => {
+		const supplement: boolean = supplements.some(item => item.id === id);
+		if(supplement){
+			setSupplements(prev => prev.filter(item => item.id !== id));
+		}
+		else{
+			const toAdd = ingredients.find(item => item.id === id);
+			if (!toAdd) return;
+			setSupplements(prev => [...prev, toAdd]);
+		}
+	}
+
+	 const handleAddToDrawer = () => {
+		const addCart: ICartItem = {
+			id: product!.id,
+			name: product!.name,
+			price: product!.price,
+			size: size,
+			daugh: daugh,
+			ingredients: supplements
+		}
+		if (!addCart) return;
+		setCart(prev => [...prev, addCart]);
+		localStorage.setItem('cart', JSON.stringify(cart));
 	}
 
 	useEffect(() => {
@@ -43,17 +77,19 @@ export default function WindowCardItem({product}:Props){
 		}
 		getProduct()
 	},[product])
+	console.log(size, daugh, supplements);
 	return (
 		<div>
 			{loading ? (<SkeletonId/>) : (
 				<div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-5" key={product?.id}>
 					<div className="p-10 rounded-2xl w=[570] h=[570] flex items-center justify-center gap-5">
-						<Image src={product!.imageUrl} alt={product!.name} width={500} height={500} />
+						{/* eslint-disable-next-line @next/next/no-img-element */}
+						<img src={product!.imageUrl} alt={product!.name} width={500} height={500} />
 					</div>
 					<div className="flex flex-col gap-6 p-10 rounded-2xl">
 						<div className="flex flex-col gap-3">
 							<h1 className='text-4xl font-extrabold'>{product?.name}</h1>
-							<p className='text-sm font-normal text-muted-foreground'>25 см, традиционное тесто 25, 380 г</p>
+							<p className='text-sm font-normal text-muted-foreground'>{key} см, {daugh} тесто, {weight} г</p>
 						</div>
 						<div className="flex flex-col gap-3 w-full max-w-[440px]">
 							<div className='bg-gray-200 px-1 py-1 rounded-4xl cursor-pointer'>
@@ -61,10 +97,10 @@ export default function WindowCardItem({product}:Props){
 									<Button
 										key={index}
 										variant='ghost'
-										className={`px-8.5 py-2.5 rounded-4xl font-bold text-base text-black cursor-pointer hover:bg-neutral-50 ${item === size && 'bg-white text-black shadow px-8.5 py-2.5 rounded-4xl'}`}
+										className={`px-8.5 py-2.5 rounded-4xl font-bold text-base text-black cursor-pointer hover:bg-neutral-50 ${item.size === size && 'bg-white text-black shadow px-8.5 py-2.5 rounded-4xl'}`}
 										onClick={() => changeSize(item)}
 									>
-										{item}
+										{item.size}
 									</Button>
 								))}
 							</div>
@@ -81,17 +117,27 @@ export default function WindowCardItem({product}:Props){
 								))}
 							</div>
 						</div>
-						<div className="flex flex-col gap-3">
+						<div className="flex flex-col gap-3 w-full max-w-[440px]">
 							<h1 className='text-lg font-semibold'>Ингредиенты</h1>
-							<div className='flex flex-row gap-5'>
-								<Ingredients />
-								<Ingredients />
-								<Ingredients />
-								<Ingredients />
+							<div className='grid grid-cols-3 gap-5 bg-gray-200 p-2 rounded-2xl overflow-y-auto'>
+								{ingredients.map((item: Ingredients) => (
+									<IngredientsCard
+										key={item.id}
+										id={item.id}
+										name={item.name}
+										price={item.price}
+										image={item.imageUrl}
+										changeIngredient={addIngredient}
+										supplements={supplements}
+									/>
+								))}
 							</div>
 						</div>
 						<div className="pt-2">
-							<Button className="w-full max-w-[360px] rounded-2xl py-6 text-base font-semibold">
+							<Button
+								className="w-full max-w-[360px] rounded-2xl py-6 text-base font-semibold cursor-pointer"
+								onClick={handleAddToDrawer}
+							>
 								Добавить в корзину за {product?.price} ₽
 							</Button>
 						</div>

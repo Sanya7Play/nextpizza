@@ -1,13 +1,14 @@
 'use client'
 import ProductItem from "@/components/shared/ProductItem";
-import {Product} from ".prisma/client";
+import {Ingredients, Product} from ".prisma/client";
 import {useEffect, useState} from "react";
 
 interface PropsProduct {
 	recommendProducts: Product[];
+	ingredients: Ingredients[];
 }
 
-export default function Recommended({recommendProducts}:PropsProduct) {
+export default function Recommended({recommendProducts, ingredients}:PropsProduct) {
 
 	const [loading, setLoading] = useState<boolean>(false);
 	useEffect(() => {
@@ -38,6 +39,7 @@ export default function Recommended({recommendProducts}:PropsProduct) {
 						imageAlt={product.name}
 						id={product.id}
 						loading={loading}
+						ingredients={ingredients}
 					/>
 				))}
 			</div>

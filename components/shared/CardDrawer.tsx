@@ -1,7 +1,7 @@
-"use client"
+'use client'
 import {
 	Sheet, SheetClose,
-	SheetContent,
+	SheetContent, SheetDescription,
 	SheetFooter,
 	SheetHeader,
 	SheetTitle,
@@ -9,12 +9,13 @@ import {
 } from "@/components/ui/sheet";
 import {Button} from "@/components/ui/button";
 import {ArrowLeft, ArrowRight, RussianRuble} from "lucide-react";
-import CartItem from "@/components/shared/CartItem";
 import Link from "next/link";
 import Image from "next/image";
+import {ICartItem} from "@/components/constants/pizza";
+import CartItem from "@/components/shared/CartItem";
 
 export default function CardDrawer({children}: { children: React.ReactNode}) {
-	const items = [];
+	const items = [1]
 	return (
 		<>
 			{items.length > 0 ? (
@@ -28,11 +29,13 @@ export default function CardDrawer({children}: { children: React.ReactNode}) {
 									3 товара
 								</p>
 							</SheetTitle>
+							<SheetDescription></SheetDescription>
 						</SheetHeader>
 						<div className="grid flex-1 auto-rows-min gap-6 px-4">
 							<CartItem/>
 							<CartItem/>
 							<CartItem/>
+
 						</div>
 						<SheetFooter>
 							<div className='flex flex-row justify-between text-lg font-bold px-4 py-1'>

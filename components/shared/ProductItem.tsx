@@ -2,8 +2,11 @@ import {RussianRuble} from "lucide-react";
 import {Button} from "@/components/ui/button";
 import Link from "next/link";
 import ProductSkeleton from "@/components/shared/ProductSkeleton";
+import {Ingredients} from ".prisma/client";
+import DialogWindow from "@/components/shared/DialogWindow";
 
 interface ProductItemProps {
+	ingredients: Ingredients[];
 	name: string;
 	price: number;
 	image: string;
@@ -12,7 +15,8 @@ interface ProductItemProps {
 	loading: boolean;
 }
 
-export default function ProductItem({name, price, image, imageAlt, id, loading}: ProductItemProps) {
+export default function ProductItem({name, price, image, id, loading, ingredients}: ProductItemProps) {
+
 	return(
 		<>
 			{loading ? (<ProductSkeleton/>) : (
@@ -20,24 +24,38 @@ export default function ProductItem({name, price, image, imageAlt, id, loading}:
 					<Link href={`/product/${id}`}>
 						<div className='flex justify-center pb-4'>
 							{/* eslint-disable-next-line @next/next/no-img-element */}
-							<img src={image} alt={imageAlt} width={200} height={200}/>
+							<img src={image} alt={name} width={200} height={200}/>
 						</div>
 					</Link>
 					<div>
 						<h1 className='font-bold text-xl my-3'>{name}</h1>
-						<p className='text-muted-foreground text-sm'>Маринованные огурчики, свежие томаты, красный лук, сочные ананасы, итальянские травы, сладкий перец, кубики брынзы, митболы</p>
+						<p className='text-muted-foreground text-sm'>
+							{ingredients?.map((ingredient) =>
+								ingredient.name).join(', ')
+							}
+						</p>
 					</div>
 					<div className='flex flex-row items-center justify-between mt-5'>
 						<span className='flex flex-row gap-1 items-center text-xl'> от
 							<p className='font-bold text-xl'>{price}</p>
 							<RussianRuble color='black' strokeWidth={2.5} size={18}/>
 						</span>
-						<Button
-							variant='default'
-							size={"sm"}
-							className='cursor-pointer text-base'>
-							+ Выбрать
-						</Button>
+						<DialogWindow
+							name={name}
+							price={price}
+							imageUrl={image}
+							id={id}
+							loading={loading}
+							ingredients={ingredients}
+						>
+							<Button
+								variant='default'
+								size={"sm"}
+								className='cursor-pointer text-base'>
+								+ Выбрать
+							</Button>
+						</DialogWindow>
+
 					</div>
 				</div>
 			)}
