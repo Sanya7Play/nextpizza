@@ -7,14 +7,15 @@ import {
 	BreadcrumbSeparator
 } from "@/components/ui/breadcrumb";
 import Link from "next/link";
-import {Product} from ".prisma/client";
+import {Category, Product} from "@/generated/prisma/client";
 import {useEffect, useState} from "react";
 import {Skeleton} from "@/components/ui/skeleton";
 
 type Props = {
 	product: Product | null;
+	category: string | null;
 }
-export default function WindowCardBreadCrumb({product}: Props) {
+export default function WindowCardBreadCrumb({product,category}: Props) {
 
 	const [breadcrumb, setBreadcrumb] = useState<boolean>(false);
 	useEffect(() => {
@@ -42,7 +43,7 @@ export default function WindowCardBreadCrumb({product}: Props) {
 				<BreadcrumbSeparator />
 				<BreadcrumbItem>
 					<BreadcrumbLink asChild>
-						<Link href="/">Пиццы</Link>
+						<Link href="/">{category}</Link>
 					</BreadcrumbLink>
 				</BreadcrumbItem>
 				<BreadcrumbSeparator />

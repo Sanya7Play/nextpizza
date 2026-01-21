@@ -1,5 +1,5 @@
 
-export const categories: string[] = ["Все", "Пицца", 'Комбо', 'Закуски', 'Коктейли', 'Кофе', 'Напитки', 'Десерты', 'Соусы'];
+export const categories: string[] = ["Все", "Пиццы", 'Комбо', 'Закуски', 'Коктейли', 'Кофе', 'Напитки', 'Десерты', 'Соусы'];
 export const buttonDaugh = ['Традиционное','Тонкое'];
 export const buttonSize = [
 	 {

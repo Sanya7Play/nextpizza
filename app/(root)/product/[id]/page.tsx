@@ -14,6 +14,11 @@ export default async function ProductPage({ params }: { params: Promise<{id: str
 		},
 		include: {
 			ingredients: true,
+			category: {
+				select: {
+					name: true,
+				},
+			},
 		},
 	});
 
@@ -35,6 +40,7 @@ export default async function ProductPage({ params }: { params: Promise<{id: str
 			<div className="flex flex-col mx-18 mt-5 min-h-screen gap-5">
 				<WindowCardBreadCrumb
 					product={product}
+					category={product.category.name}
 				/>
 				<WindowCardItem
 					product={product}

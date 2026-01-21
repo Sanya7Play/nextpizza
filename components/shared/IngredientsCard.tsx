@@ -31,8 +31,8 @@ export default function IngredientsCard({id, name, price, image, changeIngredien
 				</div>
 			</div>
 
-			<p className='text-xs'>{name}</p>
-			<span className='text-sm flex flex-row items-center'>{price} <RussianRuble size={14}/></span>
+			<p className='text-xs font-medium'>{name}</p>
+			<span className='text-sm flex flex-row items-center font-semibold'>{price} ₽</span>
 		</div>
 	)
 }

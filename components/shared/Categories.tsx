@@ -2,13 +2,18 @@
 import {useState} from "react";
 import {Button} from "@/components/ui/button";
 import {categories} from "@/components/constants/pizza";
+import {useProviders} from "@/components/shared/context/CategoryFilter";
 
 export default function Categories() {
+
+	const {setSelectedCategory} = useProviders();
 	const [categoryNumber, setCategory] = useState<number>(0);
 	const changeCategory= (category: string) => {
 		const findIndex: number = categories.indexOf(category);
 		setCategory(findIndex);
+		setSelectedCategory(findIndex);
 	}
+
 	return (
 		<div className='flex flex-row items-center justify-around bg-neutral-200/60 w-auto p-2.5 rounded-2xl gap-4 my-5'>
 			{categories.map((category, index) => (

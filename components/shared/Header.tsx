@@ -11,7 +11,7 @@ import PopoverInput from "@/components/shared/PopoverInput";
 
 interface HeaderProps {
 	buttonHide: boolean,
-	searchHide: boolean
+	пшеsearchHide: boolean
 }
 
 export default function Header({buttonHide, searchHide}: HeaderProps) {
