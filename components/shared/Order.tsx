@@ -1,7 +1,7 @@
 import {Accordion, AccordionContent, AccordionItem, AccordionTrigger} from "@/components/ui/accordion";
 import {Badge} from "@/components/ui/badge";
 import OrderCard from "@/components/shared/OrderCard";
-import {RussianRuble} from "lucide-react";
+
 
 export default function Order(){
 	return (
@@ -28,8 +28,7 @@ export default function Order(){
 					<div className="flex flex-row items-center px-5 gap-1">
 						<p className='text-xl'>Итого:</p>
 						<p className='flex flex-row items-center text-xl font-bold'>
-							2245
-							<RussianRuble size={16} strokeWidth={3}/>
+							2245 ₽
 						</p>
 					</div>
 				</AccordionContent>

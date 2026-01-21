@@ -7,7 +7,7 @@ import {
 	DialogTrigger
 } from "@/components/ui/dialog";
 import React from "react";
-import {Ingredients} from ".prisma/client";
+import {Ingredient} from "@/generated/prisma/client";
 import {IProduct} from "@/components/constants/pizza";
 import WindowCardItem from "@/components/shared/WindowCardItem";
 import { X } from 'lucide-react';
@@ -19,7 +19,7 @@ interface Props {
 	imageUrl: string;
 	id: number;
 	loading: boolean;
-	ingredients: Ingredients[];
+	ingredients: Ingredient[];
 }
 
 export default function DialogWindow({children, imageUrl, ingredients, price, name, id}: Props) {

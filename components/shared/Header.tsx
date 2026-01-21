@@ -65,7 +65,7 @@ export default function Header({buttonHide, searchHide}: HeaderProps) {
 										<Button
 											variant='default'
 											className='group p-6 cursor-pointer rounded-2xl text-base font-extrabold gap-3'>
-											<p className='flex flex-row items-center gap-1 group-hover:-translate-x-1 duration-300'>520<RussianRuble size={14} strokeWidth={3}/></p>
+											<p className='flex flex-row items-center gap-1 group-hover:-translate-x-1 duration-300'>520 ₽</p>
 											<p className='border-r border-gray-100/50 h-5'></p>
 											<p className='flex flex-row items-center gap-1 group-hover:translate-x-1 duration-300'><ShoppingCart size={16} strokeWidth={3}/>3</p>
 										</Button>

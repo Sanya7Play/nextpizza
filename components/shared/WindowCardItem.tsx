@@ -1,27 +1,27 @@
 'use client'
 import {Button} from "@/components/ui/button";
-import {Ingredients} from ".prisma/client";
+import {Ingredient} from "@/generated/prisma/client";
 import {ICartItem, IProduct, IItem} from "@/components/constants/pizza";
 import {useEffect, useState} from "react";
 import SkeletonId from "@/components/shared/SkeletonId";
 import IngredientsCard from "@/components/shared/IngredientsCard";
 import {buttonDaugh, buttonSize} from "@/components/constants/pizza";
+import {useCartStore} from "@/components/store/cart";
 
 type Props = {
 	product: IProduct | null;
-	ingredients: Ingredients[];
+	ingredients: Ingredient[] | [];
 }
 
 export default function WindowCardItem({product, ingredients}:Props){
 
-
+	const addItem = useCartStore(state => state.addItem);
 	const [loading, setLoading] = useState<boolean>(false);
 	const [size, setSize] = useState<string | undefined>(buttonSize[0].size);
 	const [key, setKey] = useState<number | undefined>(buttonSize[0].key);
 	const [weight, setWeight] = useState<number | undefined>(buttonSize[0].weight);
 	const [daugh, setDaugh] = useState<string | undefined>(buttonDaugh[0]);
-	const [supplements, setSupplements] = useState<Ingredients[]>([]);
-	const [cart, setCart] = useState<ICartItem[]>([]);
+	const [supplements, setSupplements] = useState<Ingredient[]>([]);
 
 	const changeSize = (item: IItem) => {
 		const size: string | undefined = buttonSize.find(obj => item.size === obj.size)?.size;
@@ -50,17 +50,22 @@ export default function WindowCardItem({product, ingredients}:Props){
 	}
 
 	 const handleAddToDrawer = () => {
-		const addCart: ICartItem = {
+		const totalPrice = ingredients.reduce((sum, i) => sum + i.price, 0);
+		const addCartItem: ICartItem = {
 			id: product!.id,
 			name: product!.name,
-			price: product!.price,
-			size: size,
-			daugh: daugh,
-			ingredients: supplements
+			price: product!.price + totalPrice,
+			quantity: 1,
+			ingredients: supplements,
+			image: product!.imageUrl,
+			size: size!,
+			daugh: daugh!,
+			weight: weight!,
+			key: key!
 		}
-		if (!addCart) return;
-		setCart(prev => [...prev, addCart]);
-		localStorage.setItem('cart', JSON.stringify(cart));
+		if (!addCartItem) return;
+		addItem(addCartItem)
+		console.log(addCartItem);
 	}
 
 	useEffect(() => {
@@ -77,7 +82,6 @@ export default function WindowCardItem({product, ingredients}:Props){
 		}
 		getProduct()
 	},[product])
-	console.log(size, daugh, supplements);
 	return (
 		<div>
 			{loading ? (<SkeletonId/>) : (
@@ -119,8 +123,8 @@ export default function WindowCardItem({product, ingredients}:Props){
 						</div>
 						<div className="flex flex-col gap-3 w-full max-w-[440px]">
 							<h1 className='text-lg font-semibold'>Ингредиенты</h1>
-							<div className='grid grid-cols-3 gap-5 bg-gray-200 p-2 rounded-2xl overflow-y-auto'>
-								{ingredients.map((item: Ingredients) => (
+							<div className='grid grid-cols-3 gap-5 bg-gray-200 p-3 rounded-2xl overflow-y-scroll h-[200px]'>
+								{ingredients.map((item: Ingredient) => (
 									<IngredientsCard
 										key={item.id}
 										id={item.id}
@@ -135,7 +139,7 @@ export default function WindowCardItem({product, ingredients}:Props){
 						</div>
 						<div className="pt-2">
 							<Button
-								className="w-full max-w-[360px] rounded-2xl py-6 text-base font-semibold cursor-pointer"
+								className="w-full max-w-[440px] rounded-2xl py-6 text-base font-semibold cursor-pointer"
 								onClick={handleAddToDrawer}
 							>
 								Добавить в корзину за {product?.price} ₽

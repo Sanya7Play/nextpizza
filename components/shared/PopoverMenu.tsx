@@ -9,7 +9,7 @@ export default function PopoverMenu({children}: { children: React.ReactNode}) {
 			</PopoverTrigger>
 			<PopoverContent className="w-35">
 				<div className="flex flex-col justify-between gap-4">
-					<Link href='' className='hover:text-primary'>Настройки</Link>
+					<Link href='/options' className='hover:text-primary'>Настройки</Link>
 					<Link href='/orders' className='pb-2 border-b border-gray-200 hover:text-primary'>Заказы</Link>
 					<Link href='' className='hover:text-primary'>Выйти</Link>
 				</div>

@@ -8,14 +8,23 @@ import {
 	SheetTrigger
 } from "@/components/ui/sheet";
 import {Button} from "@/components/ui/button";
-import {ArrowLeft, ArrowRight, RussianRuble} from "lucide-react";
+import {ArrowLeft, ArrowRight} from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
-import {ICartItem} from "@/components/constants/pizza";
 import CartItem from "@/components/shared/CartItem";
+import {useCartStore} from "@/components/store/cart";
+import {ICartItem} from "@/components/constants/pizza";
 
 export default function CardDrawer({children}: { children: React.ReactNode}) {
-	const items = [1]
+
+	const items = useCartStore(state => state.items);
+	const addItem = useCartStore(state => state.addItem);
+	const removeItem = useCartStore(state => state.removeItem);
+	const removeQuantity = useCartStore(state => state.removeQuantity);
+
+	const totalCount = items.reduce((sum, i) => sum + i.quantity, 0);
+	const totalPrice = items.reduce((sum, i) => sum + i.price, 0);
+	console.log(items);
 	return (
 		<>
 			{items.length > 0 ? (
@@ -26,27 +35,38 @@ export default function CardDrawer({children}: { children: React.ReactNode}) {
 							<SheetTitle className='flex flex-row gap-1'>
 								<p className='text-xl'>В корзине</p>
 								<p className='text-xl font-extrabold'>
-									3 товара
+									{totalCount} товара
 								</p>
 							</SheetTitle>
 							<SheetDescription></SheetDescription>
 						</SheetHeader>
 						<div className="grid flex-1 auto-rows-min gap-6 px-4">
-							<CartItem/>
-							<CartItem/>
-							<CartItem/>
-
+							{items.map((item: ICartItem, index: number) => (
+								<CartItem
+									key={item.id}
+									sizeNumber={item.key}
+									weight={item.weight}
+									id={index + 1}
+									price={item.price}
+									name={item.name}
+									image={item.image}
+									size={item.size}
+									daugh={item.daugh}
+									quantity={item.quantity}
+									ingredients={item.ingredients}
+									deleteItem={removeItem}
+									addToCart={addItem}
+									deleteQuantity={removeQuantity}
+								/>
+							))}
 						</div>
 						<SheetFooter>
-							<div className='flex flex-row justify-between text-lg font-bold px-4 py-1'>
+							<div className='flex flex-row text-lg font-bold px-2 py-1 gap-2'>
 								<p className='text-lg'>
 									Итого
 								</p>
-								<p className='border-b border-dashed border-gray-400 w-full p-0 m-3'></p>
-								<p className='flex flex-row items-center gap-1'>
-									1590
-									<RussianRuble size={14} strokeWidth={3}/>
-								</p>
+								<p className='border-b border-dashed border-gray-400 w-full p-0 my-2 mx-1'></p>
+								<p className='flex flex-row items-center gap-0.5'>{totalPrice}₽</p>
 							</div>
 							<Link href='/drawer'>
 								<Button

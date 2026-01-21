@@ -3,8 +3,6 @@ import {useState} from "react";
 import {Button} from "@/components/ui/button";
 import {categories} from "@/components/constants/pizza";
 
-
-
 export default function Categories() {
 	const [categoryNumber, setCategory] = useState<number>(0);
 	const changeCategory= (category: string) => {

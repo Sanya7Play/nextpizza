@@ -5,7 +5,7 @@ export default function DrawerContent() {
 	return(
 		<div className='flex flex-col mx-20 py-10'>
 			<Title text='Оформление заказа'/>
-			<div className='flex flex-row gap-10 justify-between mx-auto mt-12'>
+			<div className='grid grid-cols-2 gap-10 justify-between mx-10 mt-12'>
 				<FilingData/>
 				<Total/>
 			</div>

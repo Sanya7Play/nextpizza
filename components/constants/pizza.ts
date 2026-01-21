@@ -1,8 +1,7 @@
-import {Ingredients} from ".prisma/client";
 
- export const categories: string[] = ["Все", "Пицца", 'Комбо', 'Закуски', 'Коктейли', 'Кофе', 'Напитки', 'Десерты', 'Соусы'];
- export const buttonDaugh = ['Традиционное','Тонкое'];
- export const buttonSize = [
+export const categories: string[] = ["Все", "Пицца", 'Комбо', 'Закуски', 'Коктейли', 'Кофе', 'Напитки', 'Десерты', 'Соусы'];
+export const buttonDaugh = ['Традиционное','Тонкое'];
+export const buttonSize = [
 	 {
 		 key: 25,
 		 weight: 250,
@@ -33,9 +32,19 @@ import {Ingredients} from ".prisma/client";
  }
  export interface ICartItem {
 	 id: number;
+	 key: number;
+	 image: string;
 	 name: string;
 	 price: number;
 	 size: string | undefined;
 	 daugh: string | undefined;
-	 ingredients: Ingredients[];
+	 weight: number | undefined;
+	 quantity: number;
+	 ingredients: Ingredient[];
  }
+export interface Ingredient {
+	id: number;
+	name: string;
+	price: number;
+	imageUrl: string;
+}

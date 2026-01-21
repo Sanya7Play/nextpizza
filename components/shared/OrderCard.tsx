@@ -1,5 +1,4 @@
 import Image from "next/image";
-import {RussianRuble} from "lucide-react";
 
 export default function OrderCard() {
 	return (
@@ -13,7 +12,7 @@ export default function OrderCard() {
 			</div>
 			<div className='flex flex-row items-center ml-20 gap-2'>
 				<div className='flex flex-col items-center'>
-					<p className='flex flex-row items-center gap-0.5 text-base font-bold'>495<RussianRuble size={14} strokeWidth={3}/></p>
+					<p className='flex flex-row items-center gap-0.5 text-base font-bold'>495 ₽</p>
 					<p className='text-muted-foreground'>2 шт.</p>
 				</div>
 			</div>

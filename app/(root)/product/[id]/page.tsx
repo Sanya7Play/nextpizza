@@ -1,10 +1,9 @@
 import Header from "@/components/shared/Header";
 import WindowCardBreadCrumb from "@/components/shared/WindowCardBreadCrumb";
 import WindowCardItem from "@/components/shared/WindowCardItem";
-import {prisma} from "@/prisma/prisma-client";
-import NotFound from "@/app/not-found";
+import { prisma } from "@/lib/prisma";
 import Recommended from "@/components/shared/Recommended";
-import {Product} from ".prisma/client";
+import {notFound} from "next/navigation";
 
 export default async function ProductPage({ params }: { params: Promise<{id: string}> }) {
 
@@ -13,23 +12,23 @@ export default async function ProductPage({ params }: { params: Promise<{id: str
 		where: {
 			id: Number(id),
 		},
-	});
-	const ingredients = await prisma.ingredients.findMany({
-		where: {
-			ingridientId: product?.productCategoryId,
+		include: {
+			ingredients: true,
 		},
 	});
 
-	if (!product) NotFound();
+	if (!product) notFound();
 
-	const recommendProducts: Product[] = await prisma.product.findMany({
+	const recommendProducts = await prisma.product.findMany({
 		where:{
-			categoryId: product?.categoryId,
+			categoryId: product.categoryId,
+			NOT: {id: product.id}
+		},
+		include:{
+			ingredients: true
 		},
 		take: 4,
 	})
-	console.log(ingredients);
-	console.log(recommendProducts);
 	return (
 		<div className="mx-20 bg-white rounded-4xl min-h-screen lg:mx-20">
 			<Header buttonHide={true} searchHide={false}/>
@@ -39,11 +38,10 @@ export default async function ProductPage({ params }: { params: Promise<{id: str
 				/>
 				<WindowCardItem
 					product={product}
-					ingredients={ingredients}
+					ingredients={product.ingredients ?? []}
 				/>
 				<Recommended
 					recommendProducts={recommendProducts}
-					ingredients={ingredients}
 				/>
 			</div>
 		</div>

@@ -1,12 +1,12 @@
 import {CircleCheck, RussianRuble} from "lucide-react";
-import {Ingredients} from ".prisma/client";
+import {Ingredient} from "@/generated/prisma/client";
 interface IngredientsCard {
 	id: number;
 	name: string;
 	price: number;
 	image: string;
 	changeIngredient: (id: number) => void;
-	supplements: Ingredients[]
+	supplements: Ingredient[]
 }
 
 export default function IngredientsCard({id, name, price, image, changeIngredient, supplements}: IngredientsCard) {
@@ -15,7 +15,7 @@ export default function IngredientsCard({id, name, price, image, changeIngredien
 		changeIngredient(id)
 	}
 
-	const ingredient: Ingredients | undefined = supplements.find(ingredient => ingredient.id === id);
+	const ingredient: Ingredient | undefined = supplements.find(ingredient => ingredient.id === id);
 
 	return (
 		<div
