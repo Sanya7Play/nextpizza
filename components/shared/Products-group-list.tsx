@@ -16,6 +16,7 @@ interface Product {
 	id: number;
 	ingredients?: Ingredient[];
 	category: { name: string; };
+	description: string;
 }
 export default function ProductsGroupList() {
 
@@ -23,7 +24,6 @@ export default function ProductsGroupList() {
 	const [loading, setLoading] = useState<boolean>(false);
 
 	const {selectedCategory} = useProviders();
-	console.log(selectedCategory);
 
 	useEffect(() => {
 		async function getProducts() {
@@ -42,13 +42,12 @@ export default function ProductsGroupList() {
 
 	}, [selectedCategory]);
 
-	console.log(selectedCategory);
 	const title = selectedCategory === 0 ? 'Все товары' : categories.find((
 		category, index) => index === selectedCategory);
 	return(
 		<div className='flex flex-col gap-3 w-full mr-18'>
 			<Title text={title ? title : 'Все товары'} />
-			<div className='grid grid-cols-3 gap-1 w-auto h-auto pb-1'>
+			<div className='grid grid-cols-3 gap-4 w-auto h-auto pb-1 lg:grid-cols-2'>
 				{products.map((product) => (
 					<ProductItem
 						key={product.id}
@@ -59,6 +58,7 @@ export default function ProductsGroupList() {
 						imageAlt={product.name}
 						loading={loading}
 						ingredients={product.ingredients ?? []}
+						description={product.description}
 					/>
 				))}
 			</div>

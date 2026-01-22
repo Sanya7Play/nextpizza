@@ -44,10 +44,11 @@ model ProductCategory {
 // --- Товар (пицца, напиток и т.д.) ---
 
 model Product {
-    id       Int    @id @default(autoincrement())
-    name     String
-    imageUrl String
-    price    Int
+    id          Int     @id @default(autoincrement())
+    name        String
+    imageUrl    String
+    price       Int
+    description String?
 
     // Верхний уровень категории (Пиццы / Кофе / Закуски ...)
     categoryId Int
