@@ -6,16 +6,19 @@ export const buttonSize = [
 		 key: 25,
 		 weight: 250,
 		 size: 'Маленькая',
+		 price: 0
 	 },
 	 {
 		 key: 30,
 		 weight: 380,
 		 size: 'Средняя',
+		 price: 270
 	 },
 	 {
 		 key: 40,
 		 weight: 560,
 		 size: 'Большая',
+		 price: 430
 	 }
  ]
  export interface IProduct {
@@ -29,16 +32,17 @@ export const buttonSize = [
 	 key: number;
 	 size: string;
 	 weight: number;
+	 price: number;
  }
  export interface ICartItem {
 	 id: number;
-	 key: number;
 	 image: string;
 	 name: string;
 	 price: number;
-	 size: string | undefined;
-	 daugh: string | undefined;
-	 weight: number | undefined;
+	 size: string;
+	 daugh: string;
+	 weight: number;
+	 key: number;
 	 quantity: number;
 	 ingredients: Ingredient[];
  }

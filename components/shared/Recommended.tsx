@@ -32,7 +32,7 @@ export default function Recommended({recommendProducts}:PropsProduct) {
 	return(
 		<div className='flex flex-col gap-3 w-full mr-18 my-10'>
 			<h1 className='font-bold text-3xl'>Рекомендации</h1>
-			<div className={'grid grid-cols-4 gap-15 w-auto h-auto md:gap-1'}>
+			<div className={'grid 2xl:grid-cols-4 gap-2 w-auto h-auto lg:grid-cols-2 xl:grid-cols-3'}>
 				{recommendProducts.map((product) => (
 					<ProductItem
 						key={product.id}

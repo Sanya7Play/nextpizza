@@ -15,7 +15,7 @@ export default function Categories() {
 	}
 
 	return (
-		<div className='flex flex-row items-center justify-around bg-neutral-200/60 w-auto p-2.5 rounded-2xl gap-4 my-5'>
+		<div className='flex flex-row items-center justify-around bg-neutral-300/40 w-auto p-2.5 rounded-2xl gap-4 my-5'>
 			{categories.map((category, index) => (
 				<Button
 					key={category}

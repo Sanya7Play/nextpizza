@@ -1,4 +1,4 @@
-import {CircleCheck, RussianRuble} from "lucide-react";
+import {CircleCheck} from "lucide-react";
 import {Ingredient} from "@/generated/prisma/client";
 interface IngredientsCard {
 	id: number;

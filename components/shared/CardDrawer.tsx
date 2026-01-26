@@ -19,12 +19,12 @@ export default function CardDrawer({children}: { children: React.ReactNode}) {
 
 	const items = useCartStore(state => state.items);
 	const addItem = useCartStore(state => state.addItem);
-	const removeItem = useCartStore(state => state.removeItem);
-	const removeQuantity = useCartStore(state => state.removeQuantity);
-
-	const totalCount = items.reduce((sum, i) => sum + i.quantity, 0);
-	const totalPrice = items.reduce((sum, i) => sum + i.price, 0);
-	console.log(items);
+	// const removeItem = useCartStore(state => state.removeItem);
+	// const incrementCart = useCartStore(state => state.incrementCart);
+	// // const decrementCart = useCartStore(state => state.decrementCart);
+	//
+	// const totalCount = useCartStore(state => state.totalCount);
+	// const totalPrice = useCartStore(state => state.totalPrice);
 	return (
 		<>
 			{items.length > 0 ? (
@@ -56,7 +56,7 @@ export default function CardDrawer({children}: { children: React.ReactNode}) {
 									ingredients={item.ingredients}
 									deleteItem={removeItem}
 									addToCart={addItem}
-									deleteQuantity={removeQuantity}
+									deleteQuantity={incrementCart}
 								/>
 							))}
 						</div>

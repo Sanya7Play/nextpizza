@@ -45,9 +45,11 @@ export default async function ProductPage({ params }: { params: Promise<{id: str
 				<WindowCardItem
 					product={product}
 					ingredients={product.ingredients ?? []}
+					description={product.description ?? ''}
 				/>
 				<Recommended
 					recommendProducts={recommendProducts}
+
 				/>
 			</div>
 		</div>

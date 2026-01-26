@@ -1,6 +1,6 @@
 import {Button} from "@/components/ui/button";
-import {Minus, Plus, RussianRuble, Trash2} from "lucide-react";
-import {Ingredient} from ".prisma/client";
+import {Minus, Plus, Trash2} from "lucide-react";
+import {Ingredient} from "@/generated/prisma/client";
 import {ICartItem} from "@/components/constants/pizza";
 interface CartItemProps {
 	id: number,

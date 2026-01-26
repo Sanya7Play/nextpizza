@@ -7,7 +7,7 @@ import {Label} from "@/components/ui/label";
 export default function FilingData() {
 	return (
 		<div className='flex flex-col gap-10'>
-			<div className='flex flex-col w-auto h-auto bg-neutral-100 rounded-xl gap-3'>
+			<div className='flex flex-col w-auto h-auto bg-neutral-300/40 rounded-xl gap-3'>
 				<header className='flex flex-row justify-between w-auto border-b border-neutral-200 pb-5 p-8'>
 					<h1 className='font-bold text-2xl'>1. Корзина</h1>
 					<p className='flex flex-row items-center gap-1 text-base text-muted-foreground'><Trash2 size={16}/>Очистить корзину</p>
@@ -15,7 +15,7 @@ export default function FilingData() {
 				<PurchaseCard/>
 				<PurchaseCard/>
 			</div>
-			<div className='flex flex-col w-auto h-auto bg-neutral-50 rounded-xl gap-3'>
+			<div className='flex flex-col w-auto h-auto bg-neutral-300/40 rounded-xl gap-3'>
 				<header className='flex flex-row w-auto border-b border-neutral-300 pb-5 p-8'>
 					<h1 className='font-bold text-2xl'>2. Персональные данные</h1>
 				</header>
@@ -38,7 +38,7 @@ export default function FilingData() {
 					</div>
 				</div>
 			</div>
-			<div className='flex flex-col w-auto h-auto bg-neutral-50 rounded-xl gap-3'>
+			<div className='flex flex-col w-auto h-auto bg-neutral-300/40 rounded-xl gap-3'>
 				<header className='flex flex-row w-auto border-b border-neutral-300 pb-5 p-8'>
 					<h1 className='font-bold text-2xl'>3. Адрес доставки</h1>
 				</header>

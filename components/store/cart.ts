@@ -1,83 +1,92 @@
-import {create} from "zustand/react";
-import {ICartItem} from "@/components/constants/pizza";
-type CartState = {
-	items: ICartItem[],
+import { create } from "zustand";
 
-	addItem: (item: ICartItem) => void,
-	removeItem: (item: ICartItem) => void,
-	removeQuantity: (item: ICartItem) => void,
-	clearCart: () => void,
-
+export type CartIngredient = {
+	id: number;
+	name: string;
+	price: number;
+	imageUrl: string;
 };
 
-export const useCartStore = create<CartState>((set, get) => ({
-	items: [],
+export type CartItem = {
+	key: string;        // уникальный ключ позиции
+	productId: number;
+	name: string;
+	imageUrl: string;
 
+	unitPrice: number;  // цена за 1 штуку (уже с размером/тестом/допами)
+	size: string;
+	dough: string;
+	weight: number;
+
+	ingredients: CartIngredient[];
+	quantity: number;
+};
+
+type CartState = {
+	items: CartItem[];
+
+	addItem: (item: Omit<CartItem, "quantity">) => void;
+	incrementCart: (key: string) => void;
+	decrementCart: (key: string) => void;
+	removeItem: (key: string) => void;
+	clearCart: () => void;
+
+	totalCount: number;
+	totalPrice: number;
+};
+
+export const useCartStore = create<CartState>((set) => ({
+	items: [],
+	totalCount: 0,
+	totalPrice: 0,
 
 	addItem: (item) =>
 		set((state) => {
-			const existing = state.items.find(
-				(i) =>
-					i.id === item.id &&
-					i.size === item.size &&
-					i.daugh === item.daugh
-			);
+			const existing = state.items.find((i) => i.key === item.key);
 
+			let nextItems: CartItem[];
 			if (existing) {
-				return {
-					items: state.items.map((i) =>
-						i === existing
-							? { ...i, quantity: i.quantity + 1, price: i.price + existing.price}
-							: i
-					),
-				};
+				nextItems = state.items.map((i) =>
+					i.key === item.key ? { ...i, quantity: i.quantity + 1 } : i
+				);
+			} else {
+				nextItems = [...state.items, { ...item, quantity: 1 }];
 			}
 
-			return { items: [...state.items, item] };
+			const totalCount = nextItems.reduce((s, i) => s + i.quantity, 0);
+			const totalPrice = nextItems.reduce((s, i) => s + i.unitPrice * i.quantity, 0);
+
+			return { items: nextItems, totalCount, totalPrice };
 		}),
 
-	removeItem: (item) =>
+	incrementCart: (key) =>
 		set((state) => {
-			const existing = state.items.find(
-				(i) =>
-					i.id === item.id &&
-					i.size === item.size &&
-					i.daugh === item.daugh
+			const nextItems = state.items.map((i) =>
+				i.key === key ? { ...i, quantity: i.quantity + 1 } : i
 			);
-
-			if (existing) {
-				return {
-					items: state.items.filter((i) => i.id !== existing.id),
-				};
-			}
-
-			return { items: [...state.items] };
+			const totalCount = nextItems.reduce((s, i) => s + i.quantity, 0);
+			const totalPrice = nextItems.reduce((s, i) => s + i.unitPrice * i.quantity, 0);
+			return { items: nextItems, totalCount, totalPrice };
 		}),
 
-
-	clearCart: () => set({ items: [] }),
-
-	removeQuantity: (item) =>
+	decrementCart: (key) =>
 		set((state) => {
-			const existing = state.items.find(
-				(i) =>
-					i.id === item.id &&
-					i.size === item.size &&
-					i.daugh === item.daugh
-			);
+			const nextItems = state.items
+				.map((i) => (i.key === key ? { ...i, quantity: i.quantity - 1 } : i))
+				.filter((i) => i.quantity > 0);
 
-			if (!existing) {
-				// ничего не делаем, если такого нет
-				return state;
-			}
-
-			return {
-				items: state.items.map((i) =>
-					i === existing
-						? { ...i, quantity: i.quantity - 1, price: i.price / 2 }
-						: i
-				),
-			};
+			const totalCount = nextItems.reduce((s, i) => s + i.quantity, 0);
+			const totalPrice = nextItems.reduce((s, i) => s + i.unitPrice * i.quantity, 0);
+			return { items: nextItems, totalCount, totalPrice };
 		}),
+
+	removeItem: (key) =>
+		set((state) => {
+			const nextItems = state.items.filter((i) => i.key !== key);
+			const totalCount = nextItems.reduce((s, i) => s + i.quantity, 0);
+			const totalPrice = nextItems.reduce((s, i) => s + i.unitPrice * i.quantity, 0);
+			return { items: nextItems, totalCount, totalPrice };
+		}),
+
+	clearCart: () => set({ items: [], totalCount: 0, totalPrice: 0 }),
 }));
-

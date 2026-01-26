@@ -3,7 +3,7 @@ import PopoverSort from "@/components/shared/PopoverSort";
 
 export default function Sort() {
 	return(
-		<div className='flex flex-row items-center gap-2 bg-neutral-200/60 w-auto p-4 rounded-2xl'>
+		<div className='flex flex-row items-center gap-2 bg-neutral-300/40 w-auto p-4.5 rounded-2xl'>
 			<ArrowUpDown size={16}/>
 			<p className='font-bold'>Сортировка: </p>
 			<PopoverSort>
