@@ -8,6 +8,7 @@ export type CartIngredient = {
 };
 
 export type CartItem = {
+	id: number;
 	key: string;        // уникальный ключ позиции
 	productId: number;
 	name: string;
@@ -17,6 +18,7 @@ export type CartItem = {
 	size: string;
 	dough: string;
 	weight: number;
+	sizeNumber: number;
 
 	ingredients: CartIngredient[];
 	quantity: number;

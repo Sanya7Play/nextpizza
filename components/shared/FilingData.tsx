@@ -1,26 +1,49 @@
+"use client"
 import {Clock, Trash2} from "lucide-react";
 import PurchaseCard from "@/components/shared/PurchaseCard";
 import {Input} from "@/components/ui/input";
 import {Textarea} from "@/components/ui/textarea";
 import {Label} from "@/components/ui/label";
+import {useCartStore} from "@/components/store/cart";
 
 export default function FilingData() {
+	const items = useCartStore(state => state.items);
+	const clearCart = useCartStore(state => state.clearCart);
+	const incrementCart = useCartStore(state => state.incrementCart);
+	const decrementCart = useCartStore(state => state.decrementCart);
 	return (
 		<div className='flex flex-col gap-10'>
-			<div className='flex flex-col w-auto h-auto bg-neutral-300/40 rounded-xl gap-3'>
-				<header className='flex flex-row justify-between w-auto border-b border-neutral-200 pb-5 p-8'>
+			<div className='flex flex-col w-auto h-auto bg-neutral-300/20 rounded-xl gap-3'>
+				<header className={items.length > 0 ? 'flex flex-row justify-between w-auto border-b border-neutral-200 pb-5 p-8' : 'flex flex-row justify-between w-auto border-neutral-200 pb-5 p-8'}>
 					<h1 className='font-bold text-2xl'>1. Корзина</h1>
-					<p className='flex flex-row items-center gap-1 text-base text-muted-foreground'><Trash2 size={16}/>Очистить корзину</p>
+					<p className='flex flex-row items-center gap-1 text-base text-muted-foreground cursor-pointer' onClick={clearCart}>
+						<Trash2 size={16}/>Очистить корзину
+					</p>
 				</header>
-				<PurchaseCard/>
-				<PurchaseCard/>
+				{items.map(item => (
+					<PurchaseCard
+						key={item.key}
+						keyItem={item.key}
+						id={item.id}
+						name={item.name}
+						image={item.imageUrl}
+						price={item.unitPrice}
+						daugh={item.dough}
+						quantity={item.quantity}
+						weight={item.weight}
+						ingredients={item.ingredients}
+						sizeNumber={item.sizeNumber}
+						addQuantity={incrementCart}
+						deleteQuantity={decrementCart}
+					/>
+					))}
 			</div>
-			<div className='flex flex-col w-auto h-auto bg-neutral-300/40 rounded-xl gap-3'>
+			<div className='flex flex-col w-auto h-auto bg-neutral-300/20 rounded-xl gap-3'>
 				<header className='flex flex-row w-auto border-b border-neutral-300 pb-5 p-8'>
 					<h1 className='font-bold text-2xl'>2. Персональные данные</h1>
 				</header>
 				<div className='grid grid-cols-2 gap-8 p-8'>
-					<div className='flex flex-col gap-2 '>
+					<div className='flex flex-col gap-2'>
 						<Label className='font-bold text-sm'>Имя</Label>
 						<Input type='text' placeholder='Имя' className='h-11'/>
 					</div>
@@ -34,11 +57,11 @@ export default function FilingData() {
 					</div>
 					<div className='flex flex-col gap-2 '>
 						<Label className='font-bold text-sm'>Телефон</Label>
-						<Input type='tel' placeholder='' className='h-11'/>
+						<Input type='tel' placeholder='+7(777)-777-77-77' className='h-11'/>
 					</div>
 				</div>
 			</div>
-			<div className='flex flex-col w-auto h-auto bg-neutral-300/40 rounded-xl gap-3'>
+			<div className='flex flex-col w-auto h-auto bg-neutral-300/20 rounded-xl gap-3'>
 				<header className='flex flex-row w-auto border-b border-neutral-300 pb-5 p-8'>
 					<h1 className='font-bold text-2xl'>3. Адрес доставки</h1>
 				</header>

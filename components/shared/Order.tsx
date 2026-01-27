@@ -8,7 +8,7 @@ export default function Order(){
 		<Accordion
 			type="single"
 			collapsible
-			className="w-240 rounded-4xl bg-neutral-200/60 shadow-lg"
+			className="w-240 rounded-4xl bg-neutral-300/20 shadow-lg"
 			defaultValue="item-1"
 		>
 			<AccordionItem value="item-2" className='p-5'>

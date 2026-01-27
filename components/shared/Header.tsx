@@ -8,6 +8,7 @@ import {useState} from "react";
 import PopoverMenu from "@/components/shared/PopoverMenu";
 import Link from "next/link";
 import PopoverInput from "@/components/shared/PopoverInput";
+import {useCartStore} from "@/components/store/cart";
 
 interface HeaderProps {
 	buttonHide: boolean,
@@ -17,6 +18,8 @@ interface HeaderProps {
 export default function Header({buttonHide, searchHide}: HeaderProps) {
 	const [isAuthenticated, setIsAuthenticated] = useState<boolean>(true);
 	const items: string[] = ['12','23'];
+	const totalCount = useCartStore(state => state.totalCount);
+	const totalPrice = useCartStore(state => state.totalPrice);
 	return(
 		<>
 			<div className='flex flex-row items-center justify-between px-18 py-15 border-b border-gray-200'>
@@ -29,7 +32,7 @@ export default function Header({buttonHide, searchHide}: HeaderProps) {
 						<p className='font-normal text-muted-foreground'>вкусней уже некуда</p>
 					</div>
 				</div>
-				<div className='relative h-11 2xl:w-200 xl:w-110 lg:w-60 md:w-50'>
+				<div className='relative h-11 2xl:w-160 xl:w-100 lg:w-50 md:w-50'>
 					{searchHide &&
 						<>
                             <Search
@@ -65,9 +68,9 @@ export default function Header({buttonHide, searchHide}: HeaderProps) {
 										<Button
 											variant='default'
 											className='group p-6 cursor-pointer rounded-2xl text-base font-extrabold gap-3'>
-											<p className='flex flex-row items-center gap-1 group-hover:-translate-x-1 duration-300'>520 ₽</p>
+											<p className='flex flex-row items-center gap-1 group-hover:-translate-x-1 duration-300'>{totalPrice} ₽</p>
 											<p className='border-r border-gray-100/50 h-5'></p>
-											<p className='flex flex-row items-center gap-1 group-hover:translate-x-1 duration-300'><ShoppingCart size={16} strokeWidth={3}/>3</p>
+											<p className='flex flex-row items-center gap-1 group-hover:translate-x-1 duration-300'><ShoppingCart size={16} strokeWidth={3}/>{totalCount}</p>
 										</Button>
 									</CardDrawer>
 								) : (

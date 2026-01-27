@@ -10,7 +10,7 @@ export default function Options() {
 			<div className='flex flex-col mx-20 py-10'>
 				<Title text='Настройки'/>
 				<div className='grid grid-rows-3 gap-5 justify-between mt-10'>
-					<div className='flex flex-col w-180 h-auto bg-neutral-50 rounded-xl gap-3'>
+					<div className='flex flex-col w-180 h-auto bg-neutral-300/20 rounded-xl gap-3'>
 						<header className='flex flex-row w-auto border-b border-neutral-300 pb-5 p-8'>
 							<h1 className='font-bold text-2xl'>Персональные данные</h1>
 						</header>
@@ -33,7 +33,7 @@ export default function Options() {
 							</div>
 						</div>
 					</div>
-					<div className='flex flex-col w-auto h-auto bg-neutral-50 rounded-xl gap-3'>
+					<div className='flex flex-col w-auto h-auto bg-neutral-300/20 rounded-xl gap-3'>
 						<header className='flex flex-row w-auto border-b border-neutral-300 pb-5 p-8'>
 							<h1 className='font-bold text-2xl'>Адрес доставки</h1>
 						</header>
@@ -48,7 +48,7 @@ export default function Options() {
 							</div>
 						</div>
 					</div>
-					<div className='flex flex-col w-auto h-auto bg-neutral-50 rounded-xl gap-3'>
+					<div className='flex flex-col w-auto h-auto bg-neutral-300/20 rounded-xl gap-3'>
 						<header className='flex flex-row w-auto border-b border-neutral-300 pb-5 p-8'>
 							<h1 className='font-bold text-2xl'>Реквизиты карты</h1>
 						</header>

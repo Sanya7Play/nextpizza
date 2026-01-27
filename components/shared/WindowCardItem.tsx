@@ -7,14 +7,15 @@ import SkeletonId from "@/components/shared/SkeletonId";
 import IngredientsCard from "@/components/shared/IngredientsCard";
 import {buttonDaugh, buttonSize} from "@/components/constants/pizza";
 import {useCartStore} from "@/components/store/cart";
+import {Loader} from "lucide-react";
 
 type Props = {
 	product: IProduct | null;
 	ingredients: Ingredient[] | [];
-	description: string;
+	description?: string;
 }
 
-export default function WindowCardItem({product, ingredients,description}:Props){
+export default function WindowCardItem({product, ingredients, description}:Props){
 
 	const addItem = useCartStore(state => state.addItem);
 	const [loading, setLoading] = useState<boolean>(false);
@@ -23,7 +24,7 @@ export default function WindowCardItem({product, ingredients,description}:Props)
 	const [weight, setWeight] = useState<number | undefined>(buttonSize[0]?.weight);
 	const [daugh, setDaugh] = useState<string | undefined>(buttonDaugh[0]);
 	const [supplements, setSupplements] = useState<Ingredient[]>([]);
-	const [loadingButton, setLoadingButton] = useState<boolean>(false);
+	const [loadingButton, setLoadingButton] = useState<boolean>(true);
 
 	const basePrice = product?.price ?? 0;
 	const delta = buttonSize.find((s) => s.key === key)?.price ?? 0;
@@ -53,20 +54,30 @@ export default function WindowCardItem({product, ingredients,description}:Props)
 
 	}
 
-	 const handleAddToDrawer = () => {
-		 if(!product || !size || !daugh || !key || !weight) return
-		 const itemKey = `${product.id}_${key}_${daugh}_${supplements}`;
-		 addItem({
-			 key: itemKey,
-			 productId: product.id,
-			 name: product.name,
-			 imageUrl: product.imageUrl,
-			 unitPrice: totalPrice,
-			 size,
-			 dough: daugh,
-			 weight,
-			 ingredients: supplements,
-		 });
+	const handleAddToDrawer = async () => {
+
+		if(!product || !size || !daugh || !key || !weight) return
+
+		setTimeout(() => setLoadingButton(true), 600,)
+
+		setLoadingButton(false);
+
+		const filteredSupplement = supplements.map(i => i.name)
+		const itemKey = `${product.id}_${key}_${daugh}_${filteredSupplement}`;
+		const cartItem = {
+			id: product.id,
+			key: itemKey,
+			productId: product.id,
+			name: product.name,
+			imageUrl: product.imageUrl,
+			unitPrice: totalPrice,
+			size,
+			dough: daugh,
+			weight,
+			ingredients: supplements,
+			sizeNumber: key,
+		}
+		addItem(cartItem);
 	}
 
 	useEffect(() => {
@@ -75,7 +86,7 @@ export default function WindowCardItem({product, ingredients,description}:Props)
 				setLoading(true);
 				setTimeout(() => {
 					setLoading(false);
-				}, 1000);
+				}, 500);
 			}
 			else{
 				setLoading(false);
@@ -142,12 +153,23 @@ export default function WindowCardItem({product, ingredients,description}:Props)
 							</div>
 						</div>
 						<div className="pt-2">
-							<Button
-								className={`${loadingButton ? 'opacity-50 cursor-not-allowed' : 'w-full max-w-[440px] rounded-2xl py-6 text-base font-semibold cursor-pointer'}`}
+							{loadingButton ? (<Button
+								className={'w-full max-w-[440px] rounded-2xl py-6 text-base font-semibold cursor-pointer'}
 								onClick={handleAddToDrawer}
 							>
 								Добавить в корзину за {totalPrice} ₽
-							</Button>
+							</Button>) : (<Button
+								className='w-full max-w-[440px] rounded-2xl py-6 text-base font-semibold cursor-pointer'
+								disabled
+							>
+								<p className='animate-spin'>
+									<Loader/>
+								</p>
+
+							</Button>)
+
+							}
+
 						</div>
 					</div>
 				</div>

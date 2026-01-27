@@ -21,6 +21,8 @@ export const buttonSize = [
 		 price: 430
 	 }
  ]
+export const percent: number = 1.15;
+export const deliveryPrice: number = 250;
  export interface IProduct {
 	 name: string;
 	 price: number;

@@ -1,25 +1,26 @@
 import {Button} from "@/components/ui/button";
 import {Minus, Plus, Trash2} from "lucide-react";
 import {Ingredient} from "@/generated/prisma/client";
-import {ICartItem} from "@/components/constants/pizza";
 interface CartItemProps {
+	keyItem: string
 	id: number,
-	sizeNumber: number,
 	name: string,
 	image: string,
 	price: number,
-	size: string | undefined,
-	daugh: string | undefined,
+	size: string,
+	daugh: string,
 	quantity: number,
-	weight: number | undefined,
-	ingredients: Ingredient[]
-	deleteItem: (item: ICartItem) => void
-	addToCart: (item: ICartItem) => void
-	deleteQuantity: (item: ICartItem) => void
+	weight: number,
+	sizeNumber: number,
+	ingredients: Ingredient[],
+	deleteItem: (keyItem: string) => void,
+	addToCart: (keyItem: string) => void,
+	deleteQuantity: (keyItem: string) => void,
 }
 export default function CartItem(
 	{
 		id,
+		keyItem,
 		name,
 		image,
 		weight,
@@ -28,28 +29,25 @@ export default function CartItem(
 		daugh,
 		quantity,
 		ingredients,
-		sizeNumber,
 		deleteItem,
+		deleteQuantity,
 		addToCart,
-		deleteQuantity
+		sizeNumber,
 	}: CartItemProps) {
 	const ingredientsNames = ingredients.map((ingredient) => ingredient.name).join(', ');
 
 	const handleDelete = () => {
-		const key = sizeNumber;
-		deleteItem({id, name, image, size, daugh, quantity, price, ingredients, key, weight})
+		deleteItem(keyItem)
 	}
-	const handleAdd = () => {
-		const key = sizeNumber;
-		addToCart({id, name, image, size, daugh, quantity, price, ingredients, key, weight})
+	const handleAdd = ()	 => {
+		addToCart(keyItem)
 	}
 	const handleQuantity = () => {
-		const key = sizeNumber;
-		deleteQuantity({id, name, image, size, daugh, quantity, price, ingredients, key, weight})
+		deleteQuantity(keyItem)
 	}
-
+	console.log(keyItem)
 	return(
-		<div className='flex flex-row gap-5 py-5 rounded-2xl' key={id}>
+		<div className='flex flex-row gap-5 py-5 rounded-2xl' key={keyItem}>
 			<div className='flex flex-col items-center justify-center'>
 				{/* eslint-disable-next-line @next/next/no-img-element */}
 				<img src={image} alt={name} width={85} height={85}/>
@@ -63,7 +61,7 @@ export default function CartItem(
 						{size} {sizeNumber} см, {daugh} тесто, {weight} г.
 					</p>
 					<p className='text-sm text-muted-foreground'>
-						{ingredientsNames}
+						{ingredientsNames ? (`Добавки: ${ingredientsNames}`) : ' '}
 					</p>
 				</div>
 				<div className='flex flex-row items-center justify-between'>
@@ -84,7 +82,7 @@ export default function CartItem(
 						</Button>
 					</div>
 					<div className='flex flex-row items-center gap-2'>
-						<span className='flex flex-row items-center text-base font-bold gap-0.5'>{price} ₽</span>
+						<span className='flex flex-row items-center text-base font-bold gap-0.5'>{price * quantity} ₽</span>
 						<Trash2 color='grey' strokeWidth={2} size={16} className='cursor-pointer' onClick={handleDelete}/>
 					</div>
 				</div>

@@ -13,18 +13,16 @@ import Link from "next/link";
 import Image from "next/image";
 import CartItem from "@/components/shared/CartItem";
 import {useCartStore} from "@/components/store/cart";
-import {ICartItem} from "@/components/constants/pizza";
 
 export default function CardDrawer({children}: { children: React.ReactNode}) {
 
 	const items = useCartStore(state => state.items);
-	const addItem = useCartStore(state => state.addItem);
-	// const removeItem = useCartStore(state => state.removeItem);
-	// const incrementCart = useCartStore(state => state.incrementCart);
-	// // const decrementCart = useCartStore(state => state.decrementCart);
-	//
-	// const totalCount = useCartStore(state => state.totalCount);
-	// const totalPrice = useCartStore(state => state.totalPrice);
+	const removeItem = useCartStore(state => state.removeItem);
+	const incrementCart = useCartStore(state => state.incrementCart);
+	const decrementCart = useCartStore(state => state.decrementCart);
+
+	const totalCount = useCartStore(state => state.totalCount);
+	const totalPrice = useCartStore(state => state.totalPrice);
 	return (
 		<>
 			{items.length > 0 ? (
@@ -41,40 +39,41 @@ export default function CardDrawer({children}: { children: React.ReactNode}) {
 							<SheetDescription></SheetDescription>
 						</SheetHeader>
 						<div className="grid flex-1 auto-rows-min gap-6 px-4">
-							{items.map((item: ICartItem, index: number) => (
+							{items.map((item) => (
 								<CartItem
-									key={item.id}
-									sizeNumber={item.key}
-									weight={item.weight}
-									id={index + 1}
-									price={item.price}
+									key={item.key}
+									keyItem={item.key}
+									id={item.id}
 									name={item.name}
-									image={item.image}
+									image={item.imageUrl}
+									price={item.unitPrice}
 									size={item.size}
-									daugh={item.daugh}
+									daugh={item.dough}
 									quantity={item.quantity}
+									weight={item.weight}
 									ingredients={item.ingredients}
+									sizeNumber={item.sizeNumber}
 									deleteItem={removeItem}
-									addToCart={addItem}
-									deleteQuantity={incrementCart}
+									addToCart={incrementCart}
+									deleteQuantity={decrementCart}
 								/>
 							))}
 						</div>
 						<SheetFooter>
-							<div className='flex flex-row text-lg font-bold px-2 py-1 gap-2'>
-								<p className='text-lg'>
+							<div className='flex flex-row text-lg font-bold px-2 py-1 gap-1'>
+								<span className='text-lg'>
 									Итого
-								</p>
-								<p className='border-b border-dashed border-gray-400 w-full p-0 my-2 mx-1'></p>
-								<p className='flex flex-row items-center gap-0.5'>{totalPrice}₽</p>
+								</span>
+								<span className='flex-1 border-b border-dashed border-gray-400 w-full p-0 my-2 mx-2'></span>
+								<span className='flex flex-row items-center'>{totalPrice} ₽</span>
 							</div>
-							<Link href='/drawer'>
+							<Link href='/drawer' className='flex justify-between'>
 								<Button
 									type="submit"
 									variant='default'
-									className='text-base font-bold py-6 w-11/12 mx-auto rounded-xl gap-1 cursor-pointer'>
+									className='text-base font-bold py-6 w-full mx-auto rounded-xl gap-1 cursor-pointer group'>
 									Оформить заказ
-									<ArrowRight size={20}/>
+									<ArrowRight className='group-hover:translate-x-2 duration-300' size={21}/>
 								</Button>
 							</Link>
 						</SheetFooter>
