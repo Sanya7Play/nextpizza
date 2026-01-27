@@ -1,7 +1,7 @@
 'use client'
 import {Button} from "@/components/ui/button";
 import {Ingredient} from "@/generated/prisma/client";
-import {IProduct, IItem} from "@/components/constants/pizza";
+import {IProduct, IItem, buttonDrink} from "@/components/constants/pizza";
 import {useEffect, useState} from "react";
 import SkeletonId from "@/components/shared/SkeletonId";
 import IngredientsCard from "@/components/shared/IngredientsCard";
@@ -11,17 +11,19 @@ import {Loader} from "lucide-react";
 
 type Props = {
 	product: IProduct | null;
-	ingredients: Ingredient[] | [];
+	ingredients?: Ingredient[] | [];
 	description?: string;
+	category: string;
 }
 
-export default function WindowCardItem({product, ingredients, description}:Props){
+export default function WindowCardItem({product, ingredients, description, category}:Props){
 
 	const addItem = useCartStore(state => state.addItem);
 	const [loading, setLoading] = useState<boolean>(false);
 	const [size, setSize] = useState<string | undefined>(buttonSize[0]?.size);
 	const [key, setKey] = useState<number | undefined>(buttonSize[0]?.key);
 	const [weight, setWeight] = useState<number | undefined>(buttonSize[0]?.weight);
+	const [sizeDrink, setSizeDrink] = useState<number | undefined>(buttonDrink[0]?.key);
 	const [daugh, setDaugh] = useState<string | undefined>(buttonDaugh[0]);
 	const [supplements, setSupplements] = useState<Ingredient[]>([]);
 	const [loadingButton, setLoadingButton] = useState<boolean>(true);
@@ -35,6 +37,7 @@ export default function WindowCardItem({product, ingredients, description}:Props
 		setKey(item.key);
 		setSize(item.size);
 		setWeight(item.weight);
+		setSizeDrink(item.key)
 	}
 
 	const changeType = (item: string | undefined) => {
@@ -47,7 +50,7 @@ export default function WindowCardItem({product, ingredients, description}:Props
 			setSupplements(prev => prev.filter(item => item.id !== id));
 		}
 		else{
-			const toAdd = ingredients.find(item => item.id === id);
+			const toAdd = ingredients?.find(item => item.id === id);
 			if (!toAdd) return;
 			setSupplements(prev => [...prev, toAdd]);
 		}
@@ -105,71 +108,102 @@ export default function WindowCardItem({product, ingredients, description}:Props
 					<div className="flex flex-col gap-6 p-10 rounded-2xl">
 						<div className="flex flex-col gap-3">
 							<h1 className='text-4xl font-extrabold'>{product?.name}</h1>
-							<p className='text-sm font-normal text-muted-foreground'>{key} см, {daugh} тесто, {weight} г</p>
+							{category === 'Пиццы' ? (
+								<>
+									<p className='text-sm font-normal text-muted-foreground'>{key} см, {`${daugh} тесто`}, {weight} г</p>
+								</>
+							) : (
+								<p className='text-sm font-normal text-muted-foreground'>{sizeDrink} л, {size} стакан, {weight} г</p>
+							)}
+
 							<p className='text-base font-medium w-[500px]'>
 								{description}
 							</p>
 						</div>
 						<div className="flex flex-col gap-3 w-full max-w-[440px]">
-							<div className='bg-gray-200 px-1 py-1 rounded-4xl cursor-pointer'>
-								{buttonSize.map((item, index) => (
-									<Button
-										key={index}
-										variant='ghost'
-										className={`px-8.5 py-2.5 rounded-4xl font-bold text-base text-black cursor-pointer hover:bg-neutral-50 ${item.size === size && 'bg-white text-black shadow px-8.5 py-2.5 rounded-4xl'}`}
-										onClick={() => changeSize(item)}
-									>
-										{item.size}
-									</Button>
-								))}
-							</div>
-							<div className='bg-gray-200 px-1 py-1 rounded-4xl cursor-pointer w-full'>
-								{buttonDaugh.map((item, index) => (
-									<Button
-										key={index}
-										variant='ghost'
-										className={`px-8.5 py-2.5 w-1/2 rounded-4xl font-bold text-base text-black cursor-pointer ${item === daugh && 'bg-white text-black shadow px-8.5 py-2.5 rounded-4xl'}`}
-										onClick={() => changeType(item)}
-									>
-										{item}
-									</Button>
-								))}
-							</div>
+							{category === 'Пиццы' ? (
+								<>
+									<div className='bg-gray-200 px-1 py-1 rounded-4xl cursor-pointer'>
+										{buttonSize.map((item, index) => (
+											<Button
+												key={index}
+												variant='ghost'
+												className={`px-8.5 py-2.5 rounded-4xl font-bold text-base text-black cursor-pointer hover:bg-neutral-50 ${item.size === size && 'bg-white text-black shadow px-8.5 py-2.5 rounded-4xl'}`}
+												onClick={() => changeSize(item)}
+											>
+												{item.size}
+											</Button>
+										))}
+									</div>
+									<div className='bg-gray-200 px-1 py-1 rounded-4xl cursor-pointer w-full'>
+										{buttonDaugh.map((item, index) => (
+											<Button
+												key={index}
+												variant='ghost'
+												className={`px-8.5 py-2.5 w-1/2 rounded-4xl font-bold text-base text-black cursor-pointer ${item === daugh && 'bg-white text-black shadow px-8.5 py-2.5 rounded-4xl'}`}
+												onClick={() => changeType(item)}
+											>
+												{item}
+											</Button>
+										))}
+									</div>
+								</>
+							) : (
+								<>
+									<div className='bg-gray-200 px-1 py-1 rounded-4xl cursor-pointer'>
+										{buttonDrink.map((item, index) => (
+											<Button
+												key={index}
+												variant='ghost'
+												className={`px-8.5 py-2.5 w-1/2 rounded-4xl font-bold text-base text-black cursor-pointer hover:bg-neutral-50 ${item.key === sizeDrink && 'bg-white text-black shadow px-8.5 py-2.5 rounded-4xl'}`}
+												onClick={() => changeSize(item)}
+											>
+												{item.size}
+											</Button>
+										))}
+									</div>
+								</>
+							)
+							}
 						</div>
-						<div className="flex flex-col gap-3 w-full max-w-[440px]">
-							<h1 className='text-lg font-semibold'>Ингредиенты</h1>
-							<div className='grid grid-cols-3 gap-5 bg-gray-200 p-3 rounded-2xl overflow-y-scroll h-[230px]'>
-								{ingredients.map((item: Ingredient) => (
-									<IngredientsCard
-										key={item.id}
-										id={item.id}
-										name={item.name}
-										price={item.price}
-										image={item.imageUrl}
-										changeIngredient={addIngredient}
-										supplements={supplements}
-									/>
-								))}
-							</div>
-						</div>
+						{ingredients?.length !== 0 && (
+							<>
+								<div className="flex flex-col gap-3 w-full max-w-[440px]">
+									<h1 className='text-lg font-semibold'>Ингредиенты</h1>
+									<div className='grid grid-cols-3 gap-5 bg-gray-200 p-3 rounded-2xl overflow-y-scroll h-[230px]'>
+										{ingredients?.map((item: Ingredient) => (
+											<IngredientsCard
+												key={item.id}
+												id={item.id}
+												name={item.name}
+												price={item.price}
+												image={item.imageUrl}
+												changeIngredient={addIngredient}
+												supplements={supplements}
+											/>
+										))}
+									</div>
+								</div>
+							</>
+						)}
+
 						<div className="pt-2">
 							{loadingButton ? (<Button
 								className={'w-full max-w-[440px] rounded-2xl py-6 text-base font-semibold cursor-pointer'}
 								onClick={handleAddToDrawer}
 							>
 								Добавить в корзину за {totalPrice} ₽
-							</Button>) : (<Button
-								className='w-full max-w-[440px] rounded-2xl py-6 text-base font-semibold cursor-pointer'
-								disabled
-							>
+							</Button>
+							) : (
+								<Button
+									className='w-full max-w-[440px] rounded-2xl py-6 text-base font-semibold cursor-pointer'
+									disabled
+								>
 								<p className='animate-spin'>
 									<Loader/>
 								</p>
-
-							</Button>)
-
-							}
-
+							</Button>
+							)}
 						</div>
 					</div>
 				</div>

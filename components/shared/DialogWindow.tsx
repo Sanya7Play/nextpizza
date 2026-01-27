@@ -20,10 +20,11 @@ interface Props {
 	id: number;
 	loading: boolean;
 	ingredients: Ingredient[];
+	category: string;
 }
 
-export default function DialogWindow({children, imageUrl, ingredients, price, name, id}: Props) {
-	const product: IProduct  = {name, price, imageUrl, id};
+export default function DialogWindow({children, imageUrl, ingredients, price, name, id , category}: Props) {
+	const product: IProduct  = {name, price, imageUrl, id, category};
 	return(
 		<Dialog>
 			<form>
@@ -45,6 +46,7 @@ export default function DialogWindow({children, imageUrl, ingredients, price, na
 						<WindowCardItem
 							product={product}
 							ingredients={ingredients}
+							category={category}
 						/>
 					</div>
 					<DialogFooter>

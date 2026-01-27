@@ -47,19 +47,19 @@ export default function PurchaseCard(
 				<div className="flex flex-col ml-5 max-w-[180px]">
 					<span className="text-lg font-bold">{name}</span>
 					<span className="text-sm text-muted-foreground">
-        {daugh} тесто, {sizeNumber} см, {weight} г.
-      </span>
+						{daugh} тесто, {sizeNumber} см, {weight} г.
+      				</span>
 					<span className="text-sm text-muted-foreground">
-        Добавки: {ingredientsNames}
-      </span>
+        				Добавки: {ingredientsNames}
+      				</span>
 				</div>
 			</div>
 
 			<div className="flex items-center gap-10">
 				{/* Цена */}
 				<span className="font-bold whitespace-nowrap">
-      {price * quantity} ₽
-    </span>
+      				{price * quantity} ₽
+    			</span>
 
 				{/* Счётчик */}
 				<div className="flex items-center gap-3">
@@ -73,8 +73,8 @@ export default function PurchaseCard(
 					</Button>
 
 					<span className="font-bold w-4 text-center">
-        {quantity}
-      </span>
+        				{quantity}
+      				</span>
 
 					<Button
 						variant="outline"

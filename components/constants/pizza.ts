@@ -19,8 +19,22 @@ export const buttonSize = [
 		 weight: 560,
 		 size: 'Большая',
 		 price: 430
-	 }
- ]
+	 },
+]
+export const buttonDrink = [
+	{
+		key: 0.3,
+		weight: 300,
+		size: 'Cредний',
+		price: 0
+	},
+	{
+		key: 0.6,
+		weight: 490,
+		size: 'Большой',
+		price: 0
+	},
+]
 export const percent: number = 1.15;
 export const deliveryPrice: number = 250;
  export interface IProduct {
@@ -29,6 +43,7 @@ export const deliveryPrice: number = 250;
 	 imageUrl: string;
 	 imageAlt?: string;
 	 id: number;
+
  }
  export interface IItem {
 	 key: number;

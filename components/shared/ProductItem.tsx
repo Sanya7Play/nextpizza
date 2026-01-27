@@ -13,8 +13,9 @@ interface ProductItemProps {
 	id: number;
 	loading: boolean;
 	description: string;
+	category: string;
 }
-export default function ProductItem({name, price, image, id, loading, ingredients,description}: ProductItemProps) {
+export default function ProductItem({name, price, image, id, loading, ingredients, description, category}: ProductItemProps) {
 	return(
 		<>
 			{loading ? (<ProductSkeleton/>) : (
@@ -43,6 +44,7 @@ export default function ProductItem({name, price, image, id, loading, ingredient
 								id={id}
 								loading={loading}
 								ingredients={ingredients}
+								category={category}
 							>
 								<Button
 									variant='default'

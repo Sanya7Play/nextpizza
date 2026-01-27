@@ -38,7 +38,7 @@ export default function CardDrawer({children}: { children: React.ReactNode}) {
 							</SheetTitle>
 							<SheetDescription></SheetDescription>
 						</SheetHeader>
-						<div className="grid flex-1 auto-rows-min gap-6 px-4">
+						<div className="grid flex-1 auto-rows-min gap-6 px-4 overflow-y-scroll scrollbar-hide">
 							{items.map((item) => (
 								<CartItem
 									key={item.key}
