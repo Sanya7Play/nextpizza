@@ -1,17 +1,24 @@
 'use client'
 import React, {createContext, useContext, useState} from 'react';
+import {sortArray} from "@/components/constants/pizza";
 
 interface ContextInterface {
+	sort: string;
+	setSort: (sort: string) => void;
 	selectedCategory: number | null;
 	setSelectedCategory: (selectedCategory: number) => void;
+	search: string,
+	setSearch: (search: string) => void;
 }
 
 const PizzaContext = createContext<ContextInterface | null>(null);
 
 export function CategoryFilter({children}:{children: React.ReactNode}) {
 	const [selectedCategory, setSelectedCategory] = useState<number | null >(null);
+	const [sort, setSort] = useState<string>(sortArray[0]?.name)
+	const [search, setSearch] = useState<string>('')
 	return (
-		<PizzaContext.Provider value={{selectedCategory,setSelectedCategory}}>
+		<PizzaContext.Provider value={{selectedCategory,setSelectedCategory, sort, setSort, search, setSearch}}>
 			{children}
 		</PizzaContext.Provider>
 	);

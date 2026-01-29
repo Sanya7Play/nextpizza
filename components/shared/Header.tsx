@@ -4,11 +4,14 @@ import {Search, ShoppingCart, User} from "lucide-react";
 import {Input} from "@/components/ui/input";
 import {Button} from "@/components/ui/button";
 import CardDrawer from "@/components/shared/CardDrawer";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import PopoverMenu from "@/components/shared/PopoverMenu";
 import Link from "next/link";
 import PopoverInput from "@/components/shared/PopoverInput";
 import {useCartStore} from "@/components/store/cart";
+import {useProviders} from "@/components/shared/context/CategoryFilter";
+import {Product} from "@/generated/prisma/client";
+import axios from "axios";
 
 interface HeaderProps {
 	buttonHide: boolean,
@@ -16,10 +19,29 @@ interface HeaderProps {
 }
 
 export default function Header({buttonHide, searchHide}: HeaderProps) {
+	const {search, setSearch} = useProviders();
+	const [products, setProducts] = useState<Product[]>([]);
+	useEffect(() => {
+		const searchProduct = async () => {
+			if (!search || search.trim().length < 3){
+				setProducts([])
+				return;
+			}
+			const response = await axios.get("/api/products", {
+				params: { query: search },
+			});
+			setProducts(response.data);
+		};
+		searchProduct();
+	}, [search]);
 	const [isAuthenticated, setIsAuthenticated] = useState<boolean>(true);
 	const items: string[] = ['12','23'];
 	const totalCount = useCartStore(state => state.totalCount);
 	const totalPrice = useCartStore(state => state.totalPrice);
+	const handleInput = (value: string) => {
+		setSearch(value);
+	}
+
 	return(
 		<>
 			<div className='flex flex-row items-center justify-between px-18 py-15 border-b border-gray-200'>
@@ -38,14 +60,14 @@ export default function Header({buttonHide, searchHide}: HeaderProps) {
                             <Search
                                 className='absolute w-5 h-5 left-3 top-3 text-muted-foreground'
                             />
-
-							<PopoverInput>
+                            <PopoverInput products={products}>
                                 <Input
                                     type='text'
-                                    placeholder='Поиск Пиццы...'
+                                    placeholder='Поиск...'
+                                    onChange={(e) => handleInput(e.target.value)}
                                     className='w-full h-full bg-neutral-200/60 outline-none pl-10 pr-3 rounded-2xl focus-visible:border-ring'
                                 />
-							</PopoverInput>
+                            </PopoverInput>
 						</>
 					}
 				</div>

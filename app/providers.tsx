@@ -1,3 +1,4 @@
+'use client'
 import {CategoryFilter} from "@/components/shared/context/CategoryFilter";
 import React from "react";
 

@@ -21,10 +21,11 @@ interface Props {
 	loading: boolean;
 	ingredients: Ingredient[];
 	category: string;
+	description: string;
 }
 
-export default function DialogWindow({children, imageUrl, ingredients, price, name, id , category}: Props) {
-	const product: IProduct  = {name, price, imageUrl, id, category};
+export default function DialogWindow({children, imageUrl, ingredients, price, name, id, category, description}: Props) {
+	const product: IProduct  = {name, price, imageUrl, id};
 	return(
 		<Dialog>
 			<form>
@@ -47,6 +48,7 @@ export default function DialogWindow({children, imageUrl, ingredients, price, na
 							product={product}
 							ingredients={ingredients}
 							category={category}
+							description={description}
 						/>
 					</div>
 					<DialogFooter>

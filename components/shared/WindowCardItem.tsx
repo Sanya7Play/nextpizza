@@ -97,6 +97,7 @@ export default function WindowCardItem({product, ingredients, description, categ
 		}
 		getProduct()
 	},[product])
+	console.log(description)
 	return (
 		<div>
 			{loading ? (<SkeletonId/>) : (
@@ -169,7 +170,7 @@ export default function WindowCardItem({product, ingredients, description, categ
 						{ingredients?.length !== 0 && (
 							<>
 								<div className="flex flex-col gap-3 w-full max-w-[440px]">
-									<h1 className='text-lg font-semibold'>Ингредиенты</h1>
+									<h1 className='text-lg font-semibold'>Добавить по вкусу</h1>
 									<div className='grid grid-cols-3 gap-5 bg-gray-200 p-3 rounded-2xl overflow-y-scroll h-[230px]'>
 										{ingredients?.map((item: Ingredient) => (
 											<IngredientsCard

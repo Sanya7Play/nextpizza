@@ -19,7 +19,6 @@ interface CartItemProps {
 }
 export default function CartItem(
 	{
-		id,
 		keyItem,
 		name,
 		image,

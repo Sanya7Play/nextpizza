@@ -12,7 +12,7 @@ export default function Options() {
 				<div className='grid grid-rows-3 gap-5 justify-between mt-10'>
 					<div className='flex flex-col w-180 h-auto bg-neutral-300/20 rounded-xl gap-3'>
 						<header className='flex flex-row w-auto border-b border-neutral-300 pb-5 p-8'>
-							<h1 className='font-bold text-2xl'>Персональные данные</h1>
+							<h1 className='font-bold text-2xl'>1. Персональные данные</h1>
 						</header>
 						<div className='grid grid-cols-2 gap-8 p-8'>
 							<div className='flex flex-col gap-2 '>
@@ -35,7 +35,7 @@ export default function Options() {
 					</div>
 					<div className='flex flex-col w-auto h-auto bg-neutral-300/20 rounded-xl gap-3'>
 						<header className='flex flex-row w-auto border-b border-neutral-300 pb-5 p-8'>
-							<h1 className='font-bold text-2xl'>Адрес доставки</h1>
+							<h1 className='font-bold text-2xl'>2. Адрес доставки</h1>
 						</header>
 						<div className='flex flex-col gap-8 pt-8 pb-2 px-8'>
 							<div className='flex flex-col gap-2 '>
@@ -50,7 +50,7 @@ export default function Options() {
 					</div>
 					<div className='flex flex-col w-auto h-auto bg-neutral-300/20 rounded-xl gap-3'>
 						<header className='flex flex-row w-auto border-b border-neutral-300 pb-5 p-8'>
-							<h1 className='font-bold text-2xl'>Реквизиты карты</h1>
+							<h1 className='font-bold text-2xl'>3. Реквизиты карты</h1>
 						</header>
 						<div className='flex flex-col gap-8 pt-8 pb-2 px-8'>
 							<div className='flex flex-col gap-2 '>

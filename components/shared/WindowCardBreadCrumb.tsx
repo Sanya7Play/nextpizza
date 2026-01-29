@@ -7,7 +7,7 @@ import {
 	BreadcrumbSeparator
 } from "@/components/ui/breadcrumb";
 import Link from "next/link";
-import {Category, Product} from "@/generated/prisma/client";
+import {Product} from "@/generated/prisma/client";
 import {useEffect, useState} from "react";
 import {Skeleton} from "@/components/ui/skeleton";
 
@@ -24,7 +24,7 @@ export default function WindowCardBreadCrumb({product,category}: Props) {
 				setBreadcrumb(true);
 				setTimeout(() => {
 					setBreadcrumb(false);
-				}, 1000);
+				}, 600);
 			}
 			else{
 				setBreadcrumb(false);
