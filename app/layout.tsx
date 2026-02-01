@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Nunito } from "next/font/google";
 import "./globals.css";
 import Providers from "@/app/providers";
+import {ClerkProvider} from "@clerk/nextjs";
 
 const nunito = Nunito({
 	subsets: ['cyrillic'],
@@ -19,10 +20,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={`min-h-screen rounded-2xl ${nunito.variable} text-black`}>
-        <Providers>{children}</Providers>
-      </body>
-    </html>
+	  <ClerkProvider>
+		  <html lang="en">
+			  <body className={`min-h-screen rounded-2xl ${nunito.variable} text-black`}>
+			  	<Providers>{children}</Providers>
+			  </body>
+		  </html>
+	  </ClerkProvider>
+
   );
 }

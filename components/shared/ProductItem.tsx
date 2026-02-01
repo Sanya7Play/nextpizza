@@ -19,9 +19,9 @@ export default function ProductItem({name, price, image, id, loading, ingredient
 	return(
 		<>
 			{loading ? (<ProductSkeleton/>) : (
-				<div className='flex flex-col h-auto mt-3 py-5 px-8 mx-5 bg-neutral-300/20 rounded-2xl' key={id}>
+				<div className='flex flex-col h-auto mt-3 py-5 px-8 mx-5 bg-neutral-300/10 rounded-2xl' key={id}>
 					<Link href={`/product/${id}`}>
-						<div className='flex justify-center pb-4'>
+						<div className='flex justify-center py-5 mb-4 bg-primary/10 border-0 rounded-2xl'>
 							{/* eslint-disable-next-line @next/next/no-img-element */}
 							<img src={image} alt={name} width={200} height={200}/>
 						</div>

@@ -12,6 +12,7 @@ import {useCartStore} from "@/components/store/cart";
 import {useProviders} from "@/components/shared/context/CategoryFilter";
 import {Product} from "@/generated/prisma/client";
 import axios from "axios";
+import DialogLogin from "@/components/shared/DialogLogin";
 
 interface HeaderProps {
 	buttonHide: boolean,
@@ -19,11 +20,11 @@ interface HeaderProps {
 }
 
 export default function Header({buttonHide, searchHide}: HeaderProps) {
-	const {search, setSearch} = useProviders();
+	const {search, setSearch, login, setLogin} = useProviders();
 	const [products, setProducts] = useState<Product[]>([]);
 	useEffect(() => {
 		const searchProduct = async () => {
-			if (!search || search.trim().length < 3){
+			if (!search || search.trim().length <= 3 || search.length === 0){
 				setProducts([])
 				return;
 			}
@@ -34,7 +35,7 @@ export default function Header({buttonHide, searchHide}: HeaderProps) {
 		};
 		searchProduct();
 	}, [search]);
-	const [isAuthenticated, setIsAuthenticated] = useState<boolean>(true);
+	const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
 	const items: string[] = ['12','23'];
 	const totalCount = useCartStore(state => state.totalCount);
 	const totalPrice = useCartStore(state => state.totalPrice);
@@ -79,7 +80,15 @@ export default function Header({buttonHide, searchHide}: HeaderProps) {
 							</PopoverMenu>
 						) :
 						(
-							<Button variant='outline' className='p-5.5 cursor-pointer gap-1 rounded-2xl'><User size={16}/>Войти</Button>
+							<DialogLogin>
+								<Button
+									variant='outline'
+									className='p-5.5 cursor-pointer gap-1 rounded-xl'
+								>
+									<User size={16}/>
+									Войти
+								</Button>
+							</DialogLogin>
 						)
 					}
 					{buttonHide &&

@@ -5,7 +5,7 @@ export default function TopBar() {
 	return(
 		<div className='flex flex-col px-18 py-5'>
 			<Title text='Все пиццы'/>
-			<div className='flex flex-row items-center justify-between gap-3'>
+			<div className='flex flex-row items-center justify-between gap-3 md:gap-1'>
 				<Categories/>
 				<Sort/>
 			</div>

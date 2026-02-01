@@ -2,6 +2,7 @@ import Header from "@/components/shared/Header";
 import Title from "@/components/shared/Title";
 import {Label} from "@/components/ui/label";
 import {Input} from "@/components/ui/input";
+import {Button} from "@/components/ui/button";
 
 export default function Options() {
 	return (
@@ -68,6 +69,12 @@ export default function Options() {
 								</div>
 							</div>
 						</div>
+					</div>
+					<div className='flex gap-4'>
+						<Button variant='default' className='cursor-pointer'>
+							Сохранить изменения
+						</Button>
+						<Button variant='secondary' className='cursor-pointer'>Отмена</Button>
 					</div>
 				</div>
 			</div>

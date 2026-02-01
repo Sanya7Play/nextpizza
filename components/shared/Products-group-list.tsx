@@ -25,7 +25,7 @@ export default function ProductsGroupList() {
 	const [loading, setLoading] = useState<boolean>(false);
 	const [activePage, setActivePage] = useState<number>(1);
 	const [currentPage, setCurrentPage] = useState<number>(0);
-	const [pageSize, setPageSize] = useState<number[]>([1,2,3,4]);
+	const [pageSize, setPageSize] = useState<number[]>([1,2,3]);
 
 	const {selectedCategory, sort, search} = useProviders();
 
@@ -46,17 +46,20 @@ export default function ProductsGroupList() {
 		getProducts();
 
 	}, [selectedCategory, sort, search, currentPage]);
+	const startPage = pageSize[2];
+	const endPage = pageSize[0];
 	const changePagePlus = () => {
 		setActivePage(prevPage => prevPage + 1);
 		setCurrentPage(prevState => prevState + 6)
-
 	}
 	const changePageMinus = () => {
 		setActivePage(prevPage => prevPage - 1);
 		setCurrentPage(prevState => prevState -	 6)
-
 	}
-	console.log(activePage, currentPage);
+	const changePage = (size: number) => {
+		setActivePage(size)
+		setCurrentPage((size - 1) * 6)
+	}
 	const title = selectedCategory === 0 ? 'Все товары' : categories.find((
 		category, index) => index === selectedCategory);
 	return(
@@ -85,6 +88,9 @@ export default function ProductsGroupList() {
 						pageSize={pageSize}
 						changePagePlus={changePagePlus}
 						changePageMinus={changePageMinus}
+						changePage={changePage}
+						startPage={startPage}
+						endPage={endPage}
 					/>
 				</div>
 			)}
