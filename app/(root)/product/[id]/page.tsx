@@ -51,7 +51,6 @@ export default async function ProductPage({ params }: { params: Promise<{id: str
 				/>
 				<Recommended
 					recommendProducts={recommendProducts}
-
 				/>
 			</div>
 		</div>

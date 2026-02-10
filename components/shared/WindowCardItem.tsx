@@ -8,6 +8,7 @@ import IngredientsCard from "@/components/shared/IngredientsCard";
 import {buttonDaugh, buttonSize} from "@/components/constants/pizza";
 import {useCartStore} from "@/components/store/cart";
 import {Loader} from "lucide-react";
+import {useProviders} from "@/components/shared/context/CategoryFilter";
 
 type Props = {
 	product: IProduct | null;
@@ -26,7 +27,7 @@ export default function WindowCardItem({product, ingredients, description, categ
 	const [sizeDrink, setSizeDrink] = useState<number | undefined>(buttonDrink[0]?.key);
 	const [daugh, setDaugh] = useState<string | undefined>(buttonDaugh[0]);
 	const [supplements, setSupplements] = useState<Ingredient[]>([]);
-	const [loadingButton, setLoadingButton] = useState<boolean>(true);
+	const {loadingButton, setLoadingButton} = useProviders()
 
 	const basePrice = product?.price ?? 0;
 	const delta = buttonSize.find((s) => s.key === key)?.price ?? 0;
@@ -58,29 +59,32 @@ export default function WindowCardItem({product, ingredients, description, categ
 	}
 
 	const handleAddToDrawer = async () => {
-
-		if(!product || !size || !daugh || !key || !weight) return
-
-		setTimeout(() => setLoadingButton(true), 600,)
-
-		setLoadingButton(false);
-
-		const filteredSupplement = supplements.map(i => i.name)
-		const itemKey = `${product.id}_${key}_${daugh}_${filteredSupplement}`;
-		const cartItem = {
-			id: product.id,
-			key: itemKey,
-			productId: product.id,
-			name: product.name,
-			imageUrl: product.imageUrl,
-			unitPrice: totalPrice,
-			size,
-			dough: daugh,
-			weight,
-			ingredients: supplements,
-			sizeNumber: key,
+		setLoadingButton(true);
+		try {
+			if(!product || !size || !daugh || !key || !weight) return
+			const filteredSupplement = supplements.map(i => i.name)
+			const itemKey = `${product.id}_${key}_${daugh}_${filteredSupplement}`;
+			const cartItem = {
+				id: product.id,
+				key: itemKey,
+				productId: product.id,
+				name: product.name,
+				imageUrl: product.imageUrl,
+				unitPrice: totalPrice,
+				size,
+				dough: daugh,
+				weight,
+				ingredients: supplements,
+				sizeNumber: key,
+			}
+			addItem(cartItem);
 		}
-		addItem(cartItem);
+		catch (err) {
+
+		}
+		finally {
+			setLoadingButton(false);
+		}
 	}
 
 	useEffect(() => {
@@ -97,7 +101,6 @@ export default function WindowCardItem({product, ingredients, description, categ
 		}
 		getProduct()
 	},[product])
-	console.log(description)
 	return (
 		<div>
 			{loading ? (<SkeletonId/>) : (
@@ -187,22 +190,21 @@ export default function WindowCardItem({product, ingredients, description, categ
 								</div>
 							</>
 						)}
-
 						<div className="pt-2">
-							{loadingButton ? (<Button
-								className={'w-full max-w-[440px] rounded-2xl py-6 text-base font-semibold cursor-pointer'}
-								onClick={handleAddToDrawer}
-							>
-								Добавить в корзину за {totalPrice} ₽
-							</Button>
-							) : (
+							{loadingButton ? (
 								<Button
 									className='w-full max-w-[440px] rounded-2xl py-6 text-base font-semibold cursor-pointer'
 									disabled
 								>
-								<p className='animate-spin'>
-									<Loader/>
-								</p>
+									<p className='animate-spin'>
+										<Loader/>
+									</p>
+								</Button>
+							):(<Button
+								className={'w-full max-w-[440px] rounded-2xl py-6 text-base font-semibold cursor-pointer'}
+								onClick={handleAddToDrawer}
+							>
+								Добавить в корзину за {totalPrice} ₽
 							</Button>
 							)}
 						</div>

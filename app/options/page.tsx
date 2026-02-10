@@ -1,10 +1,26 @@
+'use client'
 import Header from "@/components/shared/Header";
 import Title from "@/components/shared/Title";
 import {Label} from "@/components/ui/label";
 import {Input} from "@/components/ui/input";
 import {Button} from "@/components/ui/button";
+import {useEffect, useState} from "react";
+import axios from "axios";
+import {User} from "@/generated/prisma";
+import {useSession} from "next-auth/react";
 
 export default function Options() {
+	const {data: session, status} = useSession()
+	const [user, setUser] = useState<User>()
+	useEffect(() => {
+		async function getUser() {
+			const {data} = await axios.get('/api/users')
+			setUser(data[0])
+			console.log(user)
+		}
+		getUser()
+	},[]);
+	console.log(session?.user.id, status);
 	return (
 		<div className='mx-50 rounded-4xl min-h-screen lg:mx-20'>
 			<Header buttonHide={false} searchHide={false}/>

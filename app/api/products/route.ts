@@ -20,6 +20,7 @@ export async function GET(req: Request){
 
 	const categoryId = categoryIdParam ? Number(categoryIdParam) : null;
 
+
 	// Преобразуем параметр sortParam в поле Prisma
 	const orderBy: object = (() => {
 		switch (sortParamId) {

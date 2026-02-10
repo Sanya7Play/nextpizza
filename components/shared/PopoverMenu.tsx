@@ -1,5 +1,6 @@
 import { Popover, PopoverContent, PopoverTrigger} from "@/components/ui/popover"
 import Link from "next/link";
+import {signOut} from "next-auth/react";
 
 export default function PopoverMenu({children}: { children: React.ReactNode}) {
 	return (
@@ -11,7 +12,7 @@ export default function PopoverMenu({children}: { children: React.ReactNode}) {
 				<div className="flex flex-col justify-between gap-4">
 					<Link href='/options' className='hover:text-primary'>Настройки</Link>
 					<Link href='/orders' className='pb-2 border-b border-gray-200 hover:text-primary'>Заказы</Link>
-					<Link href='' className='hover:text-primary'>Выйти</Link>
+					<Link href='' className='hover:text-primary' onClick={() => signOut()}>Выйти</Link>
 				</div>
 			</PopoverContent>
 		</Popover>

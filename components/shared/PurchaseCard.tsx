@@ -1,5 +1,5 @@
 import Image from "next/image";
-import {Minus, Plus} from "lucide-react";
+import {Minus, Plus, X} from "lucide-react";
 import {Button} from "@/components/ui/button";
 import {Ingredient} from "@/generated/prisma/client";
 
@@ -34,6 +34,7 @@ export default function PurchaseCard(
 	const ingredientsNames = ingredients.map((ingredient) => ingredient.name).join(', ');
 
 	const handleDeleteQuantity = () => {
+		if (quantity === 1) return;
 		deleteQuantity(keyItem)
 	}
 	const handleAddQuantity = ()	 => {
@@ -43,8 +44,7 @@ export default function PurchaseCard(
 		<div className="flex items-center justify-between mx-8 my-5 border-b border-neutral-200 pb-5 last:border-none">
 			<div className="flex items-center mr-10">
 				<Image src={image} alt={name} width={60} height={60} />
-
-				<div className="flex flex-col ml-5 max-w-[180px]">
+				<div className="flex flex-col ml-5 max-w-max">
 					<span className="text-lg font-bold">{name}</span>
 					<span className="text-sm text-muted-foreground">
 						{daugh} тесто, {sizeNumber} см, {weight} г.
@@ -66,7 +66,8 @@ export default function PurchaseCard(
 					<Button
 						variant="outline"
 						size="sm"
-						className="py-0.5 px-2"
+						className = "py-0.5 px-2 cursor-pointer"
+						disabled={quantity === 1}
 						onClick={handleDeleteQuantity}
 					>
 						<Minus size={17} />
@@ -79,12 +80,19 @@ export default function PurchaseCard(
 					<Button
 						variant="outline"
 						size="sm"
-						className="py-0.5 px-2"
+						className="py-0.5 px-2 cursor-pointer"
 						onClick={handleAddQuantity}
 					>
 						<Plus size={17} />
 					</Button>
 				</div>
+				<span>
+					<X className="text-muted-foreground hover:text-gray-400 cursor-pointer"
+					   	width={20}
+					   	height={20}
+					   	onClick={() => deleteQuantity(keyItem)}
+					/>
+				</span>
 			</div>
 		</div>
 	)

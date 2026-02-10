@@ -37,7 +37,7 @@ export default function ProductsGroupList() {
 					{params: {categoryId: selectedCategory, sort: sort, query: search, page: currentPage}});
 				setProducts(data);
 				console.log('Загрузка данных');
-				await new Promise((r) => setTimeout(r, 600));
+				await new Promise((r) => setTimeout(r, 100));
 			}
 			finally {
 				setLoading(false)
@@ -65,7 +65,7 @@ export default function ProductsGroupList() {
 	return(
 		<div className='flex flex-col gap-3 w-full mr-18'>
 			<Title text={title ? title : 'Все товары'} />
-			<div className='grid 2xl:grid-cols-2 gap-4 w-auto h-auto pb-1 xl:grid-cols-2 last:mb-5'>
+			<div className='grid 2xl:grid-cols-3 gap-4 w-auto h-auto pb-1 xl:grid-cols-2 last:mb-5'>
 				{products.map((product) => (
 					<ProductItem
 						key={product.id}

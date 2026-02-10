@@ -10,13 +10,13 @@ export default function FilingData() {
 	const items = useCartStore(state => state.items);
 	const clearCart = useCartStore(state => state.clearCart);
 	const incrementCart = useCartStore(state => state.incrementCart);
-	const decrementCart = useCartStore(state => state.decrementCart);
+	const removeItem = useCartStore(state => state.removeItem);
 	return (
 		<div className='flex flex-col gap-10'>
 			<div className='flex flex-col w-auto h-auto bg-neutral-300/20 rounded-xl gap-3'>
 				<header className={items.length > 0 ? 'flex flex-row justify-between w-auto border-b border-neutral-200 pb-5 p-8' : 'flex flex-row justify-between w-auto border-neutral-200 pb-5 p-8'}>
 					<h1 className='font-bold text-2xl'>1. Корзина</h1>
-					<p className='flex flex-row items-center gap-1 text-base text-muted-foreground cursor-pointer' onClick={clearCart}>
+					<p className='flex flex-row items-center gap-1 text-base text-muted-foreground cursor-pointer hover:text-gray-400 ' onClick={clearCart}>
 						<Trash2 size={16}/>Очистить корзину
 					</p>
 				</header>
@@ -34,7 +34,7 @@ export default function FilingData() {
 						ingredients={item.ingredients}
 						sizeNumber={item.sizeNumber}
 						addQuantity={incrementCart}
-						deleteQuantity={decrementCart}
+						deleteQuantity={removeItem}
 					/>
 					))}
 			</div>

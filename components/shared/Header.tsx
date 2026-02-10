@@ -12,37 +12,75 @@ import {useCartStore} from "@/components/store/cart";
 import {useProviders} from "@/components/shared/context/CategoryFilter";
 import {Product} from "@/generated/prisma/client";
 import axios from "axios";
-import DialogLogin from "@/components/shared/DialogLogin";
+import { signIn,useSession } from "next-auth/react";
+import {z} from "zod";
+import AuthModal from "@/components/shared/AuthModal";
+import {LoginSchema} from "@/types/schemas";
 
 interface HeaderProps {
 	buttonHide: boolean,
 	searchHide: boolean
 }
-
 export default function Header({buttonHide, searchHide}: HeaderProps) {
-	const {search, setSearch, login, setLogin} = useProviders();
+	const { data: session, status } = useSession();
+	const {search, setSearch, loadingButton, setLoadingButton } = useProviders();
 	const [products, setProducts] = useState<Product[]>([]);
-	useEffect(() => {
-		const searchProduct = async () => {
-			if (!search || search.trim().length <= 3 || search.length === 0){
-				setProducts([])
-				return;
-			}
-			const response = await axios.get("/api/products", {
-				params: { query: search },
-			});
-			setProducts(response.data);
-		};
-		searchProduct();
-	}, [search]);
-	const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
-	const items: string[] = ['12','23'];
+	const [error, setError] = useState<string[]>([]);
 	const totalCount = useCartStore(state => state.totalCount);
 	const totalPrice = useCartStore(state => state.totalPrice);
+	useEffect(() => {
+		try {
+			const searchProduct = async () => {
+				if (!search || search.trim().length <= 3 || search.length === 0){
+					setProducts([])
+					return;
+				}
+				const response = await axios.get("/api/products", {
+					params: { query: search },
+				});
+				setProducts(response.data);
+			};
+			searchProduct();
+		}
+		catch (err) {
+			console.log(err);
+		}
+		finally {
+			console.log('searchProduct');
+		}
+	}, [search]);
+	async function submit(email: string, password: string) {
+		setLoadingButton(true);
+		try {
+			const result = await LoginSchema.safeParseAsync({email, password});
+			if (!result.success){
+				setError(result.error?.issues.map(issue => issue.message) ?? []);
+				return;
+			}
+			setError([]);
+			const res = await signIn("credentials", {
+				email,
+				password,
+				redirect: false,
+			});
+			if (res?.error) {
+				setError(['Неправильный логин или пароль']);
+			}
+		}
+		catch (err){
+			setError(['Произошла ошибка'])
+		}
+		finally {
+			setLoadingButton(false);
+		}
+	}
+	async function register(email: string, password: string, fullName: string, confirmPassword: string) {
+		const data = axios.post('/api/auth/register');
+		const result = await LoginSchema.safeParseAsync({email, password, fullName, confirmPassword});
+	}
 	const handleInput = (value: string) => {
 		setSearch(value);
 	}
-
 	return(
 		<>
 			<div className='flex flex-row items-center justify-between px-18 py-15 border-b border-gray-200'>
@@ -73,14 +111,14 @@ export default function Header({buttonHide, searchHide}: HeaderProps) {
 					}
 				</div>
 				<div className='flex flex-row items-center justify-between gap-3'>
-					{isAuthenticated ?
+					{status === 'authenticated' ?
 						(
 							<PopoverMenu>
 								<Button variant='outline' className='p-5.5 cursor-pointer gap-1 rounded-2xl'><User size={16}/>Профиль</Button>
 							</PopoverMenu>
 						) :
 						(
-							<DialogLogin>
+							<AuthModal submit={submit} register={register} error={error} loading={loadingButton} >
 								<Button
 									variant='outline'
 									className='p-5.5 cursor-pointer gap-1 rounded-xl'
@@ -88,26 +126,20 @@ export default function Header({buttonHide, searchHide}: HeaderProps) {
 									<User size={16}/>
 									Войти
 								</Button>
-							</DialogLogin>
+							</AuthModal>
 						)
 					}
 					{buttonHide &&
 						<>
-							{items.length > 0 ?
-								(
-									<CardDrawer>
-										<Button
-											variant='default'
-											className='group p-6 cursor-pointer rounded-2xl text-base font-extrabold gap-3'>
-											<p className='flex flex-row items-center gap-1 group-hover:-translate-x-1 duration-300'>{totalPrice} ₽</p>
-											<p className='border-r border-gray-100/50 h-5'></p>
-											<p className='flex flex-row items-center gap-1 group-hover:translate-x-1 duration-300'><ShoppingCart size={16} strokeWidth={3}/>{totalCount}</p>
-										</Button>
-									</CardDrawer>
-								) : (
-									<Button variant='outline' className='p-6 cursor-pointer rounded-2xl'><ShoppingCart size={16}/></Button>
-								)
-							}
+                            <CardDrawer>
+                                <Button
+                                    variant='default'
+                                    className='group p-6 cursor-pointer rounded-2xl text-base font-extrabold gap-3'>
+                                    <p className='flex flex-row items-center gap-1 group-hover:-translate-x-1 duration-300'>{totalPrice} ₽</p>
+                                    <p className='border-r border-gray-100/50 h-5'></p>
+                                    <p className='flex flex-row items-center gap-1 group-hover:translate-x-1 duration-300'><ShoppingCart size={16} strokeWidth={3}/>{totalCount}</p>
+                                </Button>
+                            </CardDrawer>
 						</>
 					}
 				</div>

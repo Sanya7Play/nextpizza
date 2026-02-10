@@ -1,6 +1,7 @@
 import "dotenv/config";
 import {PrismaClient} from "@/generated/prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
+import bcrypt from "bcrypt";
 
 
 const prisma = new PrismaClient({
@@ -8,6 +9,35 @@ const prisma = new PrismaClient({
 });
 
 async function main() {
+
+	// 🔐 Хешируем пароль
+	const passwordHash = await bcrypt.hash("123456", 10);
+
+	// 👤 Пользователь 1
+	await prisma.user.upsert({
+		where: { email: "admin@test.com" },
+		update: {},
+		create: {
+			email: "admin@test.com",
+			fullName: "Admin User",
+			password: passwordHash,
+			emailVerified: new Date(),
+		},
+	});
+
+	// 👤 Пользователь 2
+	await prisma.user.upsert({
+		where: { email: "user@test.com" },
+		update: {},
+		create: {
+			email: "user@test.com",
+			fullName: "Regular User",
+			password: passwordHash,
+			emailVerified: new Date(),
+		},
+	});
+
+	console.log("✅ Users created");
 
 	// 3) Привязать ВСЕ существующие добавки ко ВСЕМ пиццам (category "Пицца")
 	// Найдём id категории "Пицца"
