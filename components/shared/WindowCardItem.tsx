@@ -9,6 +9,7 @@ import {buttonDaugh, buttonSize} from "@/components/constants/pizza";
 import {useCartStore} from "@/components/store/cart";
 import {Loader} from "lucide-react";
 import {useProviders} from "@/components/shared/context/CategoryFilter";
+import {toast, Toaster} from "react-hot-toast";
 
 type Props = {
 	product: IProduct | null;
@@ -57,7 +58,8 @@ export default function WindowCardItem({product, ingredients, description, categ
 		}
 
 	}
-
+	const notifyTrue = () => toast.success('Товар добавлен в корзину');
+	const notifyFalse = () => toast.success('Ошибка добавления в корзину');
 	const handleAddToDrawer = async () => {
 		setLoadingButton(true);
 		try {
@@ -78,25 +80,35 @@ export default function WindowCardItem({product, ingredients, description, categ
 				sizeNumber: key,
 			}
 			addItem(cartItem);
+			notifyTrue();
 		}
 		catch (err) {
-
+			notifyFalse();
 		}
 		finally {
 			setLoadingButton(false);
+
 		}
 	}
 
 	useEffect(() => {
 		async function getProduct(){
-			if(product){
-				setLoading(true);
-				setTimeout(() => {
+			try {
+				if(product){
+					setLoading(true);
+					setTimeout(() => {
+						setLoading(false);
+					}, 500);
+				}
+				else{
 					setLoading(false);
-				}, 500);
+				}
 			}
-			else{
-				setLoading(false);
+			catch (err){
+
+			}
+			finally {
+
 			}
 		}
 		getProduct()
@@ -200,12 +212,22 @@ export default function WindowCardItem({product, ingredients, description, categ
 										<Loader/>
 									</p>
 								</Button>
-							):(<Button
-								className={'w-full max-w-[440px] rounded-2xl py-6 text-base font-semibold cursor-pointer'}
-								onClick={handleAddToDrawer}
-							>
-								Добавить в корзину за {totalPrice} ₽
-							</Button>
+							):(
+								<>
+									<Button
+										className={'w-full max-w-[440px] rounded-2xl py-6 text-base font-semibold cursor-pointer'}
+										onClick={handleAddToDrawer}
+									>
+										Добавить в корзину за {totalPrice} ₽
+									</Button>
+									<Toaster
+										position={"bottom-center"}
+										reverseOrder={true}
+										toastOptions={{
+											duration: 3000,
+										}}
+									/>
+								</>
 							)}
 						</div>
 					</div>

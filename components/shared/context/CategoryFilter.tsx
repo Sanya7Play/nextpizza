@@ -30,7 +30,7 @@ export function CategoryFilter({children}:{children: React.ReactNode}) {
 	const [password, setPassword] = useState<string>("");
 	const [fullName, setName] = useState<string>("");
 	const [confirmPassword, setConfirmPassword] = useState<string>("");
-	const [selectedCategory, setSelectedCategory] = useState<number | null >(null);
+	const [selectedCategory, setSelectedCategory] = useState<number | null >(0);
 	const [sort, setSort] = useState<string>(sortArray[0]?.name);
 	const [search, setSearch] = useState<string>('');
 	const [login, setLogin] = useState<boolean>(true);

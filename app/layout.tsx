@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Nunito } from "next/font/google";
 import "./globals.css";
 import Providers from "@/app/providers";
-import {SessionProvider} from "next-auth/react";
+import NextTopLoader from "nextjs-toploader";
 
 const nunito = Nunito({
 	subsets: ['cyrillic'],
@@ -22,6 +22,11 @@ export default function RootLayout({
   return (
 	  <html lang="en">
 	      <body className={`min-h-screen rounded-2xl ${nunito.variable} text-black`}>
+		  	<NextTopLoader
+				color='#cd6900'
+				height={5}
+				showSpinner={false}
+			/>
 		  	<Providers>{children}</Providers>
 		  </body>
 	  </html>

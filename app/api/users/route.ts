@@ -7,12 +7,12 @@ export async function GET(){
 	});
 	return NextResponse.json(users);
 }
-export async function POST(){
-	const createNewUser = await prisma.user.create({
-		data: {
-			fullName: 'test',
-		}
-	});
-	console.log(createNewUser);
-	return NextResponse.json(createNewUser);
-}
+// export async function POST(){
+// 	const createNewUser = await prisma.user.create({
+// 		data: {
+// 			fullName: 'test',
+// 		}
+// 	});
+// 	console.log(createNewUser);
+// 	return NextResponse.json(createNewUser);
+// }

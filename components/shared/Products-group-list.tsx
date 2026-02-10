@@ -9,6 +9,7 @@ import {categories} from "@/components/constants/pizza";
 import PaginationHome from "@/components/shared/paginationHome";
 
 
+
 interface Product {
 	name: string;
 	price: number;
@@ -40,7 +41,7 @@ export default function ProductsGroupList() {
 				await new Promise((r) => setTimeout(r, 100));
 			}
 			finally {
-				setLoading(false)
+				setLoading(false);
 			}
 		}
 		getProducts();

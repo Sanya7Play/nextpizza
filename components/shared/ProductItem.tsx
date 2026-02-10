@@ -3,6 +3,7 @@ import Link from "next/link";
 import ProductSkeleton from "@/components/shared/ProductSkeleton";
 import {Ingredient} from "@/generated/prisma/client";
 import DialogWindow from "@/components/shared/DialogWindow";
+import {useTopLoader} from "nextjs-toploader";
 
 interface ProductItemProps {
 	ingredients: Ingredient[] | [];
@@ -16,6 +17,7 @@ interface ProductItemProps {
 	category: string;
 }
 export default function ProductItem({name, price, image, id, loading, ingredients, description, category}: ProductItemProps) {
+	const loader = useTopLoader()
 	return(
 		<>
 			{loading ? (<ProductSkeleton/>) : (
@@ -51,6 +53,7 @@ export default function ProductItem({name, price, image, id, loading, ingredient
 									variant='default'
 									size={"sm"}
 									className='cursor-pointer text-base'>
+
 									+ Выбрать
 								</Button>
 							</DialogWindow>

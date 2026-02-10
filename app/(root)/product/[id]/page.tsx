@@ -34,7 +34,6 @@ export default async function ProductPage({ params }: { params: Promise<{id: str
 		},
 		take: 4,
 	})
-	console.log(product.category.name);
 	return (
 		<div className="mx-20 bg-white rounded-4xl min-h-screen lg:mx-20">
 			<Header buttonHide={true} searchHide={false}/>

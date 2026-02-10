@@ -1,7 +1,6 @@
 import { Popover, PopoverContent, PopoverTrigger} from "@/components/ui/popover"
 import Link from "next/link";
 import {signOut} from "next-auth/react";
-
 export default function PopoverMenu({children}: { children: React.ReactNode}) {
 	return (
 		<Popover>

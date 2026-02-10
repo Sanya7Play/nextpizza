@@ -6,11 +6,9 @@ import {useProviders} from "@/components/shared/context/CategoryFilter";
 
 export default function Categories() {
 
-	const {setSelectedCategory} = useProviders();
-	const [categoryNumber, setCategory] = useState<number>(0);
+	const {selectedCategory,setSelectedCategory} = useProviders();
 	const changeCategory= (category: string) => {
 		const findIndex: number = categories.indexOf(category);
-		setCategory(findIndex);
 		setSelectedCategory(findIndex);
 	}
 
@@ -20,7 +18,7 @@ export default function Categories() {
 				<Button
 					key={category}
 					variant='secondary'
-					className={`bg-white px-4.5 py-2.5 rounded-2xl font-bold text-base text-black cursor-pointer ${index === categoryNumber && 'text-primary shadow-sm px-4.5 py-2.5 rounded-2xl'}`}
+					className={`bg-white px-4.5 py-2.5 rounded-2xl font-bold text-base text-black cursor-pointer ${index === selectedCategory && 'text-primary shadow-sm px-4.5 py-2.5 rounded-2xl'}`}
 					onClick={() => {changeCategory(category)}}
 					>
 					{category}

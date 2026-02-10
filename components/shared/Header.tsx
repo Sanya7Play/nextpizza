@@ -46,7 +46,7 @@ export default function Header({buttonHide, searchHide}: HeaderProps) {
 			console.log(err);
 		}
 		finally {
-			console.log('searchProduct');
+
 		}
 	}, [search]);
 	async function submit(email: string, password: string) {
@@ -131,7 +131,7 @@ export default function Header({buttonHide, searchHide}: HeaderProps) {
 					}
 					{buttonHide &&
 						<>
-                            <CardDrawer>
+                            <CardDrawer session={session}>
                                 <Button
                                     variant='default'
                                     className='group p-6 cursor-pointer rounded-2xl text-base font-extrabold gap-3'>

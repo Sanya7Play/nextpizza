@@ -13,8 +13,14 @@ import Link from "next/link";
 import Image from "next/image";
 import CartItem from "@/components/shared/CartItem";
 import {useCartStore} from "@/components/store/cart";
+import {toast, Toaster} from "react-hot-toast";
 
-export default function CardDrawer({children}: { children: React.ReactNode}) {
+interface CardDrawerProps {
+	children: React.ReactNode;
+	session: object | null;
+}
+
+export default function CardDrawer({children, session}: CardDrawerProps) {
 
 	const items = useCartStore(state => state.items);
 	const removeItem = useCartStore(state => state.removeItem);
@@ -23,6 +29,7 @@ export default function CardDrawer({children}: { children: React.ReactNode}) {
 
 	const totalCount = useCartStore(state => state.totalCount);
 	const totalPrice = useCartStore(state => state.totalPrice);
+	const notify = () => toast.error('Зайдите в аккаунт для оплаты')
 	return (
 		<>
 			{items.length > 0 ? (
@@ -67,15 +74,37 @@ export default function CardDrawer({children}: { children: React.ReactNode}) {
 								<span className='flex-1 border-b border-dashed border-gray-400 w-full p-0 my-2 mx-2'></span>
 								<span className='flex flex-row items-center'>{totalPrice} ₽</span>
 							</div>
-							<Link href='/drawer' className='flex justify-between'>
-								<Button
-									type="submit"
-									variant='default'
-									className='text-base font-bold py-6 w-full mx-auto rounded-xl gap-1 cursor-pointer group'>
-									Оформить заказ
-									<ArrowRight className='group-hover:translate-x-2 duration-300' size={21}/>
-								</Button>
-							</Link>
+							{session ? (
+								<Link href='/drawer' className='flex justify-between'>
+									<Button
+										type="submit"
+										variant='default'
+										className='text-base font-bold py-6 w-full mx-auto rounded-xl gap-1 cursor-pointer group'>
+										Оформить заказ
+										<ArrowRight className='group-hover:translate-x-2 duration-300' size={21}/>
+									</Button>
+								</Link>
+							) : (
+								<>
+									<Button
+										type="submit"
+										variant='default'
+										onClick={notify}
+										className='text-base font-bold py-6 w-full mx-auto rounded-xl gap-1 cursor-pointer group'>
+										Оформить заказ
+										<ArrowRight className='group-hover:translate-x-2 duration-300' size={21}/>
+									</Button>
+									<Toaster
+										position={"bottom-center"}
+										reverseOrder={true}
+										toastOptions={{
+											duration: 3000,
+										}}
+									/>
+								</>
+
+
+							)}
 						</SheetFooter>
 					</SheetContent>
 				</Sheet>
