@@ -75,8 +75,14 @@ export default function Header({buttonHide, searchHide}: HeaderProps) {
 		}
 	}
 	async function register(email: string, password: string, fullName: string, confirmPassword: string) {
-		const data = axios.post('/api/auth/register');
-		const result = await LoginSchema.safeParseAsync({email, password, fullName, confirmPassword});
+		const data = {
+			email: email,
+			confirmPassword: confirmPassword,
+			password: password,
+			fullName: fullName
+		}
+		const response = await axios.post('/api/auth/register', data);
+		console.log(response.data)
 	}
 	const handleInput = (value: string) => {
 		setSearch(value);

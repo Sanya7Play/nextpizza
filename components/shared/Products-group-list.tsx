@@ -66,7 +66,7 @@ export default function ProductsGroupList() {
 	return(
 		<div className='flex flex-col gap-3 w-full mr-18'>
 			<Title text={title ? title : 'Все товары'} />
-			<div className='grid 2xl:grid-cols-3 gap-4 w-auto h-auto pb-1 xl:grid-cols-2 last:mb-5'>
+			<div className="grid gap-4 [grid-template-columns:repeat(auto-fit,minmax(320px,1fr))] last:mb-5">
 				{products.map((product) => (
 					<ProductItem
 						key={product.id}
