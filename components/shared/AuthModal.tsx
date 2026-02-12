@@ -17,7 +17,7 @@ interface Props {
 	loading?: boolean;
 }
 export default function AuthModal({children, submit, error, loading, register}: Props) {
-	const {email, password, setEmail, setPassword, fullName, setName, confirmPassword, setConfirmPassword} = useProviders()
+	const {emailInput, password, setEmailInput, setPassword, name, setName, confirmPassword, setConfirmPassword} = useProviders()
 	const [type, setType] = useState<'login' | 'register'>('login');
 	const onSwitch = () => {
 		setType(type === 'login' ? 'register' : 'login');
@@ -34,10 +34,10 @@ export default function AuthModal({children, submit, error, loading, register}: 
 							submit={submit}
 							error={error}
 							loading={loading}
-							email={email}
+							email={emailInput}
 							password={password}
 							setPassword={setPassword}
-							setEmail={setEmail}
+							setEmail={setEmailInput}
 							onSwitch={onSwitch}
 						/>
 					) : (
@@ -45,11 +45,11 @@ export default function AuthModal({children, submit, error, loading, register}: 
 							register={register}
 							error={error}
 							loading={loading}
-							email={email}
+							email={emailInput}
 							password={password}
 							setPassword={setPassword}
-							setEmail={setEmail}
-							fullName={fullName}
+							setEmail={setEmailInput}
+							fullName={name}
 							setName={setName}
 							confirmPassword={confirmPassword}
 							setConfirmPassword={setConfirmPassword}

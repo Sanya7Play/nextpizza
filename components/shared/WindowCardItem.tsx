@@ -221,7 +221,7 @@ export default function WindowCardItem({product, ingredients, description, categ
 										Добавить в корзину за {totalPrice} ₽
 									</Button>
 									<Toaster
-										position={"bottom-center"}
+										position={"top-center"}
 										reverseOrder={true}
 										toastOptions={{
 											duration: 3000,

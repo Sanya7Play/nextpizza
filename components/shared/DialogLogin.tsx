@@ -39,7 +39,7 @@ export default function DialogLogin({ submit, error, loading, email, password, s
 					<DialogDescription>Введите свою почту, чтобы войти в аккаунт</DialogDescription>
 				</div>
 				{/* eslint-disable-next-line @next/next/no-img-element */}
-				<img src='mobile.png' width={50} height={50} alt='mobile'/>
+				<img src='/mobile.png' width={50} height={50} alt='mobile'/>
 			</DialogHeader>
 			<div className='flex flex-col px-5 gap-5'>
 				<div className='flex flex-col gap-2'>
@@ -87,7 +87,7 @@ export default function DialogLogin({ submit, error, loading, email, password, s
 					onClick={() => signIn("github")}
 				>
 					{/* eslint-disable-next-line @next/next/no-img-element */}
-					<img src="github-svgrepo-com.svg" alt="GitHub" width={15} height={15}/>
+					<img src="/github-svgrepo-com.svg" alt="GitHub" width={15} height={15}/>
 					GitHub
 				</Button>
 				<Button
@@ -96,7 +96,7 @@ export default function DialogLogin({ submit, error, loading, email, password, s
 					onClick={() => signIn("google")}
 				>
 					{/* eslint-disable-next-line @next/next/no-img-element */}
-					<img src="google-svgrepo-com.svg" alt="Google" width={15} height={15}/>
+					<img src="/google-svgrepo-com.svg" alt="Google" width={15} height={15}/>
 					Google
 				</Button>
 			</div>

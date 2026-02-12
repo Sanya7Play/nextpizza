@@ -21,7 +21,7 @@ export async function POST(req: Request){
 		}
 	})
 	if (userExisting){
-		return Response.json({error: 'Email уже существует'}, {status: 400})
+		return Response.json({error: 'Пользователь уже существует'}, {status: 409})
 	}
 	const passwordHash = await bcrypt.hash(password, 10);
 
@@ -32,6 +32,5 @@ export async function POST(req: Request){
 			password: passwordHash
 		}
 	})
-	console.log(newUser)
-	return NextResponse.json(body)
+	return NextResponse.json(newUser)
 }

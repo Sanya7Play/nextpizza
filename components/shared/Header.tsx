@@ -23,9 +23,8 @@ interface HeaderProps {
 }
 export default function Header({buttonHide, searchHide}: HeaderProps) {
 	const { data: session, status } = useSession();
-	const {search, setSearch, loadingButton, setLoadingButton } = useProviders();
+	const {search, setSearch, loadingButton, setLoadingButton, error, setError } = useProviders();
 	const [products, setProducts] = useState<Product[]>([]);
-	const [error, setError] = useState<string[]>([]);
 	const totalCount = useCartStore(state => state.totalCount);
 	const totalPrice = useCartStore(state => state.totalPrice);
 	useEffect(() => {
@@ -75,14 +74,40 @@ export default function Header({buttonHide, searchHide}: HeaderProps) {
 		}
 	}
 	async function register(email: string, password: string, fullName: string, confirmPassword: string) {
-		const data = {
-			email: email,
-			confirmPassword: confirmPassword,
-			password: password,
-			fullName: fullName
+		setLoadingButton(true)
+		try {
+			const data = {
+				email: email,
+				confirmPassword: confirmPassword,
+				password: password,
+				fullName: fullName
+			}
+			const response = await axios.post('/api/auth/register', data);
+
+			await signIn("credentials", {
+				email,
+				password,
+				redirect: false,
+			});
 		}
-		const response = await axios.post('/api/auth/register', data);
-		console.log(response.data)
+		catch (error) {
+			// ❗ ошибка с сервера
+			if (axios.isAxiosError(error)) {
+				const status = error.response?.status;
+				const message = error.response?.data?.error;
+
+				if (status === 409) {
+					setError([message || 'Пользователь уже существует']);
+				} else if (status === 400) {
+					setError([message || 'Некорректные данные']);
+				} else {
+					setError(['Ошибка сервера']);
+				}
+			}
+		}
+		finally {
+			setLoadingButton(false);
+		}
 	}
 	const handleInput = (value: string) => {
 		setSearch(value);

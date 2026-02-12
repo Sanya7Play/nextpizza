@@ -3,6 +3,7 @@ import Credentials from "next-auth/providers/credentials";
 import { prisma } from "@/lib/prisma";
 import bcrypt from "bcrypt";
 import GithubProvider from "next-auth/providers/github";
+import GoogleProvider from "next-auth/providers/google";
 
 interface CredentialsType {
 	email: string;
@@ -14,6 +15,10 @@ export const authOptions: NextAuthOptions = {
 		GithubProvider({
 			clientId: process.env.GITHUB_ID || '',
 			clientSecret: process.env.GITHUB_SECRET || '',
+		}),
+		GoogleProvider({
+			clientId: process.env.GOOGLE_CLIENT_ID || '',
+			clientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
 		}),
 		Credentials({
 			name: "Credentials",

@@ -5,8 +5,13 @@ import {Input} from "@/components/ui/input";
 import {Textarea} from "@/components/ui/textarea";
 import {Label} from "@/components/ui/label";
 import {useCartStore} from "@/components/store/cart";
+import {useState} from "react";
+import {useProviders} from "@/components/shared/context/CategoryFilter";
 
 export default function FilingData() {
+
+	const {user, setUser} = useProviders();
+	const [delivery, setDelivery] = useState<string | undefined>(user?.address + ' ' + user?.apartment || '');
 	const items = useCartStore(state => state.items);
 	const clearCart = useCartStore(state => state.clearCart);
 	const incrementCart = useCartStore(state => state.incrementCart);
@@ -45,19 +50,43 @@ export default function FilingData() {
 				<div className='grid grid-cols-2 gap-8 p-8'>
 					<div className='flex flex-col gap-2'>
 						<Label className='font-bold text-sm'>Имя</Label>
-						<Input type='text' placeholder='Имя' className='h-11'/>
+						<Input
+							type='text'
+							placeholder='Имя'
+							className='h-11'
+							value={user?.fullName?.split(' ')[0] || ''}
+							onChange={(e) => setUser({...user, fullName: e.target.value})}
+						/>
 					</div>
 					<div className='flex flex-col gap-2 '>
 						<Label className='font-bold text-sm'>Фамилия</Label>
-						<Input type='text' placeholder='Фамилия' className='h-11'/>
+						<Input
+							type='text'
+							placeholder='Фамилия'
+							className='h-11'
+							value={user?.fullName?.split(' ')[1] || ''}
+							onChange={(e) => setUser({...user, fullName: e.target.value})}
+						/>
 					</div>
 					<div className='flex flex-col gap-2 '>
 						<Label className='font-bold text-sm'>E-mail</Label>
-						<Input type='email' placeholder='E-mail' className='h-11'/>
+						<Input
+							type='email'
+							placeholder='E-mail'
+							className='h-11'
+							value={user?.email || ''}
+							onChange={(e) => setUser({...user, email: e.target.value})}
+						/>
 					</div>
 					<div className='flex flex-col gap-2 '>
 						<Label className='font-bold text-sm'>Телефон</Label>
-						<Input type='tel' placeholder='+7(777)-777-77-77' className='h-11'/>
+						<Input
+							type='tel'
+							placeholder='+7(777)-777-77-77'
+							className='h-11'
+							value={user?.telephone || ''}
+							onChange={(e) => setUser({...user, telephone: e.target.value})}
+						/>
 					</div>
 				</div>
 			</div>
@@ -68,7 +97,13 @@ export default function FilingData() {
 				<div className='flex flex-col gap-8 pt-8 pb-2 px-8'>
 					<div className='flex flex-col gap-2 '>
 						<Label className='font-bold text-sm'>Введите адрес</Label>
-						<Input type='text' placeholder='Адрес' className='h-11'/>
+						<Input
+							type='text'
+							placeholder='Адрес'
+							className='h-11'
+							value={user?.address + ' ' + user?.apartment || ' '}
+							onChange={(e) => setDelivery(e.target.value)}
+						/>
 					</div>
 					<div className='flex flex-col gap-2 '>
 						<Label className='font-bold text-sm'>Комментарий к заказу</Label>

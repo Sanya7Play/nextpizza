@@ -17,7 +17,6 @@ interface ProductItemProps {
 	category: string;
 }
 export default function ProductItem({name, price, image, id, loading, ingredients, description, category}: ProductItemProps) {
-	const loader = useTopLoader()
 	return(
 		<>
 			{loading ? (<ProductSkeleton/>) : (

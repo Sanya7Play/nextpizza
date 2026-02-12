@@ -9,6 +9,7 @@ import {Label} from "@/components/ui/label";
 import {Input} from "@/components/ui/input";
 import {Button} from "@/components/ui/button";
 import React from "react";
+import {signIn} from "next-auth/react";
 
 interface Props {
 	register: (email: string, password: string, fullName: string, confirmPassword: string) => void;
@@ -112,6 +113,26 @@ export default function DialogRegister(
 				</Button>)
 			}
 			<span className='border-b-1 border-muted-foreground/40 mt-2'></span>
+			<div className='flex flex-row justify-center gap-10 mt-2 mx-5'>
+				<Button
+					variant='default'
+					className='cursor-pointer rounded-xl w-1/2 bg-primary/10 text-primary gap-1 hover:bg-primary/20'
+					onClick={() => signIn("github")}
+				>
+					{/* eslint-disable-next-line @next/next/no-img-element */}
+					<img src="/github-svgrepo-com.svg" alt="GitHub" width={15} height={15}/>
+					GitHub
+				</Button>
+				<Button
+					variant='default'
+					className='cursor-pointer rounded-xl w-1/2 bg-primary/10 text-primary gap-1 hover:bg-primary/20'
+					onClick={() => signIn("google")}
+				>
+					{/* eslint-disable-next-line @next/next/no-img-element */}
+					<img src="/google-svgrepo-com.svg" alt="Google" width={15} height={15}/>
+					Google
+				</Button>
+			</div>
 		</div>
 		<Button
 
