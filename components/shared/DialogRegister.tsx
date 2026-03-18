@@ -44,12 +44,11 @@ export default function DialogRegister(
 	const registration = (email: string, password: string, fullName: string, confirmPassword: string) => {
 		register(email, password, fullName, confirmPassword);
 	}
-	console.log(fullName, email, password, confirmPassword);
 	return(
 		<>
 		<div>
 			<DialogClose asChild>
-				<X className="absolute right-4 top-4 text-gray-400 hover:text-gray-300 cursor-pointer" width={20} height={20}/>
+				<X className="absolute right-4 top-4 text-gray-400 hover:text-gray-300 cursor-pointer" width={20} height={20} onClick={() => onSwitch()}/>
 			</DialogClose>
 		</div>
 		<DialogHeader className='flex flex-row px-5 items-center'>
@@ -57,6 +56,8 @@ export default function DialogRegister(
 				<DialogTitle className='text-2xl'>Зарегистрироваться</DialogTitle>
 				<DialogDescription>Заполните все поля, для прохождения регистрации</DialogDescription>
 			</div>
+			{/* eslint-disable-next-line @next/next/no-img-element */}
+			<img src='/contact-form.png' width={50} height={50} alt='mobile'/>
 		</DialogHeader>
 		<div className='flex flex-col px-5 gap-5'>
 			<div className='flex flex-col gap-2'>
@@ -113,7 +114,7 @@ export default function DialogRegister(
 				</Button>)
 			}
 			<span className='border-b-1 border-muted-foreground/40 mt-2'></span>
-			<div className='flex flex-row justify-center gap-10 mt-2 mx-5'>
+			<div className='flex flex-row justify-center gap-10 mt-2 w-full'>
 				<Button
 					variant='default'
 					className='cursor-pointer rounded-xl w-1/2 bg-primary/10 text-primary gap-1 hover:bg-primary/20'

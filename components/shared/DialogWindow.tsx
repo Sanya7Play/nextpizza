@@ -28,33 +28,31 @@ export default function DialogWindow({children, imageUrl, ingredients, price, na
 	const product: IProduct  = {name, price, imageUrl, id};
 	return(
 		<Dialog>
-			<form>
-				<DialogTrigger asChild>
-					{children}
-				</DialogTrigger>
-				<DialogContent className="sm:max-w-[1250px] h-auto absoulte" showCloseButton={false}>
-					<div>
-						<DialogClose asChild>
-							<X className="absolute right-4 top-4 text-gray-400 hover:text-gray-300 cursor-pointer" width={30} height={30}/>
-						</DialogClose>
-					</div>
-					<DialogHeader>
-						<DialogTitle></DialogTitle>
-						<DialogDescription></DialogDescription>
-					</DialogHeader>
+			<DialogTrigger asChild>
+				{children}
+			</DialogTrigger>
+			<DialogContent className="sm:max-w-[1250px] h-auto absoulte" showCloseButton={false}>
+				<div>
+					<DialogClose asChild>
+						<X className="absolute right-4 top-4 text-gray-400 hover:text-gray-300 cursor-pointer" width={30} height={30}/>
+					</DialogClose>
+				</div>
+				<DialogHeader>
+					<DialogTitle></DialogTitle>
+					<DialogDescription></DialogDescription>
+				</DialogHeader>
 
-					<div className="flex flex-row">
-						<WindowCardItem
-							product={product}
-							ingredients={ingredients}
-							category={category}
-							description={description}
-						/>
-					</div>
-					<DialogFooter>
-					</DialogFooter>
-				</DialogContent>
-			</form>
+				<div className="flex flex-row">
+					<WindowCardItem
+						product={product}
+						ingredients={ingredients}
+						category={category}
+						description={description}
+					/>
+				</div>
+				<DialogFooter>
+				</DialogFooter>
+			</DialogContent>
 		</Dialog>
 	)
 }

@@ -13,6 +13,5 @@ export default function Home() {
 			  <ProductsGroupList/>
 		  </div>
 	  </div>
-
   );
 }

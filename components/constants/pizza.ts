@@ -1,3 +1,5 @@
+import {Product} from "@/generated/prisma";
+
 export const categories: string[] = ["Все", "Пиццы", 'Комбо', 'Закуски', 'Коктейли', 'Кофе', 'Напитки', 'Десерты', 'Соусы'];
 export const buttonDaugh = ['Традиционное','Тонкое'];
 export const buttonSize = [
@@ -56,8 +58,6 @@ export interface IProduct {
 	 imageUrl: string;
 	 imageAlt?: string;
 	 id: number;
-
-
 }
 export interface IItem {
 	 key: number;

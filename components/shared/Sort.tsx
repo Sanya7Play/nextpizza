@@ -4,7 +4,7 @@ import PopoverSort from "@/components/shared/PopoverSort";
 import {useProviders} from "@/components/shared/context/CategoryFilter";
 
 export default function Sort() {
-	const {sort,setSort} = useProviders()
+	const { sort, setSort } = useProviders()
 	const handleSort = (sort: string) => {
 		setSort(sort)
 	}

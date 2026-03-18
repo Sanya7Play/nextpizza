@@ -5,92 +5,95 @@ import {Input} from "@/components/ui/input";
 import {Textarea} from "@/components/ui/textarea";
 import {Label} from "@/components/ui/label";
 import {useCartStore} from "@/components/store/cart";
-import {useState} from "react";
+import React from "react";
 import {useProviders} from "@/components/shared/context/CategoryFilter";
+import Image from "next/image";
 
 export default function FilingData() {
 
-	const {user, setUser} = useProviders();
-	const [delivery, setDelivery] = useState<string | undefined>(user?.address + ' ' + user?.apartment || '');
-	const items = useCartStore(state => state.items);
-	const clearCart = useCartStore(state => state.clearCart);
-	const incrementCart = useCartStore(state => state.incrementCart);
-	const removeItem = useCartStore(state => state.removeItem);
+	const {user, setUser, error, setDelivery} = useProviders();
+	const {items, clearCart, incrementCart, removeItem, decrementCart} = useCartStore();
+
 	return (
 		<div className='flex flex-col gap-10'>
-			<div className='flex flex-col w-auto h-auto bg-neutral-300/20 rounded-xl gap-3'>
+			<div className='flex flex-col w-auto h-auto bg-neutral-300/50 rounded-xl gap-3'>
 				<header className={items.length > 0 ? 'flex flex-row justify-between w-auto border-b border-neutral-200 pb-5 p-8' : 'flex flex-row justify-between w-auto border-neutral-200 pb-5 p-8'}>
 					<h1 className='font-bold text-2xl'>1. Корзина</h1>
 					<p className='flex flex-row items-center gap-1 text-base text-muted-foreground cursor-pointer hover:text-gray-400 ' onClick={clearCart}>
 						<Trash2 size={16}/>Очистить корзину
 					</p>
 				</header>
-				{items.map(item => (
-					<PurchaseCard
-						key={item.key}
-						keyItem={item.key}
-						id={item.id}
-						name={item.name}
-						image={item.imageUrl}
-						price={item.unitPrice}
-						daugh={item.dough}
-						quantity={item.quantity}
-						weight={item.weight}
-						ingredients={item.ingredients}
-						sizeNumber={item.sizeNumber}
-						addQuantity={incrementCart}
-						deleteQuantity={removeItem}
-					/>
+				{items.length > 0 ? (<>
+					{items.map(item => (
+						<PurchaseCard
+							key={item.key}
+							keyItem={item.key}
+							id={item.id}
+							name={item.name}
+							image={item.imageUrl}
+							price={item.unitPrice}
+							daugh={item.dough}
+							quantity={item.quantity}
+							weight={item.weight}
+							ingredients={item.ingredients}
+							sizeNumber={item.sizeNumber}
+							addQuantity={incrementCart}
+							decrementCart={decrementCart}
+							deleteQuantity={removeItem}
+						/>
 					))}
+				</>) : (
+					<div className='flex flex-col items-center justify-center w-full h-full gap-3 p-5'>
+						<Image src='/cart.png' alt='Image' width={120} height={120} />
+						<div className='flex flex-col items-center justify-center gap-2'>
+							<h1 className='text-[22px] font-bold'>Корзина пустая</h1>
+							<p className='text-center w-3/4 text-base text-muted-foreground'>Добавьте хотя бы один товар, чтобы совершить заказ</p>
+						</div>
+					</div>
+				)}
 			</div>
-			<div className='flex flex-col w-auto h-auto bg-neutral-300/20 rounded-xl gap-3'>
+			<div className='flex flex-col w-auto h-auto bg-neutral-300/50 rounded-xl gap-3'>
 				<header className='flex flex-row w-auto border-b border-neutral-300 pb-5 p-8'>
 					<h1 className='font-bold text-2xl'>2. Персональные данные</h1>
 				</header>
 				<div className='grid grid-cols-2 gap-8 p-8'>
 					<div className='flex flex-col gap-2'>
-						<Label className='font-bold text-sm'>Имя</Label>
+						<Label className='font-bold text-sm'>Имя пользователя</Label>
 						<Input
 							type='text'
-							placeholder='Имя'
-							className='h-11'
-							value={user?.fullName?.split(' ')[0] || ''}
+							placeholder='Полное имя'
+							className='h-11 focus-visible:border-ring'
+							value={user?.fullName || ''}
 							onChange={(e) => setUser({...user, fullName: e.target.value})}
 						/>
-					</div>
-					<div className='flex flex-col gap-2 '>
-						<Label className='font-bold text-sm'>Фамилия</Label>
-						<Input
-							type='text'
-							placeholder='Фамилия'
-							className='h-11'
-							value={user?.fullName?.split(' ')[1] || ''}
-							onChange={(e) => setUser({...user, fullName: e.target.value})}
-						/>
+						{error && <span className='text-red-600 text-sm px-1'>{error.filter(item => item.includes('имя'))}</span>}
 					</div>
 					<div className='flex flex-col gap-2 '>
 						<Label className='font-bold text-sm'>E-mail</Label>
 						<Input
 							type='email'
 							placeholder='E-mail'
-							className='h-11'
+							className='h-11 focus-visible:border-ring'
 							value={user?.email || ''}
 							onChange={(e) => setUser({...user, email: e.target.value})}
 						/>
+						{error && <span className='text-red-600 text-sm px-1'>{error.filter(item => item.includes('Email'))}</span>}
 					</div>
+
 					<div className='flex flex-col gap-2 '>
 						<Label className='font-bold text-sm'>Телефон</Label>
 						<Input
 							type='tel'
 							placeholder='+7(777)-777-77-77'
-							className='h-11'
+							className='h-11 focus-visible:border-ring'
 							value={user?.telephone || ''}
 							onChange={(e) => setUser({...user, telephone: e.target.value})}
 						/>
+						{error && <span className='text-red-600 text-sm px-1'>{error.filter(item => item.includes('телефон'))}</span>}
 					</div>
 				</div>
 			</div>
-			<div className='flex flex-col w-auto h-auto bg-neutral-300/20 rounded-xl gap-3'>
+			<div className='flex flex-col w-auto h-auto bg-neutral-300/50 rounded-xl gap-3'>
 				<header className='flex flex-row w-auto border-b border-neutral-300 pb-5 p-8'>
 					<h1 className='font-bold text-2xl'>3. Адрес доставки</h1>
 				</header>
@@ -100,7 +103,7 @@ export default function FilingData() {
 						<Input
 							type='text'
 							placeholder='Адрес'
-							className='h-11'
+							className='h-11 focus-visible:border-ring'
 							value={user?.address + ' ' + user?.apartment || ' '}
 							onChange={(e) => setDelivery(e.target.value)}
 						/>

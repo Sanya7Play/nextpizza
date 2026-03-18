@@ -1,3 +1,4 @@
+'use client'
 import {
 	Pagination,
 	PaginationContent,
@@ -10,38 +11,37 @@ import {
 
 interface Props{
 	page: number,
-	changePagePlus: () => void,
-	changePageMinus: () => void,
+	changePagePlus: (page: number) => void,
+	changePageMinus: (page: number) => void,
 	changePage: (size: number) => void,
 	pageSize: number[],
 	startPage: number,
-	endPage: number
+	endPage: number,
 }
 
 export default function PaginationHome({page, changePagePlus, changePageMinus, changePage, pageSize, startPage, endPage} : Props) {
-	const handlePaginationPlus = () => {
-		changePagePlus()
+
+
+	const handlePaginationPlus = (page: number) => {
+		changePagePlus(page);
+	}
+	const handlePaginationMinus = (page: number) => {
+		changePageMinus(page);
+	}
+	const handlePageSize = (page: number) => {
+		changePage(page);
+	}
+	const handlePage = () => {
 
 	}
-	const handlePaginationMinus = () => {
-		if (page > 1) changePageMinus()
-	}
-	const handlePageSize = (size: number) => {
-		if(startPage === size){
-			pageSize.forEach(page => page + 1)
-		}
-		console.log(size, startPage, endPage)
-		changePage(size);
-	}
 	return (
-		<Pagination>
+		<Pagination key={page}>
 			<PaginationContent>
 				<PaginationItem>
 					<PaginationPrevious
 						className='border border-primary cursor-pointer'
 						size='default'
-						aria-disabled={page === 1}
-						onClick={handlePaginationMinus}
+						onClick={() => handlePaginationMinus(page)}
 					/>
 				</PaginationItem>
 				<PaginationItem>
@@ -65,7 +65,7 @@ export default function PaginationHome({page, changePagePlus, changePageMinus, c
 					<PaginationNext
 						className='border border-primary cursor-pointer'
 						size='default'
-						onClick={handlePaginationPlus}
+						onClick={() => handlePaginationPlus(page)}
 					/>
 				</PaginationItem>
 			</PaginationContent>

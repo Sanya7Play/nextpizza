@@ -17,10 +17,11 @@ interface Props {
 	loading?: boolean;
 }
 export default function AuthModal({children, submit, error, loading, register}: Props) {
-	const {emailInput, password, setEmailInput, setPassword, name, setName, confirmPassword, setConfirmPassword} = useProviders()
+	const {emailInput, password, setEmailInput, setPassword, name, setName, confirmPassword, setConfirmPassword, setError} = useProviders()
 	const [type, setType] = useState<'login' | 'register'>('login');
 	const onSwitch = () => {
 		setType(type === 'login' ? 'register' : 'login');
+		setError([]);
 	}
 	return(
 		<Dialog>

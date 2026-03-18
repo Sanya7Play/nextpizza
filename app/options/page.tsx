@@ -10,6 +10,8 @@ import {useSession} from "next-auth/react";
 import Locked from "@/app/locked";
 import {useProviders} from "@/components/shared/context/CategoryFilter";
 import {Loader} from "lucide-react";
+import {toast, Toaster} from "react-hot-toast";
+import React from "react";
 
 export default function Options() {
 	const {data: session, status} = useSession();
@@ -24,6 +26,7 @@ export default function Options() {
 		try {
 			const response = await axios.patch(`/api/users?userId=${user?.userId}`, user);
 			setUser(response.data);
+			notify(response.status);
 		}
 		catch (err){
 			console.log(err);
@@ -33,6 +36,14 @@ export default function Options() {
 		}
 	}
 	if (!session) return Locked();
+	const notify = (status: number) =>  {
+		if (status === 200) {
+			toast.success('Успешное сохранение данных');
+		}
+		else{
+			toast.error('Ошибка сохранения данных');
+		}
+	}
 
 	return (
 		<div className='mx-50 rounded-4xl min-h-screen lg:mx-20'>
@@ -46,23 +57,13 @@ export default function Options() {
 						</header>
 						<div className='grid grid-cols-2 gap-8 p-8'>
 							<div className='flex flex-col gap-2 '>
-								<Label className='font-bold text-sm'>Имя</Label>
+								<Label className='font-bold text-sm'>Имя пользователя</Label>
 								<Input
 									type='text'
-									placeholder='Имя'
-									className='h-11'
-									value={user?.fullName?.split(' ')[0] || ''}
-									onChange={(e) => handleChange('fullName',e.target.value)}
-								/>
-							</div>
-							<div className='flex flex-col gap-2 '>
-								<Label className='font-bold text-sm'>Фамилия</Label>
-								<Input
-									type='text'
-									placeholder='Фамилия'
-									className='h-11'
-									value={user?.fullName?.split(' ')[1] || ''}
-									onChange={(e) => handleChange('fullName',e.target.value)}
+									placeholder='Полное имя'
+									className='h-11 focus-visible:border-ring'
+									value={user?.fullName || ''}
+									onChange={(e) => setUser({...user, fullName: e.target.value})}
 								/>
 							</div>
 							<div className='flex flex-col gap-2 '>
@@ -125,13 +126,23 @@ export default function Options() {
 									<Loader/>
 								</p>
 							</Button>):(
-							<Button
-								variant='default'
-								className='cursor-pointer'
-								onClick={() => saveOptions()}
-							>
-								Сохранить изменения
-							</Button>
+
+							<>
+								<Button
+									variant='default'
+									className='cursor-pointer'
+									onClick={() => saveOptions()}
+								>
+									Сохранить изменения
+								</Button>
+								<Toaster
+									position={"top-center"}
+									reverseOrder={true}
+									toastOptions={{
+										duration: 3000,
+									}}
+								/>
+							</>
 						)
 						}
 						<Button

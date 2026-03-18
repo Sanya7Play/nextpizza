@@ -1,7 +1,8 @@
 'use client'
 import ProductItem from "@/components/shared/ProductItem";
 import type { Prisma } from "@/generated/prisma/client";
-import {useEffect, useState} from "react";
+import {useEffect} from "react";
+import {useProviders} from "@/components/shared/context/CategoryFilter";
 
 type ProductWithIngredients = Prisma.ProductGetPayload<{
 	include: { ingredients: true };
@@ -9,25 +10,36 @@ type ProductWithIngredients = Prisma.ProductGetPayload<{
 
 interface PropsProduct {
 	recommendProducts: ProductWithIngredients[];
+	category: string;
 }
 
-export default function Recommended({recommendProducts}:PropsProduct) {
-
-	const [loading, setLoading] = useState<boolean>(false);
+export default function Recommended({recommendProducts, category}:PropsProduct) {
+	const { loading, setLoading} = useProviders();
 	useEffect(() => {
-		async function getProduct(){
-			if(recommendProducts.length > 0){
-				setLoading(true);
-				setTimeout(() => {
+		setLoading(true);
+		try {
+			async function getProduct(){
+				if(recommendProducts.length > 0){
+					setLoading(true);
+					setTimeout(() => {
+						setLoading(false);
+					}, 1000);
+				}
+				else{
 					setLoading(false);
-				}, 1000);
+				}
 			}
-			else{
-				setLoading(false);
-			}
+			getProduct()
 		}
-		getProduct()
-	},[recommendProducts])
+		catch (err){
+
+		}
+		finally {
+			setLoading(false);
+		}
+
+
+	},[recommendProducts, setLoading]);
 
 	return(
 		<div className='flex flex-col gap-3 w-full mr-18 my-10'>
@@ -44,6 +56,7 @@ export default function Recommended({recommendProducts}:PropsProduct) {
 						loading={loading}
 						ingredients={product.ingredients ?? []}
 						description={product.description ?? ''}
+						category={category}
 					/>
 				))}
 			</div>

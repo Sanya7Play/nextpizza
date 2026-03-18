@@ -8,6 +8,8 @@ export async function GET(req: Request){
 
 	const sortParam = searchParams.get("sort");
 
+	const take = searchParams.get("take") ? Number(searchParams.get("take")) : 0;
+
 	const query = searchParams.get("query");
 
 	const page = searchParams.get("page");
@@ -16,10 +18,10 @@ export async function GET(req: Request){
 
 	const search = query ? String(query) : '';
 
+
 	const sortParamId = sortParam ? String(sortParam) : '';
 
 	const categoryId = categoryIdParam ? Number(categoryIdParam) : null;
-
 
 	// Преобразуем параметр sortParam в поле Prisma
 	const orderBy: object = (() => {
@@ -34,22 +36,30 @@ export async function GET(req: Request){
 				return { id: 'asc' };
 		}
 	})();
-
-
-	const products = await prisma.product.findMany({
-		where: {
-			AND: [
-				categoryId ? {categoryId} : {},
-				search ? {name: {contains: search, mode: 'insensitive'}} : {}
-			]
-		},
-		include: {
-			ingredients: true,
-			category: { select: { name: true, id: true } },
-		},
-		orderBy,
-		skip: currentPage,
-		take: search ? 5 : 6,
-	});
-	return NextResponse.json(products);
+	const [products, total] = await prisma.$transaction([
+		prisma.product.findMany({
+			where: {
+				AND: [
+					categoryId ? {categoryId} : {},
+					search ? {name: {contains: search, mode: 'insensitive'}} : {},
+				]
+			},
+			include: {
+				ingredients: true,
+				category: { select: { name: true, id: true } },
+			},
+			orderBy,
+			skip: (currentPage - 1 ) * take,
+			take: search ? 5 : 6,               // сколько взять (limit)
+		}),
+		prisma.product.count({
+			where: {
+				AND: [
+					categoryId ? {categoryId} : {},
+					search ? {name: {contains: search, mode: 'insensitive'}} : {},
+				]
+			}, // фильтры должны совпадать
+		}),
+	]);
+	return NextResponse.json({products, total});
 }

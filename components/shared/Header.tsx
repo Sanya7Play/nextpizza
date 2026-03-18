@@ -1,53 +1,62 @@
 'use client'
 import Image from "next/image";
-import {Search, ShoppingCart, User} from "lucide-react";
-import {Input} from "@/components/ui/input";
+import {ShoppingCart, User} from "lucide-react";
 import {Button} from "@/components/ui/button";
 import CardDrawer from "@/components/shared/CardDrawer";
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import PopoverMenu from "@/components/shared/PopoverMenu";
 import Link from "next/link";
-import PopoverInput from "@/components/shared/PopoverInput";
 import {useCartStore} from "@/components/store/cart";
 import {useProviders} from "@/components/shared/context/CategoryFilter";
 import {Product} from "@/generated/prisma/client";
-import axios from "axios";
+import axios, {isAxiosError} from "axios";
 import { signIn,useSession } from "next-auth/react";
-import {z} from "zod";
 import AuthModal from "@/components/shared/AuthModal";
-import {LoginSchema} from "@/types/schemas";
+import {LoginSchema, RegisterSchema} from "@/types/schemas";
+import SearchInput from "@/components/shared/SearchInput";
+import {useDebounce } from 'react-use';
 
 interface HeaderProps {
 	buttonHide: boolean,
 	searchHide: boolean
 }
+export type ProductTotal = {
+	total: number;
+	products: Product[];
+}
 export default function Header({buttonHide, searchHide}: HeaderProps) {
 	const { data: session, status } = useSession();
-	const {search, setSearch, loadingButton, setLoadingButton, error, setError } = useProviders();
-	const [products, setProducts] = useState<Product[]>([]);
+	const {search, loadingButton, setLoadingButton, error, setError, setLoading, searchProducts, setSearchProducts} = useProviders();
 	const totalCount = useCartStore(state => state.totalCount);
 	const totalPrice = useCartStore(state => state.totalPrice);
-	useEffect(() => {
-		try {
-			const searchProduct = async () => {
-				if (!search || search.trim().length <= 3 || search.length === 0){
-					setProducts([])
-					return;
-				}
-				const response = await axios.get("/api/products", {
-					params: { query: search },
-				});
-				setProducts(response.data);
-			};
-			searchProduct();
-		}
-		catch (err) {
-			console.log(err);
-		}
-		finally {
 
-		}
-	}, [search]);
+	useDebounce(
+		async () => {
+			setLoading(true);
+			try {
+				const searchProduct = async () => {
+					if (!search || search.trim().length <= 2 || search.length === 0 ){
+						setSearchProducts([]);
+						return;
+					}
+					const response = await axios.get<ProductTotal>("/api/products", {
+						params: { query: search },
+					});
+					console.log(response.data.products);
+					setSearchProducts(response.data.products);
+				};
+				searchProduct();
+			} catch (error) {
+				console.log(error);
+			}
+			finally {
+				setLoading(false);
+			}
+		},
+		300,
+		[search],
+	);
+
 	async function submit(email: string, password: string) {
 		setLoadingButton(true);
 		try {
@@ -82,19 +91,25 @@ export default function Header({buttonHide, searchHide}: HeaderProps) {
 				password: password,
 				fullName: fullName
 			}
+			const result = await RegisterSchema.safeParseAsync(data);
+			if (!result.success){
+				setError(result.error?.issues.map(issue => issue.message) ?? []);
+				return;
+			}
 			const response = await axios.post('/api/auth/register', data);
-
+			if (response.status !== 201) {
+				setError([]);
+			}
 			await signIn("credentials", {
 				email,
 				password,
 				redirect: false,
 			});
 		}
-		catch (error) {
-			// ❗ ошибка с сервера
-			if (axios.isAxiosError(error)) {
-				const status = error.response?.status;
-				const message = error.response?.data?.error;
+		catch (err) {
+			if (isAxiosError(err)){
+				const status = err.response?.status;
+				const message = err.response?.data?.error;
 
 				if (status === 409) {
 					setError([message || 'Пользователь уже существует']);
@@ -109,9 +124,6 @@ export default function Header({buttonHide, searchHide}: HeaderProps) {
 			setLoadingButton(false);
 		}
 	}
-	const handleInput = (value: string) => {
-		setSearch(value);
-	}
 	return(
 		<>
 			<div className='flex flex-row items-center justify-between px-18 py-15 border-b border-gray-200'>
@@ -124,23 +136,7 @@ export default function Header({buttonHide, searchHide}: HeaderProps) {
 						<p className='font-normal text-muted-foreground'>вкусней уже некуда</p>
 					</div>
 				</div>
-				<div className='relative h-11 2xl:w-160 xl:w-100 lg:w-50 md:w-50'>
-					{searchHide &&
-						<>
-                            <Search
-                                className='absolute w-5 h-5 left-3 top-3 text-muted-foreground'
-                            />
-                            <PopoverInput products={products}>
-                                <Input
-                                    type='text'
-                                    placeholder='Поиск...'
-                                    onChange={(e) => handleInput(e.target.value)}
-                                    className='w-full h-full bg-neutral-200/60 outline-none pl-10 pr-3 rounded-2xl focus-visible:border-ring'
-                                />
-                            </PopoverInput>
-						</>
-					}
-				</div>
+				<SearchInput searchHide={searchHide} products={searchProducts} search={search}/>
 				<div className='flex flex-row items-center justify-between gap-3'>
 					{status === 'authenticated' ?
 						(

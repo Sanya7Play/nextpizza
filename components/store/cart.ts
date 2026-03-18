@@ -38,6 +38,7 @@ type CartState = {
 };
 
 export const useCartStore = create<CartState>((set) => ({
+
 	items: [],
 	totalCount: 0,
 	totalPrice: 0,

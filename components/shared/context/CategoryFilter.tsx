@@ -3,7 +3,8 @@ import React, {createContext, useContext, useEffect, useState} from 'react';
 import {sortArray} from "@/components/constants/pizza";
 import axios from "axios";
 import {useSession} from "next-auth/react";
-import {User} from "@/generated/prisma";
+import {Product, User} from "@/generated/prisma";
+import {OrderWithItems} from "@/types/order";
 import {useCartStore} from "@/components/store/cart";
 
 interface ContextInterface {
@@ -23,7 +24,7 @@ interface ContextInterface {
 	setConfirmPassword: (confirmPassword: string) => void;
 	user: Partial<User>;
 	setUser: (user: Partial<User>) => void;
-	loading?: boolean;
+	loading: boolean;
 	setLoading: (loading: boolean) => void;
 	emailInput: string;
 	setEmailInput: (emailInput: string) => void;
@@ -31,12 +32,20 @@ interface ContextInterface {
 	setName: (name: string) => void;
 	error: string[];
 	setError: (error: string[]) => void;
+	orders: OrderWithItems[];
+	setOrders: (orders: OrderWithItems[]) => void;
+	delivery: string | undefined;
+	setDelivery: (delivery: string | undefined) => void;
+	focused: boolean;
+	setFocused: (focused: boolean) => void;
+	searchProducts: Product[];
+	setSearchProducts: (searchProducts: Product[]) => void;
 }
 
 const PizzaContext = createContext<ContextInterface | null>(null);
 
 export function CategoryFilter({children}:{children: React.ReactNode}) {
-	const { data: session, status } = useSession();
+	const { data: session } = useSession();
 	const [password, setPassword] = useState<string>("");
 	const [confirmPassword, setConfirmPassword] = useState<string>("");
 	const [selectedCategory, setSelectedCategory] = useState<number | null >(0);
@@ -49,6 +58,10 @@ export function CategoryFilter({children}:{children: React.ReactNode}) {
 	const [emailInput, setEmailInput] = useState<string>("");
 	const [name, setName] = useState<string>("");
 	const [error, setError] = useState<string[]>([]);
+	const [orders, setOrders] = useState<OrderWithItems[]>([]);
+	const [delivery, setDelivery] = useState<string | undefined>(user?.address + ' ' + user?.apartment || '');
+	const [focused, setFocused] = useState<boolean>(false);
+	const [searchProducts, setSearchProducts] = useState<Product[]>([]);
 
 	useEffect(() => {
 		if (!session?.user?.email) return;
@@ -59,6 +72,7 @@ export function CategoryFilter({children}:{children: React.ReactNode}) {
 					params: { email: session?.user.email }
 				});
 				setUser(data);
+
 			} catch (err) {
 				console.log(err);
 			}
@@ -72,6 +86,14 @@ export function CategoryFilter({children}:{children: React.ReactNode}) {
 		<PizzaContext.Provider value={{
 			user,
 			setUser,
+			searchProducts,
+			setSearchProducts,
+			focused,
+			setFocused,
+			delivery,
+			setDelivery,
+			orders,
+			setOrders,
 			error,
 			setError,
 			emailInput,

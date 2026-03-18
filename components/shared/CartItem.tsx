@@ -44,7 +44,6 @@ export default function CartItem(
 	const handleQuantity = () => {
 		deleteQuantity(keyItem)
 	}
-	console.log(keyItem)
 	return(
 		<div className='flex flex-row gap-5 py-5 rounded-2xl' key={keyItem}>
 			<div className='flex flex-col items-center justify-center'>

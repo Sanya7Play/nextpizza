@@ -1,7 +1,7 @@
-import { NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
+import {prisma} from "@/lib/prisma";
+import {NextResponse} from "next/server";
 
-export async function GET(){
-	const cart = await prisma.cart.findMany();
+export async function GET(req: Request){
+	const cart = await prisma.cart.findFirst({});
 	return NextResponse.json(cart);
 }

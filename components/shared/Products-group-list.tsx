@@ -2,13 +2,11 @@
 import ProductItem from "./ProductItem";
 import Title from "@/components/shared/Title";
 import axios from "axios";
-import { useEffect, useState} from "react";
+import {useEffect, useMemo, useState} from "react";
 import {Ingredient} from "@/generated/prisma/client";
 import {useProviders} from "@/components/shared/context/CategoryFilter";
 import {categories} from "@/components/constants/pizza";
 import PaginationHome from "@/components/shared/paginationHome";
-
-
 
 interface Product {
 	name: string;
@@ -20,25 +18,44 @@ interface Product {
 	category: { name: string; };
 	description: string;
 }
+export type ProductTotal = {
+	total: number;
+	products: Product[];
+}
 export default function ProductsGroupList() {
 
+	const {selectedCategory, sort, search, loading, setLoading} = useProviders();
 	const [products, setProducts] = useState<Product[]>([]);
-	const [loading, setLoading] = useState<boolean>(false);
-	const [activePage, setActivePage] = useState<number>(1);
-	const [currentPage, setCurrentPage] = useState<number>(0);
-	const [pageSize, setPageSize] = useState<number[]>([1,2,3]);
+	const [page, setPage] = useState<number>(1);
+	const [total, setTotal] = useState<number>(0);
 
-	const {selectedCategory, sort, search} = useProviders();
+	const take = search ? 5 : 6;
+
+	const totalPages = useMemo(() => Math.max(1, Math.ceil(total / take)), [total, take]);
+
+	const windowSize = 3;
+	const windowIndex = Math.floor((page - 1) / windowSize);
+	const start = windowIndex * windowSize + 1;
+	const end = Math.min(totalPages, start + windowSize - 1);
+
+	const pageSize = useMemo(
+		() => Array.from({ length: end - start + 1 }, (_, i) => start + i),
+		[start, end]
+	);
+
 
 	useEffect(() => {
 		async function getProducts() {
-			setLoading(true)
+			setLoading(true);
 			try {
-				const {data} = await axios.get<Product[]>(`/api/products`,
-					{params: {categoryId: selectedCategory, sort: sort, query: search, page: currentPage}});
-				setProducts(data);
-				console.log('Загрузка данных');
-				await new Promise((r) => setTimeout(r, 100));
+				const {data} = await axios.get<ProductTotal>(`/api/products`,
+					{params: {categoryId: selectedCategory, sort: sort, query: search, page, take}});
+				setProducts(data.products);
+				setTotal(data.total);
+				await new Promise((r) => setTimeout(r, 200));
+			}
+			catch (err){
+				console.log(err);
 			}
 			finally {
 				setLoading(false);
@@ -46,20 +63,15 @@ export default function ProductsGroupList() {
 		}
 		getProducts();
 
-	}, [selectedCategory, sort, search, currentPage]);
-	const startPage = pageSize[2];
-	const endPage = pageSize[0];
+	}, [selectedCategory, sort, page, setLoading]);
 	const changePagePlus = () => {
-		setActivePage(prevPage => prevPage + 1);
-		setCurrentPage(prevState => prevState + 6)
+		if (page < totalPages) setPage((p) => p + 1);
 	}
 	const changePageMinus = () => {
-		setActivePage(prevPage => prevPage - 1);
-		setCurrentPage(prevState => prevState -	 6)
+		if (page > 1) setPage((p) => p - 1);
 	}
-	const changePage = (size: number) => {
-		setActivePage(size)
-		setCurrentPage((size - 1) * 6)
+	const changePage = (page: number) => {
+		setPage(page);
 	}
 	const title = selectedCategory === 0 ? 'Все товары' : categories.find((
 		category, index) => index === selectedCategory);
@@ -85,17 +97,16 @@ export default function ProductsGroupList() {
 			{products.length > 0 && (
 				<div className='my-8'>
 					<PaginationHome
-						page={activePage}
+						page={page}
 						pageSize={pageSize}
 						changePagePlus={changePagePlus}
 						changePageMinus={changePageMinus}
 						changePage={changePage}
-						startPage={startPage}
-						endPage={endPage}
+						startPage={start}
+						endPage={end}
 					/>
 				</div>
 			)}
-
 		</div>
 	)
 }

@@ -18,7 +18,6 @@ export async function GET(req: Request){
 			apartment: true,
 		}
 	});
-	console.log(users)
 	return NextResponse.json(users);
 }
 export async function PATCH(req: Request){
@@ -30,6 +29,5 @@ export async function PATCH(req: Request){
 		},
 		data: body
 	});
-	console.log(updateUser)
 	return NextResponse.json(body)
 }

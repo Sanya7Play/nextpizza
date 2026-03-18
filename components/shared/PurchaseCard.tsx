@@ -16,6 +16,7 @@ interface PurchaseCardProps {
 	daugh: string;
 	addQuantity(keyItem: string): void;
 	deleteQuantity(keyItem: string): void;
+	decrementCart(keyItem: string): void;
 }
 export default function PurchaseCard(
 	{
@@ -29,13 +30,14 @@ export default function PurchaseCard(
 		ingredients,
 		sizeNumber,
 		addQuantity,
-		deleteQuantity
+		deleteQuantity,
+		decrementCart
 }:PurchaseCardProps) {
 	const ingredientsNames = ingredients.map((ingredient) => ingredient.name).join(', ');
 
 	const handleDeleteQuantity = () => {
 		if (quantity === 1) return;
-		deleteQuantity(keyItem)
+		decrementCart(keyItem);
 	}
 	const handleAddQuantity = ()	 => {
 		addQuantity(keyItem)

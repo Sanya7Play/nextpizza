@@ -1,7 +1,6 @@
 import "dotenv/config";
 import {PrismaClient} from "@/generated/prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
-import bcrypt from "bcrypt";
 
 
 const prisma = new PrismaClient({
@@ -10,76 +9,55 @@ const prisma = new PrismaClient({
 
 async function main() {
 
-	// 🔐 Хешируем пароль
-	const passwordHash = await bcrypt.hash("123456", 10);
-
-	// 👤 Пользователь 1
-	await prisma.user.upsert({
-		where: { email: "admin@test.com" },
-		update: {},
-		create: {
-			email: "admin@test.com",
-			fullName: "Admin User",
-			password: passwordHash,
-			emailVerified: new Date(),
-		},
+	// 🛒 Создаём тестовую корзину для user@test.com
+	const testUser = await prisma.user.findUnique({
+		where: { email: "arsikpopov17@gmail.com" },
+		select: { userId: true },
 	});
 
-	// 👤 Пользователь 2
-	await prisma.user.upsert({
-		where: { email: "user@test.com" },
-		update: {},
-		create: {
-			email: "user@test.com",
-			fullName: "Regular User",
-			password: passwordHash,
-			emailVerified: new Date(),
-		},
-	});
-
-	console.log("✅ Users created");
-
-	// 3) Привязать ВСЕ существующие добавки ко ВСЕМ пиццам (category "Пицца")
-	// Найдём id категории "Пицца"
-	const pizzaCategory = await prisma.category.findFirst({
-		where: { name: "Пицца" },
-		select: { id: true },
-	});
-
-	if (!pizzaCategory) {
-		throw new Error("Категория 'Пицца' не найдена");
+	if (!testUser) {
+		throw new Error("Test user not found");
 	}
 
-	// Берём все ингредиенты (добавки), которые уже есть в базе
-	const ingredientIds = (
-		await prisma.ingredient.findMany({ select: { id: true } })
-	).map((i) => i.id);
-
-	// Берём все продукты-пиццы
-	const pizzas = await prisma.product.findMany({
-		where: { categoryId: pizzaCategory.id },
-		select: { id: true },
+// Возьмём любые 2 продукта
+	const products = await prisma.product.findMany({
+		take: 2,
+		select: { id: true, price: true },
 	});
 
-	// Всем пиццам ставим одинаковый набор добавок (можно перезапускать)
-	console.log(`Pizzas to update: ${pizzas.length}, ingredients: ${ingredientIds.length}`);
+	if (products.length < 2) {
+		throw new Error("Not enough products to create test cart");
+	}
 
-	let done = 0;
-	for (const p of pizzas) {
-		await prisma.product.update({
-			where: { id: p.id },
-			data: {
-				ingredients: {
-					set: ingredientIds.map((id) => ({ id })),
-				},
+// Удалим старую корзину если есть
+	await prisma.cart.deleteMany({
+		where: { userId: testUser.userId },
+	});
+
+// Создаём новую корзину
+	const cart = await prisma.cart.create({
+		data: {
+			userId: testUser.userId,
+			totalAmount: products[0].price + products[1].price,
+			items: {
+				create: [
+					{
+						productId: products[0].id,
+						quantity: 1,
+					},
+					{
+						productId: products[1].id,
+						quantity: 1,
+					},
+				],
 			},
-		});
+		},
+		include: {
+			items: true,
+		},
+	});
 
-		done++;
-		if (done % 10 === 0) {
-			console.log(`✅ Updated ${done}/${pizzas.length}`);
-		}
-	}
+	console.log("🛒 Test cart created:", cart.id);
 
 }
 

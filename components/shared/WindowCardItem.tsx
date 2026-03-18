@@ -25,6 +25,7 @@ export default function WindowCardItem({product, ingredients, description, categ
 	const [size, setSize] = useState<string | undefined>(buttonSize[0]?.size);
 	const [key, setKey] = useState<number | undefined>(buttonSize[0]?.key);
 	const [weight, setWeight] = useState<number | undefined>(buttonSize[0]?.weight);
+	const [buttonSizeDrink, setButtonSizeDrink] = useState<string | undefined>(buttonDrink[0]?.size)
 	const [sizeDrink, setSizeDrink] = useState<number | undefined>(buttonDrink[0]?.key);
 	const [daugh, setDaugh] = useState<string | undefined>(buttonDaugh[0]);
 	const [supplements, setSupplements] = useState<Ingredient[]>([]);
@@ -39,7 +40,7 @@ export default function WindowCardItem({product, ingredients, description, categ
 		setKey(item.key);
 		setSize(item.size);
 		setWeight(item.weight);
-		setSizeDrink(item.key)
+		setSizeDrink(item.key);
 	}
 
 	const changeType = (item: string | undefined) => {
@@ -90,34 +91,11 @@ export default function WindowCardItem({product, ingredients, description, categ
 
 		}
 	}
-
-	useEffect(() => {
-		async function getProduct(){
-			try {
-				if(product){
-					setLoading(true);
-					setTimeout(() => {
-						setLoading(false);
-					}, 500);
-				}
-				else{
-					setLoading(false);
-				}
-			}
-			catch (err){
-
-			}
-			finally {
-
-			}
-		}
-		getProduct()
-	},[product])
 	return (
 		<div>
 			{loading ? (<SkeletonId/>) : (
 				<div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-5" key={product?.id}>
-					<div className="p-10 rounded-2xl w=[570] h=[570] flex items-center justify-center gap-5">
+					<div className="m-10 rounded-2xl w=[570] h=[570] flex items-center justify-center gap-5">
 						{/* eslint-disable-next-line @next/next/no-img-element */}
 						<img src={product?.imageUrl} alt={product?.name} width={500} height={500} />
 					</div>
@@ -129,7 +107,7 @@ export default function WindowCardItem({product, ingredients, description, categ
 									<p className='text-sm font-normal text-muted-foreground'>{key} см, {`${daugh} тесто`}, {weight} г</p>
 								</>
 							) : (
-								<p className='text-sm font-normal text-muted-foreground'>{sizeDrink} л, {size} стакан, {weight} г</p>
+								<p className='text-sm font-normal text-muted-foreground'>{sizeDrink} л, {buttonSizeDrink} стакан, {weight} г</p>
 							)}
 
 							<p className='text-base font-medium w-[500px]'>

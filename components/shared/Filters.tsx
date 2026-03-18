@@ -4,10 +4,59 @@ import {Input} from "@/components/ui/input";
 import {Button} from "@/components/ui/button";
 import {Slider} from "@/components/ui/slider";
 import {Label} from "@/components/ui/label";
-import {useState} from "react";
+import {useEffect, useState} from "react";
+import axios from "axios";
+import {Ingredient} from "@/generated/prisma";
+import {buttonDaugh} from "@/components/constants/pizza";
+import {useProviders} from "@/components/shared/context/CategoryFilter";
 
 export default function Filters() {
+	const { loading, setLoading} = useProviders();
 	const [value, setValue] = useState<number[]>([0, 4950]);
+	const [ingredients, setIngredients] = useState<string[]>([]);
+	const [showAll, setShowAll] = useState(false);
+	const [checked, setChecked] = useState<string[]>([]);
+	const [daugh, setDaugh] = useState<string[]>([]);
+	useEffect(() => {
+		async function getIngredients() {
+			setLoading(true);
+			try {
+				const response = await axios.get('/api/ingredient',{
+					params: { show: showAll}
+				});
+				setIngredients(response.data.map((ingredient: Ingredient) => ingredient.name));
+			}
+			catch (error) {
+			}
+			finally {
+				setLoading(false);
+			}
+		}
+		getIngredients();
+	}, [showAll]);
+	const handleChecked = (ingredient: string) => {
+		setChecked(prev => {
+			return prev.includes(ingredient) ? prev.filter(item => item !== ingredient) : [...prev, ingredient];
+		});
+	}
+	const handleDaugh = (daugh: string) => {
+		setDaugh(prev => {
+			return prev.includes(daugh) ? prev.filter(item => item !== daugh) : [...prev, daugh];
+		});
+	}
+	const showButton = () => {
+		if (showAll){
+			setShowAll(false);
+			setIngredients([])
+		}
+		else{
+			setShowAll(true);
+			setIngredients([])
+		}
+	}
+	const queryFunction = () => {
+
+	}
 	return(
 		<div className='flex flex-col gap-5 mx-20 my-1 w-60'>
 			<div className='flex flex-col gap-5 w-60 border-b border-gray-200 pb-6'>
@@ -43,51 +92,35 @@ export default function Filters() {
 						} />
 					</p>
 				</div>
-				<Slider defaultValue={value} onValueChange={setValue} min={0} max={4950} step={50}/>
+				<Slider className='cursor-pointer' defaultValue={value} onValueChange={setValue} min={0} max={4950} step={50}/>
 			</div>
 			<div className='flex flex-col gap-3'>
 				<h1 className='font-bold text-lg'>Ингредиенты: </h1>
-				<div className='flex flex-row items-center gap-3'>
-					<Checkbox id='cheesy' className='cursor-pointer'/>
-					<Label htmlFor="cheesy" className='text-base'>Сырный соус</Label>
-				</div>
-				<div className='flex flex-row items-center gap-3'>
-					<Checkbox id='mozzarella' className='cursor-pointer'/>
-					<Label htmlFor="mozzarella" className='text-base'>Моцарелла</Label>
-				</div>
-				<div className='flex flex-row items-center gap-3'>
-					<Checkbox id='tomate' className='cursor-pointer'/>
-					<Label htmlFor="tomate" className='text-base'>Томаты</Label>
-				</div>
-				<div className='flex flex-row items-center gap-3'>
-					<Checkbox id='garlic' className='cursor-pointer'/>
-					<Label htmlFor="garlic" className='text-base'>Чеснок</Label>
-				</div>
-				<div className='flex flex-row items-center gap-3'>
-					<Checkbox id='cucumbers' className='cursor-pointer'/>
-					<Label htmlFor="cucumbers" className='text-base'>Соленные огурчики</Label>
-				</div>
-				<div className='flex flex-row items-center gap-3'>
-					<Checkbox id='onion' className='cursor-pointer'/>
-					<Label htmlFor="onion" className='text-base'>Красный лук</Label>
-				</div>
+				{
+					ingredients.map((ingredient, index) => (
+						<div className='flex flex-row items-center gap-3' key={index}>
+							<Checkbox value={ingredient} className='cursor-pointer' onClick={() => handleChecked(ingredient)}/>
+							<Label htmlFor={ingredient} className='text-base'>{ingredient}</Label>
+						</div>
+					))
+				}
 				<div>
-					<button className='text-primary cursor-pointer'>+ Показать все</button>
+					<button className='text-primary cursor-pointer' onClick={() => showButton()}>{showAll ? ' Cкрыть' : '+ Показать все'}</button>
 				</div>
 			</div>
 			<div className='flex flex-col gap-3 pb-2'>
 				<h1 className='font-bold text-lg'>Тип теста: </h1>
 				<div className='flex flex-row items-center gap-3'>
-					<Checkbox id='thin' className='cursor-pointer'/>
-					<Label htmlFor="thin" className='text-base'>тонкое</Label>
+					<Checkbox value={buttonDaugh[1]} className='cursor-pointer' onClick={() => handleDaugh(buttonDaugh[1])}/>
+					<Label htmlFor="thin" className='text-base'>{buttonDaugh[1].toLowerCase()}</Label>
 				</div>
 				<div className='flex flex-row items-center gap-3'>
-					<Checkbox id='traditional' className='cursor-pointer'/>
-					<Label htmlFor="traditional" className='text-base'>традиционное</Label>
+					<Checkbox value={buttonDaugh[1]} className='cursor-pointer' onClick={() => handleDaugh(buttonDaugh[0])}/>
+					<Label htmlFor="traditional" className='text-base'>{buttonDaugh[0].toLowerCase()}</Label>
 				</div>
 			</div>
 			<div className='pt-2 pb-10'>
-				<Button className='rounded-4xl py-6 w-full cursor-pointer'>Применить</Button>
+				<Button className='rounded-4xl py-6 w-full cursor-pointer' onClick={() => queryFunction()}>Применить</Button>
 			</div>
 		</div>
 	)

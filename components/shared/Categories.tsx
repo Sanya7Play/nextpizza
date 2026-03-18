@@ -1,5 +1,4 @@
 'use client'
-import {useState} from "react";
 import {Button} from "@/components/ui/button";
 import {categories} from "@/components/constants/pizza";
 import {useProviders} from "@/components/shared/context/CategoryFilter";
@@ -11,7 +10,6 @@ export default function Categories() {
 		const findIndex: number = categories.indexOf(category);
 		setSelectedCategory(findIndex);
 	}
-
 	return (
 		<div className='flex flex-row items-center justify-around bg-neutral-300/40 w-auto p-2.5 rounded-2xl gap-4 my-5 md:gap-2.5'>
 			{categories.map((category, index) => (
