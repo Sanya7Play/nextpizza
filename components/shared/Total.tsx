@@ -31,27 +31,22 @@ export default function Total() {
 		const parsed = await OrderSchema.safeParseAsync(data);
 		if (!parsed.success){
 			setError(parsed.error?.issues.map(issue => issue.message) ?? []);
-			console.log(error)
 			return;
 		}
-		console.log(orders.length);
 		try {
 			const response = await axios.post('/api/payment', {
 				totalPrice: String(totalCardPrice),
 				orderId: orders[orders.length - 1]?.id + 1 || 1 ,
 			})
-
-			console.log(response.data);
 			if (response.status === 200){
 				const cleanedItems = items.map(item => ({
 					productId: item.productId,
 					quantity: item.quantity,
 					ingredients: item.ingredients,
 					key: item.key,
-					daugh: item.dough,
+					dough: item.dough,
 					size: item.size
 				}));
-				console.log(cleanedItems);
 				const {data} = await axios.post('/api/order', {
 					id: orders[orders.length - 1]?.id + 1 || 1,
 					items: cleanedItems,
@@ -82,7 +77,6 @@ export default function Total() {
 				totalPrice: totalCardPrice,
 				deliveryPrice,
 			});
-			console.log(response);
 		}
 		catch (err){
 
@@ -92,7 +86,7 @@ export default function Total() {
 		}
 	};
 	return (
-		<div className='flex flex-col w-170 h-121 bg-neutral-300/50 rounded-xl gap-3 p-10'>
+		<div className='flex flex-col w-170 h-121 bg-neutral-300/40 border rounded-xl gap-3 p-10'>
 			<div className='flex flex-col w-auto h-auto pb-5 p-10 gap-2'>
 				<h1 className='text-xl'>Итого:</h1>
 				<span className='flex flex-row items-center gap-2 text-4xl font-extrabold'>{totalCardPrice.toFixed(2)} ₽</span>
@@ -121,19 +115,21 @@ export default function Total() {
 						<p className='border-b border-dashed border-gray-400 w-78 p-2 mx-1'></p>
 						<span className='flex flex-row items-center gap-0.5 font-bold'>{deliveryPrice} ₽</span>
 					</div>
-					{loading ? (
-						<Button
-							className='w-full max-w-[440px] rounded-2xl py-6 text-base font-semibold cursor-pointer'
-							disabled
-						>
-							<p className='animate-spin'>
-								<Loader/>
-							</p>
-						</Button>):(
-						<Button variant='default' size='lg' className='w-full py-6 rounded-xl cursor-pointer' onClick={() => paymentFunction()}>
-							<p className='flex flex-row items-center text-lg gap-2'>Оформить заказ<ArrowRight size={20}/></p>
-						</Button>
-					)}
+					<div className='w-full'>
+						{loading ? (
+							<Button
+								className='w-[440px] rounded-2xl py-6 text-base font-semibold cursor-pointer'
+								disabled
+							>
+								<p className='animate-spin'>
+									<Loader/>
+								</p>
+							</Button>):(
+							<Button variant='default' size='lg' className='w-full py-6 rounded-xl cursor-pointer' onClick={() => paymentFunction()}>
+								<p className='flex flex-row items-center text-lg gap-2'>Оформить заказ<ArrowRight size={20}/></p>
+							</Button>
+						)}
+					</div>
 				</div>
 			</div>
 		</div>

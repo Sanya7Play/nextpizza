@@ -15,11 +15,9 @@ interface Props{
 	changePageMinus: (page: number) => void,
 	changePage: (size: number) => void,
 	pageSize: number[],
-	startPage: number,
-	endPage: number,
 }
 
-export default function PaginationHome({page, changePagePlus, changePageMinus, changePage, pageSize, startPage, endPage} : Props) {
+export default function PaginationHome({page, changePagePlus, changePageMinus, changePage, pageSize} : Props) {
 
 
 	const handlePaginationPlus = (page: number) => {
@@ -30,9 +28,6 @@ export default function PaginationHome({page, changePagePlus, changePageMinus, c
 	}
 	const handlePageSize = (page: number) => {
 		changePage(page);
-	}
-	const handlePage = () => {
-
 	}
 	return (
 		<Pagination key={page}>

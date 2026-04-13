@@ -1,5 +1,5 @@
 "use client"
-import {Clock, Trash2} from "lucide-react";
+import {ArrowDown, Clock, Trash2} from "lucide-react";
 import PurchaseCard from "@/components/shared/PurchaseCard";
 import {Input} from "@/components/ui/input";
 import {Textarea} from "@/components/ui/textarea";
@@ -8,15 +8,15 @@ import {useCartStore} from "@/components/store/cart";
 import React from "react";
 import {useProviders} from "@/components/shared/context/CategoryFilter";
 import Image from "next/image";
+import PopoverTime from "@/components/shared/PopoverTime";
 
 export default function FilingData() {
 
-	const {user, setUser, error, setDelivery} = useProviders();
+	const {user, setUser, error, setDelivery, timeDelivery} = useProviders();
 	const {items, clearCart, incrementCart, removeItem, decrementCart} = useCartStore();
-
 	return (
 		<div className='flex flex-col gap-10'>
-			<div className='flex flex-col w-auto h-auto bg-neutral-300/50 rounded-xl gap-3'>
+			<div className='flex flex-col w-auto h-auto bg-neutral-300/40 border rounded-xl gap-3'>
 				<header className={items.length > 0 ? 'flex flex-row justify-between w-auto border-b border-neutral-200 pb-5 p-8' : 'flex flex-row justify-between w-auto border-neutral-200 pb-5 p-8'}>
 					<h1 className='font-bold text-2xl'>1. Корзина</h1>
 					<p className='flex flex-row items-center gap-1 text-base text-muted-foreground cursor-pointer hover:text-gray-400 ' onClick={clearCart}>
@@ -37,6 +37,8 @@ export default function FilingData() {
 							weight={item.weight}
 							ingredients={item.ingredients}
 							sizeNumber={item.sizeNumber}
+							size={item.size}
+							category={item.category}
 							addQuantity={incrementCart}
 							decrementCart={decrementCart}
 							deleteQuantity={removeItem}
@@ -52,7 +54,7 @@ export default function FilingData() {
 					</div>
 				)}
 			</div>
-			<div className='flex flex-col w-auto h-auto bg-neutral-300/50 rounded-xl gap-3'>
+			<div className='flex flex-col w-auto h-auto bg-neutral-300/40 border rounded-xl gap-3'>
 				<header className='flex flex-row w-auto border-b border-neutral-300 pb-5 p-8'>
 					<h1 className='font-bold text-2xl'>2. Персональные данные</h1>
 				</header>
@@ -93,7 +95,7 @@ export default function FilingData() {
 					</div>
 				</div>
 			</div>
-			<div className='flex flex-col w-auto h-auto bg-neutral-300/50 rounded-xl gap-3'>
+			<div className='flex flex-col w-auto h-auto bg-neutral-300/40 border rounded-xl gap-3'>
 				<header className='flex flex-row w-auto border-b border-neutral-300 pb-5 p-8'>
 					<h1 className='font-bold text-2xl'>3. Адрес доставки</h1>
 				</header>
@@ -114,8 +116,13 @@ export default function FilingData() {
 					</div>
 				</div>
 				<div className='flex flex-col px-8 py-4 gap-2'>
-					<p>Время доставки</p>
-					<span className='flex flex-row gap-2'><Clock/>Доставка в 11:00</span>
+					<div className='flex flex-row items-center gap-2 bg-neutral-300/10 w-2/5 p-4.5 rounded-2xl'>
+						<Clock/>
+						<p className='font-bold'>Время доставки:</p>
+						<PopoverTime>
+							<span className='flex flex-row gap-2 cursor-pointer text-primary'>{timeDelivery}</span>
+						</PopoverTime>
+					</div>
 				</div>
 			</div>
 		</div>

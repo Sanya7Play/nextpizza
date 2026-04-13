@@ -6,7 +6,8 @@ import {useEffect, useMemo, useState} from "react";
 import {Ingredient} from "@/generated/prisma/client";
 import {useProviders} from "@/components/shared/context/CategoryFilter";
 import {categories} from "@/components/constants/pizza";
-import PaginationHome from "@/components/shared/paginationHome";
+import PaginationHome from "@/components/shared/PaginationHome";
+import ProductSkeleton from "@/components/shared/ProductSkeleton";
 
 interface Product {
 	name: string;
@@ -49,13 +50,13 @@ export default function ProductsGroupList() {
 			setLoading(true);
 			try {
 				const {data} = await axios.get<ProductTotal>(`/api/products`,
-					{params: {categoryId: selectedCategory, sort: sort, query: search, page, take}});
+					{params: {categoryId: selectedCategory, sort: sort, page, take}});
 				setProducts(data.products);
 				setTotal(data.total);
 				await new Promise((r) => setTimeout(r, 200));
 			}
 			catch (err){
-				console.log(err);
+
 			}
 			finally {
 				setLoading(false);
@@ -63,7 +64,7 @@ export default function ProductsGroupList() {
 		}
 		getProducts();
 
-	}, [selectedCategory, sort, page, setLoading]);
+	}, [selectedCategory, sort, page, setLoading, take]);
 	const changePagePlus = () => {
 		if (page < totalPages) setPage((p) => p + 1);
 	}
@@ -79,20 +80,26 @@ export default function ProductsGroupList() {
 		<div className='flex flex-col gap-3 w-full mr-18'>
 			<Title text={title ? title : 'Все товары'} />
 			<div className="grid gap-4 [grid-template-columns:repeat(auto-fit,minmax(320px,1fr))] last:mb-5">
-				{products.map((product) => (
-					<ProductItem
-						key={product.id}
-						id={product.id}
-						name={product.name}
-						price={product.price}
-						image={product.imageUrl}
-						imageAlt={product.name}
-						loading={loading}
-						ingredients={product.ingredients ?? []}
-						description={product.description}
-						category={product.category.name}
-					/>
-				))}
+				{loading ? (
+					Array.from({ length: 6 }).map((_, i) => (
+						<ProductSkeleton key={i} />
+					))
+				) : (
+					products.map((product) => (
+						<ProductItem
+							key={product.id}
+							id={product.id}
+							name={product.name}
+							price={product.price}
+							image={product.imageUrl}
+							imageAlt={product.name}
+							ingredients={product.ingredients ?? []}
+							description={product.description}
+							category={product.category.name}
+						/>
+					))
+				)}
+
 			</div>
 			{products.length > 0 && (
 				<div className='my-8'>
@@ -102,8 +109,6 @@ export default function ProductsGroupList() {
 						changePagePlus={changePagePlus}
 						changePageMinus={changePageMinus}
 						changePage={changePage}
-						startPage={start}
-						endPage={end}
 					/>
 				</div>
 			)}

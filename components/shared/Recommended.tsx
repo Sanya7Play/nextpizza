@@ -14,7 +14,7 @@ interface PropsProduct {
 }
 
 export default function Recommended({recommendProducts, category}:PropsProduct) {
-	const { loading, setLoading} = useProviders();
+	const {setLoading} = useProviders();
 	useEffect(() => {
 		setLoading(true);
 		try {
@@ -53,7 +53,6 @@ export default function Recommended({recommendProducts, category}:PropsProduct) 
 						image={product.imageUrl}
 						imageAlt={product.name}
 						id={product.id}
-						loading={loading}
 						ingredients={product.ingredients ?? []}
 						description={product.description ?? ''}
 						category={category}

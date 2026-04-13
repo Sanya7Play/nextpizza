@@ -50,7 +50,7 @@ export async function GET(req: Request){
 			},
 			orderBy,
 			skip: (currentPage - 1 ) * take,
-			take: search ? 5 : 6,               // сколько взять (limit)
+			take: search ? 5 : 6,
 		}),
 		prisma.product.count({
 			where: {

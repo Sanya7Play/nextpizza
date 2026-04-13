@@ -3,7 +3,7 @@ import Image from "next/image";
 import {ShoppingCart, User} from "lucide-react";
 import {Button} from "@/components/ui/button";
 import CardDrawer from "@/components/shared/CardDrawer";
-import React, {useEffect, useState} from "react";
+import React from "react";
 import PopoverMenu from "@/components/shared/PopoverMenu";
 import Link from "next/link";
 import {useCartStore} from "@/components/store/cart";
@@ -26,7 +26,7 @@ export type ProductTotal = {
 }
 export default function Header({buttonHide, searchHide}: HeaderProps) {
 	const { data: session, status } = useSession();
-	const {search, loadingButton, setLoadingButton, error, setError, setLoading, searchProducts, setSearchProducts} = useProviders();
+	const {search, loadingButton, setLoadingButton, error, setError, setLoading, setSearchProducts} = useProviders();
 	const totalCount = useCartStore(state => state.totalCount);
 	const totalPrice = useCartStore(state => state.totalPrice);
 
@@ -35,19 +35,18 @@ export default function Header({buttonHide, searchHide}: HeaderProps) {
 			setLoading(true);
 			try {
 				const searchProduct = async () => {
-					if (!search || search.trim().length <= 2 || search.length === 0 ){
+					if (!search || search.length < 2 ){
 						setSearchProducts([]);
 						return;
 					}
 					const response = await axios.get<ProductTotal>("/api/products", {
 						params: { query: search },
 					});
-					console.log(response.data.products);
 					setSearchProducts(response.data.products);
 				};
-				searchProduct();
+				await searchProduct();
 			} catch (error) {
-				console.log(error);
+
 			}
 			finally {
 				setLoading(false);
@@ -56,7 +55,6 @@ export default function Header({buttonHide, searchHide}: HeaderProps) {
 		300,
 		[search],
 	);
-
 	async function submit(email: string, password: string) {
 		setLoadingButton(true);
 		try {
@@ -136,7 +134,7 @@ export default function Header({buttonHide, searchHide}: HeaderProps) {
 						<p className='font-normal text-muted-foreground'>вкусней уже некуда</p>
 					</div>
 				</div>
-				<SearchInput searchHide={searchHide} products={searchProducts} search={search}/>
+				<SearchInput searchHide={searchHide}/>
 				<div className='flex flex-row items-center justify-between gap-3'>
 					{status === 'authenticated' ?
 						(

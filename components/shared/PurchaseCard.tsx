@@ -14,6 +14,8 @@ interface PurchaseCardProps {
 	sizeNumber: number;
 	price: number;
 	daugh: string;
+	category: string;
+	size: string;
 	addQuantity(keyItem: string): void;
 	deleteQuantity(keyItem: string): void;
 	decrementCart(keyItem: string): void;
@@ -29,9 +31,11 @@ export default function PurchaseCard(
 		quantity,
 		ingredients,
 		sizeNumber,
+		size,
+		category,
 		addQuantity,
 		deleteQuantity,
-		decrementCart
+		decrementCart,
 }:PurchaseCardProps) {
 	const ingredientsNames = ingredients.map((ingredient) => ingredient.name).join(', ');
 
@@ -48,12 +52,22 @@ export default function PurchaseCard(
 				<Image src={image} alt={name} width={60} height={60} />
 				<div className="flex flex-col ml-5 max-w-max">
 					<span className="text-lg font-bold">{name}</span>
-					<span className="text-sm text-muted-foreground">
-						{daugh} тесто, {sizeNumber} см, {weight} г.
-      				</span>
-					<span className="text-sm text-muted-foreground">
-        				Добавки: {ingredientsNames}
-      				</span>
+					{category === 'Напитки' ? (
+						<>
+							<p className='text-sm text-muted-foreground'>
+								{sizeNumber} л, {size} стакан,  {weight} г.
+							</p>
+						</>
+					) : (
+						<>
+							<p className='text-sm text-muted-foreground'>
+								{daugh} тесто, {sizeNumber} см,  {weight} г.
+							</p>
+							<p className='text-sm text-muted-foreground'>
+								{ingredientsNames ? (`Добавки: ${ingredientsNames}`) : ' '}
+							</p>
+						</>
+					)}
 				</div>
 			</div>
 

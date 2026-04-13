@@ -7,6 +7,8 @@ export type OrderWithItems = Prisma.OrderGetPayload<{
 			include: {
 				product: true;
 				supplements: true;
+				size: true;
+				key: true;
 			};
 		};
 	};

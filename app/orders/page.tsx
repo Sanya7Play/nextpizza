@@ -29,7 +29,6 @@ export default function OrdersPage() {
 		}
 		getOrders();
 	},[user])
-	console.log(orders);
 	return(
 		<div className="mx-50 bg-white rounded-4xl min-h-screen lg:mx-20">
 			<Header buttonHide={true} searchHide={false}/>

@@ -1,6 +1,7 @@
 import Image from "next/image";
 import {Ingredient} from "@/generated/prisma";
-import {categories} from "@/components/constants/pizza";
+import {buttonDrink, categories} from "@/components/constants/pizza";
+import {useState} from "react";
 
 interface Props {
 	id: number;
@@ -10,20 +11,30 @@ interface Props {
 	image: string;
 	supplements: Ingredient[];
 	category: number;
+	keyItem: string | null;
 }
-export default function OrderCard({id, price, quantity, name, supplements, image, category}: Props) {
-	const categoryFind = categories.filter((cat, index) => {
+export default function OrderCard({id, price, quantity, name, supplements, image, category, keyItem}: Props) {
+	const [size, setSize] = useState(keyItem?.split('_') || null);
+
+	const categoryFind = categories.find((cat, index) => {
 		if (index === category) return cat;
 	});
-	console.log();
+
 	return (
 		<div className='flex flex-row justify-between mx-5 my-4 border-b border-neutral-200 pb-5 last:border-none' key={id}>
 			<div className='flex flex-row w-auto h-auto '>
 				<Image src={image} alt='name' width={60} height={60} className='m-auto'/>
 				<div className='flex flex-col ml-5'>
 					<p className='text-lg font-bold'>{name}</p>
-					<p className='text-sm text-muted-foreground'>Традиционное тесто, 20 см.</p>
-					<p className='text-sm text-muted-foreground'>Добавки: {supplements.map(item => item.name).join(', ')}</p>
+					{categoryFind === 'Напитки' || categoryFind === 'Кофе' ? (<>
+						{keyItem?.split('_')[1] === '0.3' ? (<p className='text-sm text-muted-foreground '>Средний стакан {keyItem?.split('_')[1]} л.</p>) : (<p className='text-sm text-muted-foreground '>Большой стакан {keyItem?.split('_')[1]} л.</p>) }
+					</>) : (
+						<>
+							<p className='text-sm text-muted-foreground'>{keyItem?.split('_')[2]} тесто, {keyItem?.split('_')[1]} см.</p>
+							<p className='text-sm text-muted-foreground'>Добавки: {supplements.map(item => item.name).join(', ')}</p>
+						</>
+					)}
+
 				</div>
 			</div>
 			<div className='flex flex-row items-center ml-20 gap-2'>

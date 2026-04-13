@@ -22,7 +22,6 @@ interface Props {
 	onSwitch: () => void;
 }
 export default function DialogLogin({ submit, error, loading, email, password, setPassword, setEmail, onSwitch}: Props) {
-
 	const authorization = (email: string, password: string) => {
 		submit(email, password);
 	}

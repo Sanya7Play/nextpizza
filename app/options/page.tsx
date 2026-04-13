@@ -29,7 +29,7 @@ export default function Options() {
 			notify(response.status);
 		}
 		catch (err){
-			console.log(err);
+
 		}
 		finally {
 			setLoading(false);
@@ -44,7 +44,6 @@ export default function Options() {
 			toast.error('Ошибка сохранения данных');
 		}
 	}
-
 	return (
 		<div className='mx-50 rounded-4xl min-h-screen lg:mx-20'>
 			<Header buttonHide={false} searchHide={false}/>
@@ -116,7 +115,6 @@ export default function Options() {
 						</div>
 					</div>
 					<div className='flex gap-4'>
-
 						{loading ? (
 							<Button
 								className='w-full max-w-[440px] rounded-2xl py-6 text-base font-semibold cursor-pointer'
@@ -125,8 +123,8 @@ export default function Options() {
 								<p className='animate-spin'>
 									<Loader/>
 								</p>
-							</Button>):(
-
+							</Button>
+						):(
 							<>
 								<Button
 									variant='default'
@@ -156,6 +154,5 @@ export default function Options() {
 				</div>
 			</div>
 		</div>
-
 	)
 }

@@ -14,7 +14,6 @@ export default function IngredientsCard({id, name, price, image, changeIngredien
 	const handleIngredient = (id: number) => {
 		changeIngredient(id)
 	}
-
 	const ingredient: Ingredient | undefined = supplements.find(ingredient => ingredient.id === id);
 
 	return (
@@ -30,7 +29,6 @@ export default function IngredientsCard({id, name, price, image, changeIngredien
 					{ingredient?.id === id ? (<CircleCheck color='#f54900' size={22}/>) : ('') }
 				</div>
 			</div>
-
 			<p className='text-xs font-medium'>{name}</p>
 			<span className='text-sm flex flex-row items-center font-semibold'>{price} ₽</span>
 		</div>

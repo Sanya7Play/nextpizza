@@ -3,7 +3,6 @@ import {Badge} from "@/components/ui/badge";
 import OrderCard from "@/components/shared/OrderCard";
 import {OrderWithItems} from "@/types/order";
 import OrderSkeleton from "@/components/shared/OrderSkeleton";
-import {product} from "remeda";
 
 
 interface OrderProps {
@@ -18,14 +17,13 @@ export default function Order({id, createdAt, status, totalPrice, items, loading
 	const numberDate = new Date(createdAt).toLocaleDateString('ru-RU', {
 		day: 'numeric', month: 'long', year: 'numeric',hour: 'numeric', minute: 'numeric',
 	}).replace(' г.', ',')
-	console.log(numberDate);
 	return (
 		<>
 			{loading ? (<OrderSkeleton/>) : (
 				<Accordion
 					type="single"
 					collapsible
-					className="w-240 rounded-4xl bg-neutral-300/20 shadow-lg"
+					className="w-240 border-1 rounded-4xl bg-neutral-300/20 shadow-xl"
 					defaultValue="item-1"
 				>
 					<AccordionItem value="item-2" className='p-5' key={id}>
@@ -49,6 +47,7 @@ export default function Order({id, createdAt, status, totalPrice, items, loading
 									quantity={item.quantity}
 									price={item.product.price}
 									supplements={item.supplements}
+									keyItem={item.key}
 								/>
 							))}
 							<div className="flex flex-row items-center px-5 gap-1">

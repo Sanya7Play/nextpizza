@@ -9,6 +9,7 @@ import axios from "axios";
 import {Ingredient} from "@/generated/prisma";
 import {buttonDaugh} from "@/components/constants/pizza";
 import {useProviders} from "@/components/shared/context/CategoryFilter";
+import IngredientSkeleton from "@/components/shared/IngredientSkeleton";
 
 export default function Filters() {
 	const { loading, setLoading} = useProviders();
@@ -95,15 +96,17 @@ export default function Filters() {
 				<Slider className='cursor-pointer' defaultValue={value} onValueChange={setValue} min={0} max={4950} step={50}/>
 			</div>
 			<div className='flex flex-col gap-3'>
-				<h1 className='font-bold text-lg'>Ингредиенты: </h1>
-				{
-					ingredients.map((ingredient, index) => (
-						<div className='flex flex-row items-center gap-3' key={index}>
-							<Checkbox value={ingredient} className='cursor-pointer' onClick={() => handleChecked(ingredient)}/>
-							<Label htmlFor={ingredient} className='text-base'>{ingredient}</Label>
-						</div>
-					))
-				}
+				<h1 className='font-bold text-lg'>Ингредиенты:</h1>
+				{ingredients.length > 0 ? (ingredients.map((ingredient, index) => (
+					<div className='flex flex-row items-center gap-3' key={index}>
+						<Checkbox value={ingredient} className='cursor-pointer' onClick={() => handleChecked(ingredient)}/>
+						<Label htmlFor={ingredient} className='text-base'>{ingredient}</Label>
+					</div>
+				))) : (
+					Array.from({length: 5}, (_, i) =>
+						<IngredientSkeleton key={i}/>
+					)
+				)}
 				<div>
 					<button className='text-primary cursor-pointer' onClick={() => showButton()}>{showAll ? ' Cкрыть' : '+ Показать все'}</button>
 				</div>

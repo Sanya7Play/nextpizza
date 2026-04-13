@@ -13,6 +13,7 @@ export type CartItem = {
 	productId: number;
 	name: string;
 	imageUrl: string;
+	category: string;
 
 	unitPrice: number;  // цена за 1 штуку (уже с размером/тестом/допами)
 	size: string;

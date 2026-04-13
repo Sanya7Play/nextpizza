@@ -2,7 +2,7 @@
 import {Button} from "@/components/ui/button";
 import {Ingredient} from "@/generated/prisma/client";
 import {IProduct, IItem, buttonDrink} from "@/components/constants/pizza";
-import {useEffect, useState} from "react";
+import {useState} from "react";
 import SkeletonId from "@/components/shared/SkeletonId";
 import IngredientsCard from "@/components/shared/IngredientsCard";
 import {buttonDaugh, buttonSize} from "@/components/constants/pizza";
@@ -20,8 +20,12 @@ type Props = {
 
 export default function WindowCardItem({product, ingredients, description, category}:Props){
 
+	const {loading} = useProviders();
+
 	const addItem = useCartStore(state => state.addItem);
-	const [loading, setLoading] = useState<boolean>(false);
+	const notifyTrue = () => toast.success('Товар добавлен в корзину');
+	const notifyFalse = () => toast.error('Ошибка добавления в корзину');
+
 	const [size, setSize] = useState<string | undefined>(buttonSize[0]?.size);
 	const [key, setKey] = useState<number | undefined>(buttonSize[0]?.key);
 	const [weight, setWeight] = useState<number | undefined>(buttonSize[0]?.weight);
@@ -41,6 +45,7 @@ export default function WindowCardItem({product, ingredients, description, categ
 		setSize(item.size);
 		setWeight(item.weight);
 		setSizeDrink(item.key);
+		setButtonSizeDrink(item.size);
 	}
 
 	const changeType = (item: string | undefined) => {
@@ -59,8 +64,6 @@ export default function WindowCardItem({product, ingredients, description, categ
 		}
 
 	}
-	const notifyTrue = () => toast.success('Товар добавлен в корзину');
-	const notifyFalse = () => toast.success('Ошибка добавления в корзину');
 	const handleAddToDrawer = async () => {
 		setLoadingButton(true);
 		try {
@@ -79,6 +82,7 @@ export default function WindowCardItem({product, ingredients, description, categ
 				weight,
 				ingredients: supplements,
 				sizeNumber: key,
+				category: category,
 			}
 			addItem(cartItem);
 			notifyTrue();

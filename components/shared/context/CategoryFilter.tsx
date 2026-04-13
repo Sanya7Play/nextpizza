@@ -5,7 +5,6 @@ import axios from "axios";
 import {useSession} from "next-auth/react";
 import {Product, User} from "@/generated/prisma";
 import {OrderWithItems} from "@/types/order";
-import {useCartStore} from "@/components/store/cart";
 
 interface ContextInterface {
 	sort: string;
@@ -40,12 +39,21 @@ interface ContextInterface {
 	setFocused: (focused: boolean) => void;
 	searchProducts: Product[];
 	setSearchProducts: (searchProducts: Product[]) => void;
+	timeDelivery: string;
+	setTimeDelivery: (timeDelivery: string) => void;
+	timeArray: string[];
 }
 
 const PizzaContext = createContext<ContextInterface | null>(null);
 
 export function CategoryFilter({children}:{children: React.ReactNode}) {
 	const { data: session } = useSession();
+	const time = new Date().toLocaleString("ru-RU",{
+		hour: "numeric",
+		minute: "numeric",
+	});
+	const timeArray = Array.from({length: 22 - Number(time.slice(0,2))}, (_, i) => Number(time.slice(3)) < 30 ? (Number(time.slice(0,2)) + i + 1 + ':' + "00") : (Number(time.slice(0,2)) + i + 1  + ':' + "30"));
+	const [timeDelivery, setTimeDelivery] = useState<string>(timeArray[0]);
 	const [password, setPassword] = useState<string>("");
 	const [confirmPassword, setConfirmPassword] = useState<string>("");
 	const [selectedCategory, setSelectedCategory] = useState<number | null >(0);
@@ -116,6 +124,9 @@ export function CategoryFilter({children}:{children: React.ReactNode}) {
 			setLogin,
 			loadingButton,
 			setLoadingButton,
+			timeDelivery,
+			setTimeDelivery,
+			timeArray,
 		}}>
 			{children}
 		</PizzaContext.Provider>

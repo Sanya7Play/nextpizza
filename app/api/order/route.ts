@@ -16,15 +16,7 @@ export async function GET(req: Request){
 		include: {
 			items: {
 				include: {
-					product: {
-						select: {
-							id: true,
-							name: true,
-							price: true,
-							imageUrl: true,
-							categoryId: true,
-						}
-					},
+					product: {select: { id: true, name: true, price: true, imageUrl: true, categoryId: true,}},
 					supplements: true,
 				}
 			}
@@ -49,7 +41,6 @@ export async function POST(req: Request) {
 					productId: item.productId,
 					quantity: item.quantity,
 					key: item.key,
-					size: item.size,
 					supplements: item.ingredients?.length
 						? {
 							connect: item.ingredients.map((i: Ingredient) => ({ id: i.id })),

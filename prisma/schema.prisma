@@ -2,6 +2,7 @@ generator client {
     provider = "prisma-client-js"
     output   = "../generated/prisma"
 }
+
 datasource db {
     provider = "postgresql"
 }
@@ -51,6 +52,8 @@ model CartItem {
 
     orderId Int?
     order   Order? @relation(fields: [orderId], references: [id])
+
+    key String?
 
     supplements Ingredient[] @relation("CartItemSupplements")
 

@@ -29,7 +29,7 @@ export default function CardDrawer({children, session}: CardDrawerProps) {
 
 	const totalCount = useCartStore(state => state.totalCount);
 	const totalPrice = useCartStore(state => state.totalPrice);
-	const notify = () => toast.error('Зайдите в аккаунт для оплаты')
+	const notify = () => toast.error('Зайдите в аккаунт для оплаты');
 	return (
 		<>
 			{items.length > 0 ? (
@@ -60,6 +60,7 @@ export default function CardDrawer({children, session}: CardDrawerProps) {
 									weight={item.weight}
 									ingredients={item.ingredients}
 									sizeNumber={item.sizeNumber}
+									category={item.category}
 									deleteItem={removeItem}
 									addToCart={incrementCart}
 									deleteQuantity={decrementCart}

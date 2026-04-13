@@ -12,6 +12,7 @@ interface CartItemProps {
 	quantity: number,
 	weight: number,
 	sizeNumber: number,
+	category: string,
 	ingredients: Ingredient[],
 	deleteItem: (keyItem: string) => void,
 	addToCart: (keyItem: string) => void,
@@ -32,6 +33,7 @@ export default function CartItem(
 		deleteQuantity,
 		addToCart,
 		sizeNumber,
+		category,
 	}: CartItemProps) {
 	const ingredientsNames = ingredients.map((ingredient) => ingredient.name).join(', ');
 
@@ -55,12 +57,23 @@ export default function CartItem(
 					<h1 className='text-base font-bold'>
 						{name}
 					</h1>
-					<p className='text-sm text-muted-foreground'>
-						{size} {sizeNumber} см, {daugh} тесто, {weight} г.
-					</p>
-					<p className='text-sm text-muted-foreground'>
-						{ingredientsNames ? (`Добавки: ${ingredientsNames}`) : ' '}
-					</p>
+					{category === 'Напитки' ? (
+						<>
+							<p className='text-sm text-muted-foreground'>
+								{sizeNumber} л, {size} стакан,  {weight} г.
+							</p>
+						</>
+					) : (
+						<>
+							<p className='text-sm text-muted-foreground'>
+								{size} {sizeNumber} см, {daugh} тесто, {weight} г.
+							</p>
+							<p className='text-sm text-muted-foreground'>
+								{ingredientsNames ? (`Добавки: ${ingredientsNames}`) : ' '}
+							</p>
+						</>
+					)}
+
 				</div>
 				<div className='flex flex-row items-center justify-between'>
 					<div className='flex flex-row items-center gap-3'>

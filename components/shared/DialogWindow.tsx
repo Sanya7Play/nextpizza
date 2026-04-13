@@ -18,7 +18,6 @@ interface Props {
 	price: number;
 	imageUrl: string;
 	id: number;
-	loading: boolean;
 	ingredients: Ingredient[];
 	category: string;
 	description: string;
