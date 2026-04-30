@@ -58,7 +58,7 @@ export async function GET(req: Request){
 					categoryId ? {categoryId} : {},
 					search ? {name: {contains: search, mode: 'insensitive'}} : {},
 				]
-			}, // фильтры должны совпадать
+			},
 		}),
 	]);
 	return NextResponse.json({products, total});
