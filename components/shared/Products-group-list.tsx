@@ -44,26 +44,28 @@ export default function ProductsGroupList() {
 		[start, end]
 	);
 
-
 	useEffect(() => {
+		const controller = new AbortController();
 		async function getProducts() {
 			setLoading(true);
 			try {
 				const {data} = await axios.get<ProductTotal>(`/api/products`,
-					{params: {categoryId: selectedCategory, sort: sort, page, take}});
+					{params: {categoryId: selectedCategory, sort: sort, page, take}, signal: controller.signal});
+				console.log(data);
 				setProducts(data.products);
 				setTotal(data.total);
-				await new Promise((r) => setTimeout(r, 200));
 			}
 			catch (err){
-
+				if (axios.isCancel(err)) return;
+				console.error('Не удалось загрузить товары', err);
 			}
 			finally {
-				setLoading(false);
+				if (!controller.signal.aborted) setLoading(false);
 			}
 		}
 		getProducts();
 
+		return () => controller.abort();
 	}, [selectedCategory, sort, page, setLoading, take]);
 	const changePagePlus = () => {
 		if (page < totalPages) setPage((p) => p + 1);
@@ -79,7 +81,7 @@ export default function ProductsGroupList() {
 	return(
 		<div className='flex flex-col gap-3 w-full mr-18'>
 			<Title text={title ? title : 'Все товары'} />
-			<div className="grid gap-4 [grid-template-columns:repeat(auto-fit,minmax(320px,1fr))] last:mb-5">
+			<div className="grid gap-4 grid-cols-[repeat(auto-fit,minmax(320px,1fr))] last:mb-5">
 				{loading ? (
 					Array.from({ length: 6 }).map((_, i) => (
 						<ProductSkeleton key={i} />
